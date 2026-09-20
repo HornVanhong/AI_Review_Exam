@@ -34,10 +34,13 @@ export async function POST(req: Request) {
         );
       }
 
-      const geminiModel = model || "gemini-2.0-flash";
-      const targetUrl = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(
-        geminiModel
-      )}:streamGenerateContent?alt=sse&key=${encodeURIComponent(resolvedApiKey)}`;
+      let requestedModel = model && model !== "gemini-2.0-flash" ? model : "gemini-3.6-flash";
+      const candidateModels = [
+        requestedModel,
+        "gemini-3.6-flash",
+        "gemini-3.5-flash",
+        "gemini-1.5-flash"
+      ].filter((m, i, arr) => arr.indexOf(m) === i);
 
       // Format messages for Gemini API
       // Gemini expects: { role: "user" | "model", parts: [{ text: string }] }
@@ -61,25 +64,45 @@ export async function POST(req: Request) {
         };
       }
 
-      let geminiResponse: globalThis.Response;
-      try {
-        geminiResponse = await fetch(targetUrl, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(geminiPayload)
-        });
-      } catch (err: any) {
-        return NextResponse.json(
-          { error: `Failed to connect to Google Gemini API: ${err?.message}` },
-          { status: 503 }
-        );
+      let geminiResponse: globalThis.Response | null = null;
+      let lastErrorText = "";
+
+      for (const currentModel of candidateModels) {
+        const targetUrl = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(
+          currentModel
+        )}:streamGenerateContent?alt=sse&key=${encodeURIComponent(resolvedApiKey)}`;
+
+        try {
+          const res = await fetch(targetUrl, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(geminiPayload)
+          });
+
+          if (res.ok) {
+            geminiResponse = res;
+            break;
+          } else {
+            lastErrorText = await res.text();
+            // If 404 (model retired/not found), try next fallback model
+            if (res.status === 404) {
+              continue;
+            } else {
+              return NextResponse.json(
+                { error: `Gemini API returned HTTP ${res.status}: ${lastErrorText}` },
+                { status: res.status }
+              );
+            }
+          }
+        } catch (err: any) {
+          lastErrorText = err?.message || "Failed to fetch";
+        }
       }
 
-      if (!geminiResponse.ok) {
-        const errText = await geminiResponse.text();
+      if (!geminiResponse) {
         return NextResponse.json(
-          { error: `Gemini API returned HTTP ${geminiResponse.status}: ${errText}` },
-          { status: geminiResponse.status }
+          { error: `Google Gemini API Error: ${lastErrorText || "No candidate model was reachable"}` },
+          { status: 503 }
         );
       }
 

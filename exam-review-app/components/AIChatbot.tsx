@@ -85,7 +85,7 @@ export const AIChatbot: React.FC = () => {
 
   // Provider State: Local Ollama vs Google Gemini
   const [provider, setProvider] = useState<"ollama" | "gemini">("gemini");
-  const [geminiModel, setGeminiModel] = useState<string>("gemini-2.0-flash");
+  const [geminiModel, setGeminiModel] = useState<string>("gemini-3.6-flash");
 
   // Settings State
   const [showSettings, setShowSettings] = useState<boolean>(false);
@@ -497,28 +497,28 @@ export const AIChatbot: React.FC = () => {
           {provider === "gemini" ? (
             <div className="flex items-center space-x-1 bg-slate-900/90 p-1 rounded-xl border border-slate-800">
               <button
-                onClick={() => handleSelectGeminiModel("gemini-2.0-flash")}
+                onClick={() => handleSelectGeminiModel("gemini-3.6-flash")}
                 className={`px-2.5 py-1 rounded-lg text-xs font-semibold flex items-center space-x-1 transition ${
-                  geminiModel === "gemini-2.0-flash"
+                  geminiModel === "gemini-3.6-flash"
                     ? "bg-purple-600 text-white shadow-sm ring-1 ring-purple-400"
                     : "text-slate-400 hover:text-white"
                 }`}
-                title="Gemini 2.0 Flash: Fastest Google model (~0.8s), recommended for monthly exam questions"
+                title="Gemini 3.6 Flash: Latest Google flagship model (~0.8s), recommended for monthly exam questions"
               >
                 <Zap className="w-3 h-3 text-amber-300" />
-                <span>⚡ 2.0 Flash (~0.8s)</span>
+                <span>⚡ 3.6 Flash (~0.8s)</span>
               </button>
 
               <button
-                onClick={() => handleSelectGeminiModel("gemini-1.5-flash")}
+                onClick={() => handleSelectGeminiModel("gemini-3.5-flash")}
                 className={`px-2.5 py-1 rounded-lg text-xs font-semibold flex items-center space-x-1 transition ${
-                  geminiModel === "gemini-1.5-flash"
+                  geminiModel === "gemini-3.5-flash"
                     ? "bg-purple-600 text-white shadow-sm ring-1 ring-purple-400"
                     : "text-slate-400 hover:text-white"
                 }`}
-                title="Gemini 1.5 Flash: 1M token context, high speed"
+                title="Gemini 3.5 Flash: High-speed stable model"
               >
-                <span>⚡ 1.5 Flash</span>
+                <span>⚡ 3.5 Flash</span>
               </button>
 
               <button
@@ -682,8 +682,8 @@ export const AIChatbot: React.FC = () => {
                 onChange={(e) => handleSelectGeminiModel(e.target.value)}
                 className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-slate-200 focus:outline-none focus:border-purple-500 font-mono text-xs"
               >
-                <option value="gemini-2.0-flash">gemini-2.0-flash (Recommended &bull; ~0.8s)</option>
-                <option value="gemini-1.5-flash">gemini-1.5-flash (Fast &bull; 1M Context)</option>
+                <option value="gemini-3.6-flash">gemini-3.6-flash (Recommended &bull; ~0.8s)</option>
+                <option value="gemini-3.5-flash">gemini-3.5-flash (Fast &bull; Stable)</option>
                 <option value="gemini-1.5-pro">gemini-1.5-pro (Deep Reasoning & Code)</option>
               </select>
             </div>
