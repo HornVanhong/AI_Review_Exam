@@ -25,6 +25,7 @@ import {
   ExternalLink,
   Globe
 } from "lucide-react";
+import { MarkdownRenderer } from "./MarkdownRenderer";
 
 interface Message {
   id: string;
@@ -41,7 +42,14 @@ Your mission is to help students review and pass their monthly exam based on cou
 - Lesson 07: Autonomous Agents, ReAct loop, Tool Calling rule ("Model requests, application executes"), Schema vs Business validation, FastMCP Tools vs. Resources, HITL vs. HOTL vs. HOOTL.
 - CLI & Serving: Ollama (pull, run, list, ps, show, Modelfile num_ctx), Docker (--ipc=host for vLLM shared memory), nvidia-smi (P0 vs P8 perf states).
 
-Provide concise, highly accurate, and exam-focused explanations. Be direct and avoid excessive preamble or filler so that local generation is fast. Always highlight potential "Exam Traps" and provide exact code snippets in Cypher, Docker, or Python when relevant.`;
+Provide concise, highly accurate, and exam-focused explanations formatted for maximum visual clarity:
+1. Use clear Markdown headings (### **Section Title**) to organize concepts.
+2. Use Markdown comparison tables for commands, ports, protocols, or algorithmic trade-offs.
+3. Highlight critical traps using alert callouts:
+   > 🚨 **Exam Trap:** [Explain the specific mistake students make on exams]
+   > 💡 **Exam Tip:** [Quick memorization rule or key takeaway]
+4. Provide clean, syntax-highlighted code blocks (e.g. \`\`\`cypher, \`\`\`bash, \`\`\`python).
+5. Keep explanations direct, structured, and easy to memorize for the test.`;
 
 const QUICK_PROMPTS = [
   {
@@ -421,12 +429,7 @@ export const AIChatbot: React.FC = () => {
               </div>
             );
           } else {
-            // Text rendering with bold markdown parsing
-            return (
-              <div key={idx} className="text-xs sm:text-sm leading-relaxed whitespace-pre-wrap">
-                {p.content}
-              </div>
-            );
+            return <MarkdownRenderer key={idx} content={p.content} />;
           }
         })}
       </div>
@@ -826,15 +829,29 @@ export const AIChatbot: React.FC = () => {
 
               {/* Message Bubble */}
               <div
-                className={`max-w-[85%] sm:max-w-[75%] rounded-2xl p-4 shadow-md ${
+                className={`max-w-[94%] sm:max-w-[88%] rounded-2xl p-4 sm:p-5 shadow-lg ${
                   isUser
                     ? "bg-blue-600 text-white rounded-tr-sm"
-                    : "bg-slate-800/90 text-slate-200 border border-slate-700/80 rounded-tl-sm"
+                    : "bg-slate-900/95 text-slate-100 border border-slate-800 rounded-tl-sm"
                 }`}
               >
-                <div className="flex items-center justify-between text-[10px] opacity-70 mb-1.5">
-                  <span className="font-semibold">{isUser ? "You" : `AI Tutor (${model})`}</span>
-                  <span>{msg.timestamp}</span>
+                <div className="flex items-center justify-between text-[11px] opacity-75 mb-2 pb-1.5 border-b border-slate-800/60">
+                  <span className="font-semibold flex items-center space-x-1.5">
+                    {isUser ? (
+                      <span>You</span>
+                    ) : provider === "gemini" ? (
+                      <>
+                        <Sparkles className="w-3 h-3 text-amber-300 inline" />
+                        <span className="text-purple-300 font-bold">Google Gemini ({geminiModel})</span>
+                      </>
+                    ) : (
+                      <>
+                        <Cpu className="w-3 h-3 text-cyan-400 inline" />
+                        <span className="text-cyan-300 font-bold">Ollama AI Tutor ({model})</span>
+                      </>
+                    )}
+                  </span>
+                  <span className="font-mono text-[10px] text-slate-400">{msg.timestamp}</span>
                 </div>
 
                 {isUser ? (
@@ -851,7 +868,11 @@ export const AIChatbot: React.FC = () => {
         {isStreaming && (
           <div className="flex items-center space-x-2 text-xs text-cyan-400 pl-10 animate-pulse">
             <Sparkles className="w-3.5 h-3.5" />
-            <span>Qwen 35B is thinking & generating tokens...</span>
+            <span>
+              {provider === "gemini"
+                ? `Google Gemini (${geminiModel}) is streaming response...`
+                : `${model} is thinking & generating tokens...`}
+            </span>
           </div>
         )}
 
