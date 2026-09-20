@@ -109,12 +109,25 @@ export const AIChatbot: React.FC = () => {
   // Load saved Provider & Gemini Model preference on mount
   useEffect(() => {
     try {
+      const isCloud =
+        typeof window !== "undefined" &&
+        window.location.hostname !== "localhost" &&
+        window.location.hostname !== "127.0.0.1";
+
       const savedProvider = localStorage.getItem("exam_ai_provider");
-      if (savedProvider === "gemini" || savedProvider === "ollama") {
+      if (isCloud) {
+        // On cloud (e.g. Vercel), default to Gemini because local Ollama (127.0.0.1) cannot be reached
+        setProvider("gemini");
+      } else if (savedProvider === "gemini" || savedProvider === "ollama") {
         setProvider(savedProvider as "ollama" | "gemini");
       }
+
       const savedGeminiModel = localStorage.getItem("exam_gemini_model");
-      if (savedGeminiModel) setGeminiModel(savedGeminiModel);
+      if (savedGeminiModel && savedGeminiModel !== "gemini-2.0-flash") {
+        setGeminiModel(savedGeminiModel);
+      } else {
+        setGeminiModel("gemini-3.6-flash");
+      }
     } catch {}
   }, []);
 
@@ -246,9 +259,16 @@ export const AIChatbot: React.FC = () => {
           )
         );
       } else {
+        const isCloudHost =
+          typeof window !== "undefined" &&
+          window.location.hostname !== "localhost" &&
+          window.location.hostname !== "127.0.0.1";
+
         const errorContent =
           provider === "gemini"
-            ? `⚠️ **Google Gemini:** ${err.message}\n\n*Setup Reminder:*\nPlease ensure your key is added in \`.env.local\`:\n\`\`\`bash\n# In d:\\AI_Review_Exam\\exam-review-app\\.env.local\nGEMINI_API_KEY=AIzaSy...\n\`\`\`\nGet a free key in 30 seconds at [Google AI Studio](https://aistudio.google.com/app/apikey).`
+            ? `⚠️ **Google Gemini:** ${err.message}\n\n*Setup Reminder:*\nPlease ensure your key is added in Vercel Environment Variables or \`.env.local\`:\n\`\`\`bash\nGEMINI_API_KEY=AIzaSy...\n\`\`\`\nGet a free key in 30 seconds at [Google AI Studio](https://aistudio.google.com/app/apikey).`
+            : isCloudHost
+            ? `⚠️ **Local Ollama Cannot Be Reached from Vercel Cloud:**\n\nYou are viewing this site online at \`${window.location.hostname}\`.\nOllama runs locally on your PC (\`127.0.0.1:11434\`), which Vercel's cloud servers cannot access over the public internet.\n\n👉 **To fix this right now:**\nSwitch to **[✨ Google Gemini API]** at the top or bottom of this chat! Gemini runs 100% in the cloud and answers instantly.\n\n*(If you want to use local Qwen 35B offline, run the app on your computer at \`http://localhost:3000\`)*.`
             : `⚠️ **Connection Error:** ${err.message}\n\n*Troubleshooting Tips:*\n1. Verify Ollama is running in background (\`ollama serve\`).\n2. Run \`ollama list\` to verify \`${model}\` is installed.\n3. Check endpoint in Settings (default is \`http://127.0.0.1:11434\`).`;
 
         setMessages((prev) =>
@@ -865,10 +885,26 @@ export const AIChatbot: React.FC = () => {
 
         <div className="mt-2 flex items-center justify-between text-[11px] text-slate-500">
           <span>Press <strong>Enter</strong> to send, <strong>Shift+Enter</strong> for newline</span>
-          <span className="flex items-center space-x-1 font-mono text-[10px]">
-            <Cpu className="w-3 h-3 text-cyan-400" />
-            <span>Local Ollama • {model}</span>
-          </span>
+          <button
+            type="button"
+            onClick={() => handleSwitchProvider(provider === "gemini" ? "ollama" : "gemini")}
+            className="flex items-center space-x-1.5 font-mono text-[10px] px-2 py-0.5 rounded-md hover:bg-slate-800 transition cursor-pointer border border-transparent hover:border-slate-700"
+            title="Click to switch between Google Gemini Cloud and Local Ollama"
+          >
+            {provider === "gemini" ? (
+              <>
+                <Sparkles className="w-3 h-3 text-amber-300 shrink-0" />
+                <span className="text-purple-300 font-semibold">✨ Gemini Cloud ({geminiModel})</span>
+                <span className="text-slate-500 text-[9px] underline">(Switch)</span>
+              </>
+            ) : (
+              <>
+                <Cpu className="w-3 h-3 text-cyan-400 shrink-0" />
+                <span className="text-cyan-300 font-semibold">💻 Local Ollama ({model})</span>
+                <span className="text-slate-500 text-[9px] underline">(Switch)</span>
+              </>
+            )}
+          </button>
         </div>
       </div>
 
