@@ -128,6 +128,11 @@ export const AIChatbot: React.FC = () => {
       } else {
         setGeminiModel("gemini-3.6-flash");
       }
+
+      const savedEndpoint = localStorage.getItem("exam_ollama_endpoint");
+      if (savedEndpoint) {
+        setEndpoint(savedEndpoint);
+      }
     } catch {}
   }, []);
 
@@ -740,14 +745,42 @@ export const AIChatbot: React.FC = () => {
             </div>
           </div>
 
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between p-3 rounded-xl bg-slate-900/60 border border-slate-800 text-[11px] text-slate-400 gap-2">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 p-3 rounded-xl bg-slate-900/60 border border-slate-800 text-[11px] text-slate-400">
+            <div>
+              <label className="block text-slate-300 font-medium mb-1">
+                Ollama Server Endpoint:
+                <span className="text-slate-500 font-normal ml-1">
+                  (Default: <code>http://127.0.0.1:11434</code> or your Cloudflare/Ngrok URL)
+                </span>
+              </label>
+              <div className="flex space-x-2">
+                <input
+                  type="text"
+                  value={endpoint}
+                  onChange={(e) => {
+                    setEndpoint(e.target.value);
+                    try { localStorage.setItem("exam_ollama_endpoint", e.target.value); } catch {}
+                  }}
+                  placeholder="http://127.0.0.1:11434 or https://xxxx.trycloudflare.com"
+                  className="flex-1 bg-slate-950 border border-slate-700 rounded-lg p-2 text-slate-200 font-mono text-xs focus:outline-none focus:border-blue-500"
+                />
+                <button
+                  type="button"
+                  onClick={checkConnection}
+                  disabled={isCheckingConnection}
+                  className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg text-slate-200 font-medium text-xs transition"
+                >
+                  {isCheckingConnection ? "Testing..." : "Test"}
+                </button>
+              </div>
+            </div>
+
             <div className="flex items-center space-x-2">
               <span className="w-2 h-2 rounded-full bg-emerald-400 shrink-0"></span>
               <span>
-                <strong>Environment Config:</strong> Gemini API Key is loaded automatically from <code className="text-cyan-300 font-mono">.env.local</code> (<code>GEMINI_API_KEY</code>). No browser setup needed!
+                <strong>Cloud Hosting Tip:</strong> When using Vercel, tunnel your local Ollama using Cloudflare (<code>cloudflared tunnel --url http://localhost:11434</code>) or use <strong>✨ Google Gemini API</strong> for 24/7 cloud access.
               </span>
             </div>
-            <span className="text-slate-500 font-mono text-[10px]">Ollama Endpoint: {endpoint}</span>
           </div>
 
           {/* System Prompt Customizer */}
