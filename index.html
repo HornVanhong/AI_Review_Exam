@@ -1,0 +1,1898 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mastering Local LLM & AI Systems - Exam Review & Code Lab</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap');
+    body { font-family: 'Inter', sans-serif; }
+    code, pre { font-family: 'Fira Code', monospace; }
+    .tab-active { border-bottom: 3px solid #3b82f6; color: #3b82f6; font-weight: 600; }
+    .badge-highlight { background-color: #fef08a; color: #854d0e; border: 1px solid #fde047; font-weight: 600; }
+    .dark .badge-highlight { background-color: #713f12; color: #fef08a; border: 1px solid #a16207; }
+    .glass-panel { backdrop-filter: blur(12px); }
+    /* Custom scrollbar */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    .dark ::-webkit-scrollbar-thumb { background: #475569; }
+  </style>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: { 50: '#eff6ff', 100: '#dbeafe', 500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8', 900: '#1e3a8a' }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 min-h-screen transition-colors duration-200">
+
+  <!-- TOP HEADER -->
+  <header class="sticky top-0 z-50 bg-white/90 dark:bg-slate-900/90 border-b border-slate-200 dark:border-slate-800 glass-panel">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center text-white font-bold shadow-md shadow-blue-500/20">
+            <i class="fa-solid fa-graduation-cap text-lg"></i>
+          </div>
+          <div>
+            <h1 class="text-lg font-bold bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400 bg-clip-text text-transparent">
+              Local AI & LLM Exam Prep
+            </h1>
+            <p class="text-xs text-slate-500 dark:text-slate-400">KSGA — Korea Software HRD Center (KSHRD)</p>
+          </div>
+        </div>
+
+        <!-- SEARCH & THEME TOGGLE -->
+        <div class="flex items-center space-x-3">
+          <button onclick="toggleDarkMode()" class="p-2 rounded-lg text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition">
+            <i id="theme-icon" class="fa-solid fa-moon"></i>
+          </button>
+          <a href="#test-section" onclick="switchMainTab('quiz')" class="px-4 py-2 text-xs font-semibold rounded-lg bg-blue-600 hover:bg-blue-700 text-white shadow-sm flex items-center space-x-1.5 transition">
+            <i class="fa-solid fa-play"></i>
+            <span>Take Test</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- NAVIGATION TABS -->
+      <nav class="flex space-x-8 border-t border-slate-100 dark:border-slate-800/60 overflow-x-auto text-sm">
+        <button onclick="switchMainTab('review')" id="nav-review" class="py-3 px-1 border-b-2 font-medium tab-active flex items-center space-x-2">
+          <i class="fa-solid fa-book-open"></i>
+          <span>Theory & Highlights</span>
+        </button>
+        <button onclick="switchMainTab('code')" id="nav-code" class="py-3 px-1 border-b-2 border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 font-medium flex items-center space-x-2">
+          <i class="fa-solid fa-code"></i>
+          <span>Code Review Lab</span>
+          <span class="bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 text-[10px] font-bold px-1.5 py-0.5 rounded-full">Exam Code</span>
+        </button>
+        <button onclick="switchMainTab('commands')" id="nav-commands" class="py-3 px-1 border-b-2 border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 font-medium flex items-center space-x-2">
+          <i class="fa-solid fa-terminal"></i>
+          <span>CLI & Commands</span>
+          <span class="bg-cyan-100 dark:bg-cyan-900/50 text-cyan-700 dark:text-cyan-300 text-[10px] font-bold px-1.5 py-0.5 rounded-full">Ollama / Docker</span>
+        </button>
+        <button onclick="switchMainTab('quiz')" id="nav-quiz" class="py-3 px-1 border-b-2 border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 font-medium flex items-center space-x-2">
+          <i class="fa-solid fa-clipboard-check"></i>
+          <span>Interactive Exam Simulator</span>
+          <span id="quiz-count-badge" class="bg-amber-100 dark:bg-amber-900/50 text-amber-800 dark:text-amber-300 text-[10px] font-bold px-1.5 py-0.5 rounded-full">37 Qs</span>
+        </button>
+        <button onclick="switchMainTab('flashcards')" id="nav-flashcards" class="py-3 px-1 border-b-2 border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 font-medium flex items-center space-x-2">
+          <i class="fa-solid fa-bolt"></i>
+          <span>Quick Flashcards</span>
+        </button>
+        <a href="http://localhost:3000" target="_blank" class="py-3 px-1 border-b-2 border-transparent text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 font-medium flex items-center space-x-2">
+          <i class="fa-solid fa-robot"></i>
+          <span>Qwen 35B Chatbot</span>
+          <span class="bg-purple-100 dark:bg-purple-900/50 text-purple-700 dark:text-purple-300 text-[10px] font-bold px-1.5 py-0.5 rounded-full">Live App</span>
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- SUB-HEADER / MODULE FILTER -->
+  <div class="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 py-3">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center space-x-2 overflow-x-auto text-xs py-1">
+        <span class="text-slate-400 font-semibold uppercase tracking-wider text-[11px] mr-1">Filter Module:</span>
+        <button onclick="filterModule('all')" class="mod-filter-btn active-mod px-3 py-1.5 rounded-full bg-blue-600 text-white font-medium" data-mod="all">All Lessons</button>
+        <button onclick="filterModule('mod04')" class="mod-filter-btn px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-medium" data-mod="mod04">04. Workflow Engineering</button>
+        <button onclick="filterModule('mod05')" class="mod-filter-btn px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-medium" data-mod="mod05">05. RAG Fundamentals</button>
+        <button onclick="filterModule('mod06')" class="mod-filter-btn px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-medium" data-mod="mod06">06. Advanced RAG</button>
+        <button onclick="filterModule('mod07')" class="mod-filter-btn px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-medium" data-mod="mod07">07. Autonomous Agents</button>
+      </div>
+      <div class="text-xs text-slate-500 dark:text-slate-400 flex items-center space-x-2">
+        <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium badge-highlight">
+          <i class="fa-solid fa-star text-[10px] mr-1"></i> Teacher Highlighted
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT CONTAINER -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+    <!-- TAB 1: THEORY & HIGHLIGHTS REVIEW -->
+    <div id="tab-content-review" class="space-y-12">
+      <!-- Welcome Hero Banner -->
+      <div class="bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-900 text-white rounded-2xl p-6 sm:p-8 shadow-xl relative overflow-hidden">
+        <div class="relative z-10 max-w-3xl">
+          <div class="inline-flex items-center space-x-2 bg-blue-500/30 border border-blue-400/40 rounded-full px-3 py-1 text-xs font-semibold mb-3">
+            <i class="fa-solid fa-bullhorn text-amber-300"></i>
+            <span>Monthly Exam Preparation Portal</span>
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight">Mastering Local LLM & AI Engineering</h2>
+          <p class="mt-2 text-sm sm:text-base text-blue-200">
+            This review strictly aligns with the topics highlighted in your teacher's review document and extracted from course lecture slides (04, 05, 06, and 07). Use the Code Lab to review exam code, and the Simulator to practice with real exam questions!
+          </p>
+          <div class="mt-4 flex flex-wrap gap-3">
+            <button onclick="switchMainTab('quiz')" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 rounded-lg text-xs font-bold transition flex items-center space-x-2 shadow-lg shadow-blue-500/30">
+              <i class="fa-solid fa-circle-check"></i>
+              <span>Launch Practice Exam (25 Questions)</span>
+            </button>
+            <button onclick="switchMainTab('code')" class="px-4 py-2 bg-slate-800/80 hover:bg-slate-700/80 border border-slate-600 rounded-lg text-xs font-bold transition flex items-center space-x-2">
+              <i class="fa-solid fa-code"></i>
+              <span>Open Code Review Lab</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- MODULE 04 SECTION -->
+      <section class="mod-section" data-mod="mod04">
+        <div class="flex items-center space-x-3 mb-6 pb-2 border-b border-slate-200 dark:border-slate-800">
+          <div class="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold text-sm">04</div>
+          <div>
+            <h2 class="text-xl font-bold text-slate-900 dark:text-white">Workflow Engineering with LLM Frameworks</h2>
+            <p class="text-xs text-slate-500">Chaining, State vs Memory, Ingestion Pipelines & Orchestration (LangGraph / LlamaIndex)</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Card 1: What is Workflow & Why -->
+          <div class="bg-white dark:bg-slate-900 rounded-xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
+            <div class="flex items-center justify-between">
+              <h3 class="font-bold text-base text-slate-800 dark:text-slate-100 flex items-center space-x-2">
+                <i class="fa-solid fa-diagram-project text-blue-500"></i>
+                <span>Introduction to LLM Workflow</span>
+              </h3>
+              <span class="badge-highlight px-2 py-0.5 rounded text-[11px]">Exam Highlight</span>
+            </div>
+            <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+              <strong>What is LLM Workflow?</strong> Combining multiple LLM calls, tool usages, and data-processing steps into an organized, automated pipeline rather than relying on a single one-shot prompt.
+            </p>
+            <div class="bg-slate-50 dark:bg-slate-800/60 p-3 rounded-lg text-xs text-slate-600 dark:text-slate-300 space-y-1.5 border border-slate-200/60 dark:border-slate-700/60">
+              <p class="font-semibold text-slate-800 dark:text-slate-200"><i class="fa-solid fa-triangle-exclamation text-amber-500 mr-1"></i> Problem Statement:</p>
+              <p>A single prompt call is like an intern with a great memory but no structure. It fails at complex multi-step tasks due to context limits, no memory, and lack of deterministic control.</p>
+              <p class="font-semibold text-slate-800 dark:text-slate-200 mt-2"><i class="fa-solid fa-layer-group text-blue-500 mr-1"></i> The 4 Levels of AI Automation:</p>
+              <ol class="list-decimal list-inside pl-1 space-y-0.5">
+                <li><strong>Level 1 (Prompting):</strong> Single Q&A (One-off).</li>
+                <li><strong>Level 2 (Chaining):</strong> Fixed linear steps (Step A &rarr; B &rarr; C).</li>
+                <li><strong>Level 3 (Agents):</strong> Dynamic loops (Decide &rarr; Act &rarr; Observe).</li>
+                <li><strong>Level 4 (Multi-Agent):</strong> Autonomous specialized teams.</li>
+              </ol>
+            </div>
+          </div>
+
+          <!-- Card 2: Chaining Patterns -->
+          <div class="bg-white dark:bg-slate-900 rounded-xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
+            <div class="flex items-center justify-between">
+              <h3 class="font-bold text-base text-slate-800 dark:text-slate-100 flex items-center space-x-2">
+                <i class="fa-solid fa-link text-indigo-500"></i>
+                <span>Chaining & Execution Patterns</span>
+              </h3>
+              <span class="badge-highlight px-2 py-0.5 rounded text-[11px]">Exam Highlight</span>
+            </div>
+            <p class="text-sm text-slate-600 dark:text-slate-300">
+              <strong>LLM Chains:</strong> Connecting multiple LLMs or their outputs to tools/services where output of step $N$ becomes input to step $N+1$.
+            </p>
+            <div class="grid grid-cols-2 gap-3 text-xs">
+              <div class="p-2.5 rounded-lg bg-blue-50/70 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900/60">
+                <p class="font-bold text-blue-800 dark:text-blue-300 mb-1">Sequential Chain</p>
+                <p class="text-slate-600 dark:text-slate-300">Linear, fixed-order pipeline. Best for predictable tasks where each step strictly requires previous results (e.g. Summarize &rarr; Translate).</p>
+              </div>
+              <div class="p-2.5 rounded-lg bg-purple-50/70 dark:bg-purple-950/40 border border-purple-200 dark:border-purple-900/60">
+                <p class="font-bold text-purple-800 dark:text-purple-300 mb-1">Conditional Routing</p>
+                <p class="text-slate-600 dark:text-slate-300">Dynamic "if-then" branching at runtime based on classification or state (e.g. Refund vs Tech Support route).</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 3: State vs Memory -->
+          <div class="bg-white dark:bg-slate-900 rounded-xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
+            <div class="flex items-center justify-between">
+              <h3 class="font-bold text-base text-slate-800 dark:text-slate-100 flex items-center space-x-2">
+                <i class="fa-solid fa-memory text-emerald-500"></i>
+                <span>State vs. Memory</span>
+              </h3>
+              <span class="badge-highlight px-2 py-0.5 rounded text-[11px]">Exam Highlight</span>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs border-collapse">
+                <thead>
+                  <tr class="border-b border-slate-200 dark:border-slate-700 text-slate-500">
+                    <th class="py-1.5 font-semibold">Attribute</th>
+                    <th class="py-1.5 font-semibold text-blue-600 dark:text-blue-400">State</th>
+                    <th class="py-1.5 font-semibold text-emerald-600 dark:text-emerald-400">Memory</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-slate-600 dark:text-slate-300">
+                  <tr>
+                    <td class="py-1.5 font-medium">Time Horizon</td>
+                    <td>Short-term (current run)</td>
+                    <td>Long-term (across sessions)</td>
+                  </tr>
+                  <tr>
+                    <td class="py-1.5 font-medium">Purpose</td>
+                    <td>Manage current task execution</td>
+                    <td>Retain user habits & preferences</td>
+                  </tr>
+                  <tr>
+                    <td class="py-1.5 font-medium">Lifecycle</td>
+                    <td>Temporary (cleared after run)</td>
+                    <td>Persisted intentionally</td>
+                  </tr>
+                  <tr>
+                    <td class="py-1.5 font-medium">Example</td>
+                    <td>Current pizza order: Large Pepperoni</td>
+                    <td>"User always orders Pepperoni"</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="text-xs text-slate-500 dark:text-slate-400">
+              <strong>LangGraph mapping:</strong> Short-term state is handled by <code>Checkpointer (thread_id)</code>; Long-term memory is handled by <code>Store (namespaces)</code>.
+            </p>
+          </div>
+
+          <!-- Card 4: Document Ingestion Pipelines -->
+          <div class="bg-white dark:bg-slate-900 rounded-xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
+            <div class="flex items-center justify-between">
+              <h3 class="font-bold text-base text-slate-800 dark:text-slate-100 flex items-center space-x-2">
+                <i class="fa-solid fa-file-import text-amber-500"></i>
+                <span>Document Ingestion Pipelines</span>
+              </h3>
+              <span class="badge-highlight px-2 py-0.5 rounded text-[11px]">Exam Highlight</span>
+            </div>
+            <p class="text-sm text-slate-600 dark:text-slate-300">
+              <strong>4-Stage Ingestion Lifecycle:</strong>
+            </p>
+            <div class="space-y-1.5 text-xs text-slate-600 dark:text-slate-300">
+              <div class="p-2 rounded bg-slate-100 dark:bg-slate-800 flex items-start space-x-2">
+                <span class="font-bold text-blue-500">1. Loading:</span>
+                <span>Load raw files (PDF, DOCX, CSV) into standardized <code>Document</code> objects with stable IDs.</span>
+              </div>
+              <div class="p-2 rounded bg-slate-100 dark:bg-slate-800 flex items-start space-x-2">
+                <span class="font-bold text-blue-500">2. Cache/Hash Check:</span>
+                <span>Docstore checks cryptographic content hash. If file hash matches, <strong>skip</strong> to avoid expensive embedding recomputation.</span>
+              </div>
+              <div class="p-2 rounded bg-slate-100 dark:bg-slate-800 flex items-start space-x-2">
+                <span class="font-bold text-blue-500">3. Transformations:</span>
+                <span>Chunking (SentenceSplitter) &rarr; Metadata Extraction (TitleExtractor) &rarr; Embedding Generation.</span>
+              </div>
+              <div class="p-2 rounded bg-slate-100 dark:bg-slate-800 flex items-start space-x-2">
+                <span class="font-bold text-blue-500">4. Vector Store Save:</span>
+                <span>Persist chunks, metadata, and vectors into vector database (upsert support).</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- MODULE 05 SECTION: RAG FUNDAMENTALS -->
+      <section class="mod-section" data-mod="mod05">
+        <div class="flex items-center space-x-3 mb-6 pb-2 border-b border-slate-200 dark:border-slate-800">
+          <div class="w-8 h-8 rounded-lg bg-emerald-600 text-white flex items-center justify-center font-bold text-sm">05</div>
+          <div>
+            <h2 class="text-xl font-bold text-slate-900 dark:text-white">Module 1: RAG Fundamentals</h2>
+            <p class="text-xs text-slate-500">The 5-Stage Pipeline, Embeddings, Chunking Strategies & Vector Databases (ChromaDB)</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Card 1: RAG Architecture & Comparison -->
+          <div class="bg-white dark:bg-slate-900 rounded-xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
+            <div class="flex items-center justify-between">
+              <h3 class="font-bold text-base text-slate-800 dark:text-slate-100 flex items-center space-x-2">
+                <i class="fa-solid fa-magnifying-glass text-emerald-500"></i>
+                <span>The RAG Pipeline & Comparison</span>
+              </h3>
+              <span class="badge-highlight px-2 py-0.5 rounded text-[11px]">Exam Highlight</span>
+            </div>
+            <div class="text-xs space-y-2 text-slate-600 dark:text-slate-300">
+              <p><strong>Two Pipelines of RAG:</strong></p>
+              <ul class="list-disc list-inside pl-1 space-y-1">
+                <li><strong>Offline:</strong> Ingest &rarr; Chunk &rarr; Embed &rarr; Store in Vector DB (Runs once).</li>
+                <li><strong>Online:</strong> Query &rarr; Embed Query &rarr; Retrieve &rarr; Augment &rarr; Generate (Every query).</li>
+              </ul>
+              <div class="p-2.5 rounded bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-900 dark:text-emerald-300">
+                <strong>RAG vs Fine-Tuning vs Long-Context:</strong>
+                <p class="mt-1">&bull; <strong>RAG:</strong> Dynamic, rapidly changing facts, private data, verifiable citations.</p>
+                <p>&bull; <strong>Fine-Tuning:</strong> Adapting style, tone, format, and task behavior; NOT for fact injection.</p>
+                <p>&bull; <strong>Long-Context:</strong> One-off ad-hoc analysis; high per-token cost on every call, suffers from "Lost in the Middle".</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2: Chunking Strategies & Overlap -->
+          <div class="bg-white dark:bg-slate-900 rounded-xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
+            <div class="flex items-center justify-between">
+              <h3 class="font-bold text-base text-slate-800 dark:text-slate-100 flex items-center space-x-2">
+                <i class="fa-solid fa-scissors text-amber-500"></i>
+                <span>Chunking Strategies & Overlap</span>
+              </h3>
+              <span class="badge-highlight px-2 py-0.5 rounded text-[11px]">Exam Highlight</span>
+            </div>
+            <div class="text-xs space-y-2 text-slate-600 dark:text-slate-300">
+              <div class="grid grid-cols-3 gap-2 text-center">
+                <div class="p-2 bg-slate-100 dark:bg-slate-800 rounded">
+                  <p class="font-bold text-slate-800 dark:text-slate-200">Fixed-Size</p>
+                  <p class="text-[11px] text-slate-500">Cuts at exact token/char count; risks slicing mid-sentence.</p>
+                </div>
+                <div class="p-2 bg-blue-50 dark:bg-blue-950/50 rounded border border-blue-200 dark:border-blue-900">
+                  <p class="font-bold text-blue-700 dark:text-blue-300">Recursive</p>
+                  <p class="text-[11px] text-slate-500">Paragraph &rarr; Sentence &rarr; Word. Keeps sentences whole.</p>
+                </div>
+                <div class="p-2 bg-slate-100 dark:bg-slate-800 rounded">
+                  <p class="font-bold text-slate-800 dark:text-slate-200">Semantic</p>
+                  <p class="text-[11px] text-slate-500">Splits when topic shifts; higher accuracy, costlier.</p>
+                </div>
+              </div>
+              <div class="p-2.5 rounded bg-slate-100 dark:bg-slate-800 space-y-1">
+                <p><strong>Chunk Overlap (10–20%, e.g., 50–100 tokens):</strong></p>
+                <p class="text-slate-500 dark:text-slate-400">Repeats tokens at chunk boundary so sentences cut in half appear completely intact in at least one chunk.</p>
+                <p><strong>Structure-Aware Splitting:</strong> Preserves tables, headers, and code blocks together.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 3: Embeddings & Similarity Metrics -->
+          <div class="bg-white dark:bg-slate-900 rounded-xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
+            <div class="flex items-center justify-between">
+              <h3 class="font-bold text-base text-slate-800 dark:text-slate-100 flex items-center space-x-2">
+                <i class="fa-solid fa-calculator text-blue-500"></i>
+                <span>Similarity Search Metrics</span>
+              </h3>
+              <span class="badge-highlight px-2 py-0.5 rounded text-[11px]">Exam Highlight</span>
+            </div>
+            <div class="text-xs space-y-2 text-slate-600 dark:text-slate-300">
+              <div class="p-2 rounded bg-slate-100 dark:bg-slate-800">
+                <span class="font-bold text-blue-600 dark:text-blue-400">Cosine Similarity:</span>
+                <code>cos(&theta;) = (A &middot; B) / (||A|| ||B||)</code>
+                <p class="text-slate-500 mt-0.5">Measures angle between vectors. Invariant to text length. Values -1 to 1 (or 0 to 1 for normalized vectors).</p>
+              </div>
+              <div class="p-2 rounded bg-slate-100 dark:bg-slate-800">
+                <span class="font-bold text-blue-600 dark:text-blue-400">Dot Product:</span>
+                <code>A &middot; B = &Sigma; A_i * B_i</code>
+                <p class="text-slate-500 mt-0.5">Measures angle + magnitude. If vectors are unit-normalized, dot product equals cosine similarity and is faster.</p>
+              </div>
+              <div class="p-2 rounded bg-slate-100 dark:bg-slate-800">
+                <span class="font-bold text-blue-600 dark:text-blue-400">Euclidean Distance (L2):</span>
+                <code>d(A, B) = &radic;&Sigma;(A_i - B_i)&sup2;</code>
+                <p class="text-slate-500 mt-0.5">Straight-line distance. Smaller value means closer/higher similarity.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 4: Vector Databases -->
+          <div class="bg-white dark:bg-slate-900 rounded-xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
+            <div class="flex items-center justify-between">
+              <h3 class="font-bold text-base text-slate-800 dark:text-slate-100 flex items-center space-x-2">
+                <i class="fa-solid fa-database text-purple-500"></i>
+                <span>Vector DBs vs Traditional DBs</span>
+              </h3>
+              <span class="badge-highlight px-2 py-0.5 rounded text-[11px]">Exam Highlight</span>
+            </div>
+            <div class="text-xs space-y-2 text-slate-600 dark:text-slate-300">
+              <p><strong>What Vector DB does differently:</strong> Traditional DBs use B-trees for exact match queries (<code>WHERE id = 5</code>). Vector DBs use <strong>HNSW (Hierarchical Navigable Small World)</strong> for sub-millisecond Approximate Nearest Neighbor (ANN) search over 768+ dimensions.</p>
+              <div class="grid grid-cols-3 gap-2 text-center mt-2">
+                <div class="p-2 bg-slate-100 dark:bg-slate-800 rounded">
+                  <p class="font-bold">Embedded / Local</p>
+                  <p class="text-[10px] text-slate-500">ChromaDB in-process. Zero Docker, fastest for &le; 1M vectors.</p>
+                </div>
+                <div class="p-2 bg-slate-100 dark:bg-slate-800 rounded">
+                  <p class="font-bold">Client-Server</p>
+                  <p class="text-[10px] text-slate-500">Qdrant, Milvus. Microservice, multi-user, payload filters.</p>
+                </div>
+                <div class="p-2 bg-slate-100 dark:bg-slate-800 rounded">
+                  <p class="font-bold">Pgvector</p>
+                  <p class="text-[10px] text-slate-500">Postgres extension. Unified SQL + vector in one table.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- MODULE 06 SECTION: ADVANCED RAG -->
+      <section class="mod-section" data-mod="mod06">
+        <div class="flex items-center space-x-3 mb-6 pb-2 border-b border-slate-200 dark:border-slate-800">
+          <div class="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-bold text-sm">06</div>
+          <div>
+            <h2 class="text-xl font-bold text-slate-900 dark:text-white">Module 2: Advanced RAG Architecture & Evaluation</h2>
+            <p class="text-xs text-slate-500">Hybrid Search, BM25, RRF, Graph RAG, Agentic RAG, Cross-Encoder Reranking & Context Management</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Card 1: Hybrid Retrieval & RRF -->
+          <div class="bg-white dark:bg-slate-900 rounded-xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
+            <div class="flex items-center justify-between">
+              <h3 class="font-bold text-base text-slate-800 dark:text-slate-100 flex items-center space-x-2">
+                <i class="fa-solid fa-code-merge text-blue-500"></i>
+                <span>Hybrid Retrieval & RRF</span>
+              </h3>
+              <span class="badge-highlight px-2 py-0.5 rounded text-[11px]">Exam Highlight</span>
+            </div>
+            <div class="text-xs space-y-2 text-slate-600 dark:text-slate-300">
+              <p><strong>Two Searches, Two Blind Spots:</strong></p>
+              <ul class="list-disc list-inside pl-1 text-slate-500 dark:text-slate-400">
+                <li><strong>Dense misses:</strong> Exact part numbers (<code>SKU-4471</code>), error codes (<code>E-1147</code>), acronyms (<code>KSHRD</code>).</li>
+                <li><strong>BM25 misses:</strong> Synonyms (car vs automobile), paraphrases, cross-lingual queries.</li>
+              </ul>
+              <div class="p-2.5 rounded bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900">
+                <p class="font-bold text-blue-800 dark:text-blue-300">Reciprocal Rank Fusion (RRF) Formula:</p>
+                <code class="block font-bold mt-1 text-slate-900 dark:text-white">RRF(d) = &Sigma; 1 / (k + rank_i(d))</code>
+                <p class="mt-1 text-slate-600 dark:text-slate-300">Standard constant <strong>k = 60</strong>. Discards raw scores and combines strictly by rank position. Agreement wins!</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2: Graph RAG -->
+          <div class="bg-white dark:bg-slate-900 rounded-xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
+            <div class="flex items-center justify-between">
+              <h3 class="font-bold text-base text-slate-800 dark:text-slate-100 flex items-center space-x-2">
+                <i class="fa-solid fa-circle-nodes text-purple-500"></i>
+                <span>Graph RAG (Microsoft Approach)</span>
+              </h3>
+              <span class="badge-highlight px-2 py-0.5 rounded text-[11px]">Exam Highlight</span>
+            </div>
+            <div class="text-xs space-y-2 text-slate-600 dark:text-slate-300">
+              <p><strong>When chunk retrieval fails:</strong> Multi-hop queries (vendor in Chunk 14, supplier in Chunk 902) and global thematic queries (summarize 400 reports).</p>
+              <div class="p-2 rounded bg-slate-100 dark:bg-slate-800 space-y-1">
+                <p><strong>Graph Construction:</strong> Entity Extraction &rarr; Relationship Extraction (Triples: <code>(Sokha)-[:MEMBER_OF]->(Platform)</code>) &rarr; Neo4j <code>MERGE</code>.</p>
+                <p><strong>Hierarchical Leiden Algorithm:</strong> Partitions the graph into communities; LLM generates summary reports for each cluster.</p>
+                <p><strong>Local vs Global Search:</strong></p>
+                <p class="text-slate-500">&bull; <em>Local:</em> Walks 1–2 hops outward from query entities (fast, specific facts).</p>
+                <p class="text-slate-500">&bull; <em>Global:</em> Map-reduce over community summary reports (corpus-wide themes).</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 3: Agentic RAG -->
+          <div class="bg-white dark:bg-slate-900 rounded-xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
+            <div class="flex items-center justify-between">
+              <h3 class="font-bold text-base text-slate-800 dark:text-slate-100 flex items-center space-x-2">
+                <i class="fa-solid fa-robot text-emerald-500"></i>
+                <span>Agentic RAG & Self-Reflection</span>
+              </h3>
+              <span class="badge-highlight px-2 py-0.5 rounded text-[11px]">Exam Highlight</span>
+            </div>
+            <div class="text-xs space-y-2 text-slate-600 dark:text-slate-300">
+              <p><strong>What makes RAG "Agentic":</strong> The retrieval strategy is chosen dynamically at runtime by the model in a loop (Retrieve &rarr; Judge &rarr; Rewrite &rarr; Retrieve Again), rather than a single fixed pass.</p>
+              <div class="p-2.5 rounded bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800">
+                <p class="font-bold text-emerald-800 dark:text-emerald-300">Self-Reflective RAG (3 Critical Checks):</p>
+                <p class="mt-1">1. <strong>Check 1 (Before Generation):</strong> Are retrieved chunks relevant? (Filter out non-relevant ones).</p>
+                <p>2. <strong>Check 2 (After Generation):</strong> Is the draft answer grounded in context? (Catches hallucination).</p>
+                <p>3. <strong>Check 3 (After Generation):</strong> Does the answer address the original question?</p>
+              </div>
+              <p><strong>Execution Cap:</strong> Must have strict stopping conditions (max iterations &le; 3) to prevent runaway loops.</p>
+            </div>
+          </div>
+
+          <!-- Card 4: Reranking & Context Management -->
+          <div class="bg-white dark:bg-slate-900 rounded-xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
+            <div class="flex items-center justify-between">
+              <h3 class="font-bold text-base text-slate-800 dark:text-slate-100 flex items-center space-x-2">
+                <i class="fa-solid fa-arrow-down-wide-short text-amber-500"></i>
+                <span>Cross-Encoders & Context Management</span>
+              </h3>
+              <span class="badge-highlight px-2 py-0.5 rounded text-[11px]">Exam Highlight</span>
+            </div>
+            <div class="text-xs space-y-2 text-slate-600 dark:text-slate-300">
+              <p><strong>Bi-Encoder vs Cross-Encoder:</strong></p>
+              <ul class="list-disc list-inside pl-1 text-slate-500">
+                <li><strong>Bi-Encoder (Two Towers):</strong> Encodes query and doc separately; fast cosine match; lacks token interaction.</li>
+                <li><strong>Cross-Encoder (Single Tower):</strong> Encodes <code>[CLS] query [SEP] doc</code> together; full cross-attention; highly accurate.</li>
+              </ul>
+              <div class="p-2 rounded bg-slate-100 dark:bg-slate-800 space-y-1">
+                <p><strong>Two-Stage Pipeline:</strong> Broad recall (top-50 via Hybrid) &rarr; Cross-Encoder rerank to top-5.</p>
+                <p><strong>"Lost in the Middle":</strong> Accuracy drops for facts in the middle of prompt. <strong>Fix:</strong> Reorder chunks (Rank 1 first, Rank 2 last, weakest in the middle).</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- MODULE 07 SECTION: AUTONOMOUS AGENTS -->
+      <section class="mod-section" data-mod="mod07">
+        <div class="flex items-center space-x-3 mb-6 pb-2 border-b border-slate-200 dark:border-slate-800">
+          <div class="w-8 h-8 rounded-lg bg-rose-600 text-white flex items-center justify-center font-bold text-sm">07</div>
+          <div>
+            <h2 class="text-xl font-bold text-slate-900 dark:text-white">Autonomous Agents & Tool Integration</h2>
+            <p class="text-xs text-slate-500">Tool Lifecycle, Schemas, Bounded Actions, Agent Patterns, Harness Kernel, MCP Server & HITL</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Card 1: Tool Calling Lifecycle & Core Rule -->
+          <div class="bg-white dark:bg-slate-900 rounded-xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
+            <div class="flex items-center justify-between">
+              <h3 class="font-bold text-base text-slate-800 dark:text-slate-100 flex items-center space-x-2">
+                <i class="fa-solid fa-screwdriver-wrench text-rose-500"></i>
+                <span>Tool Calling Architecture</span>
+              </h3>
+              <span class="badge-highlight px-2 py-0.5 rounded text-[11px]">Exam Highlight</span>
+            </div>
+            <div class="p-2.5 rounded bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900 text-xs font-semibold text-rose-900 dark:text-rose-300">
+              <i class="fa-solid fa-quote-left mr-1"></i> "The model requests the action; the application executes it."
+            </div>
+            <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+              LLMs have no sockets, DB drivers, or execution runtime. Local models in Ollama emit structured JSON tool calls; the host Python application executes the function and feeds the observation back.
+            </p>
+            <div class="p-2 bg-slate-100 dark:bg-slate-800 rounded text-xs space-y-1">
+              <p class="font-bold text-slate-800 dark:text-slate-200">Schema Validation vs Business Validation:</p>
+              <p>&bull; <strong>Schema:</strong> Type, shape, required fields ("Is request well-formed?").</p>
+              <p>&bull; <strong>Business:</strong> Does record exist? In stock? Has permission? ("Is it okay to do?").</p>
+              <p class="text-slate-500 italic text-[11px]">"A valid schema does not guarantee a valid argument (-5 is a valid int, but invalid product ID)."</p>
+            </div>
+          </div>
+
+          <!-- Card 2: Bounded Actions & Safety -->
+          <div class="bg-white dark:bg-slate-900 rounded-xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
+            <div class="flex items-center justify-between">
+              <h3 class="font-bold text-base text-slate-800 dark:text-slate-100 flex items-center space-x-2">
+                <i class="fa-solid fa-shield-halved text-emerald-500"></i>
+                <span>Bounded Actions & Failure Boundaries</span>
+              </h3>
+              <span class="badge-highlight px-2 py-0.5 rounded text-[11px]">Exam Highlight</span>
+            </div>
+            <div class="text-xs space-y-2 text-slate-600 dark:text-slate-300">
+              <p><strong>Principle of Least Privilege:</strong> Never expose <code>eval()</code>, raw shell, or arbitrary SQL strings. Use narrow, parameterized allowlist tools.</p>
+              <div class="grid grid-cols-3 gap-2 text-center">
+                <div class="p-1.5 bg-emerald-50 dark:bg-emerald-950/40 rounded border border-emerald-200 dark:border-emerald-800">
+                  <p class="font-bold text-emerald-700 dark:text-emerald-300">Green (Read)</p>
+                  <p class="text-[10px] text-slate-500">Auto-execute</p>
+                </div>
+                <div class="p-1.5 bg-amber-50 dark:bg-amber-950/40 rounded border border-amber-200 dark:border-amber-800">
+                  <p class="font-bold text-amber-700 dark:text-amber-300">Yellow (Write)</p>
+                  <p class="text-[10px] text-slate-500">Audit + Rollback</p>
+                </div>
+                <div class="p-1.5 bg-rose-50 dark:bg-rose-950/40 rounded border border-rose-200 dark:border-rose-800">
+                  <p class="font-bold text-rose-700 dark:text-rose-300">Red (Destruct)</p>
+                  <p class="text-[10px] text-slate-500">Human Approval</p>
+                </div>
+              </div>
+              <p><strong>Failure Boundary:</strong> Wrapping calls in error handling so crashes become <em>observations</em>. The agent reads the error and chooses an alternative action instead of crashing the system.</p>
+            </div>
+          </div>
+
+          <!-- Card 3: Agent Patterns & Harness -->
+          <div class="bg-white dark:bg-slate-900 rounded-xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
+            <div class="flex items-center justify-between">
+              <h3 class="font-bold text-base text-slate-800 dark:text-slate-100 flex items-center space-x-2">
+                <i class="fa-solid fa-microchip text-blue-500"></i>
+                <span>Agent Patterns & Harness Design</span>
+              </h3>
+              <span class="badge-highlight px-2 py-0.5 rounded text-[11px]">Exam Highlight</span>
+            </div>
+            <div class="text-xs space-y-1.5 text-slate-600 dark:text-slate-300">
+              <p><strong>The 5 Agent Patterns:</strong></p>
+              <p>&bull; <strong>ReAct:</strong> Reason + Act + Observe loop. Best for unpredictable, dynamic tasks.</p>
+              <p>&bull; <strong>Router:</strong> Classifies request to select single best specialist agent/tool.</p>
+              <p>&bull; <strong>Planner-Executor:</strong> Plans steps upfront, executes sequentially, replans on failure.</p>
+              <p>&bull; <strong>Reflection:</strong> Generator &rarr; Critic &rarr; Reviser loop for objective quality gating.</p>
+              <p>&bull; <strong>Multi-Agent:</strong> Supervisor delegates specialized subtasks to independent agents.</p>
+              <div class="p-2 rounded bg-slate-100 dark:bg-slate-800">
+                <p class="font-bold text-slate-800 dark:text-slate-200">The Harness OS-Kernel Analogy:</p>
+                <p class="text-slate-500">Model = Untrusted CPU (generates tokens). Harness = Kernel (enforces syscalls, permissions, memory boundaries, and budgets).</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 4: MCP Server & Human in the Loop -->
+          <div class="bg-white dark:bg-slate-900 rounded-xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
+            <div class="flex items-center justify-between">
+              <h3 class="font-bold text-base text-slate-800 dark:text-slate-100 flex items-center space-x-2">
+                <i class="fa-solid fa-network-wired text-indigo-500"></i>
+                <span>MCP Server & Human-in-the-Loop</span>
+              </h3>
+              <span class="badge-highlight px-2 py-0.5 rounded text-[11px]">Exam Highlight</span>
+            </div>
+            <div class="text-xs space-y-2 text-slate-600 dark:text-slate-300">
+              <p><strong>MCP (Model Context Protocol):</strong> Solves the $M 	imes N$ integration problem by providing a standardized host/client/server protocol.</p>
+              <p><strong>3 MCP Primitives:</strong> <code>Tools</code> (model-called actions), <code>Resources</code> (readable attachments), <code>Prompts</code> (slash commands).</p>
+              <p><strong>Lifecycle:</strong> Initialization &rarr; Operation (tools/list, tools/call) &rarr; Shutdown.</p>
+              <div class="p-2 rounded bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-200 dark:border-indigo-900">
+                <p class="font-bold text-indigo-800 dark:text-indigo-300">HITL vs HOTL vs HOOTL:</p>
+                <p>&bull; <strong>Human-IN-the-loop:</strong> Blocks execution until human approves (highest safety).</p>
+                <p>&bull; <strong>Human-ON-the-loop:</strong> Runs automatically; streams to audit log with abort/rollback.</p>
+                <p>&bull; <strong>Human-OUT-of-the-loop:</strong> Fully autonomous; only post-hoc logging.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- TAB 2: CODE REVIEW LAB -->
+    <div id="tab-content-code" class="hidden space-y-8">
+      <div class="bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900 rounded-xl p-5">
+        <h2 class="text-lg font-bold text-blue-900 dark:text-blue-200 flex items-center space-x-2">
+          <i class="fa-solid fa-code text-blue-600"></i>
+          <span>Code Review Lab (Exam Code Walkthrough)</span>
+        </h2>
+        <p class="text-xs text-blue-700 dark:text-blue-300 mt-1">
+          Review the real Python code patterns, schemas, and algorithms that appear on the exam. Each snippet highlights critical exam traps!
+        </p>
+      </div>
+
+      <!-- Code Example 1: LangGraph StateGraph & Routing -->
+      <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
+        <div class="bg-slate-100 dark:bg-slate-800/80 px-4 py-3 border-b border-slate-200 dark:border-slate-700 flex justify-between items-center">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">Lesson 04</span>
+            <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm">LangGraph: Conditional Edge vs Command & Checkpointing</h3>
+          </div>
+          <span class="text-xs bg-slate-200 dark:bg-slate-700 px-2 py-0.5 rounded font-mono">Python</span>
+        </div>
+        <div class="p-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div>
+            <pre class="bg-slate-900 text-slate-100 p-3 rounded-lg text-xs overflow-x-auto leading-relaxed"><code>from typing import TypedDict, Literal
+from langgraph.graph import StateGraph, START, END
+from langgraph.checkpoint.memory import InMemorySaver
+from langgraph.types import Command
+
+class State(TypedDict):
+    ticket: str
+    tries: int
+
+# Option A: Conditional Edge routing
+def route(state: State) -> str:
+    return "billing" if "billing" in state["ticket"].lower() else "general"
+
+# Option B: Command (Modern 1-step route + state update)
+def classifier(state: State) -> Command[Literal["billing", "general"]]:
+    if "billing" in state["ticket"].lower():
+        return Command(update={"tries": state["tries"] + 1}, goto="billing")
+    return Command(update={"tries": state["tries"] + 1}, goto="general")
+
+# Short-term thread memory setup
+builder = StateGraph(State)
+builder.add_node("classifier", classifier)
+checkpointer = InMemorySaver()
+app = builder.compile(checkpointer=checkpointer)
+
+# Using thread_id for conversation persistence
+config = {"configurable": {"thread_id": "session-101"}}
+app.invoke({"ticket": "My billing failed", "tries": 0}, config)</code></pre>
+          </div>
+          <div class="bg-slate-50 dark:bg-slate-800/50 p-3 rounded-lg text-xs space-y-2 border border-slate-200 dark:border-slate-700">
+            <h4 class="font-bold text-slate-800 dark:text-slate-200 flex items-center space-x-1 text-xs">
+              <i class="fa-solid fa-triangle-exclamation text-amber-500"></i>
+              <span>Exam Traps & Key Concepts:</span>
+            </h4>
+            <p><strong>1. Conditional Edge vs Command:</strong> Conditional edge requires a separate routing function passed to <code>add_conditional_edges()</code>. <code>Command</code> is newer and returns the state update <em>and</em> the next destination (<code>goto</code>) together!</p>
+            <p><strong>2. Checkpointer Scope:</strong> <code>InMemorySaver()</code> scopes by <code>thread_id</code>. Two calls with the same <code>thread_id</code> share state; a different <code>thread_id</code> starts an empty conversation.</p>
+            <p><strong>3. Volatility Trap:</strong> <code>InMemorySaver</code> lives in RAM and is lost upon process exit. For production, use <code>PostgresSaver</code> or <code>SqliteSaver</code>.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Code Example 2: Hybrid Retrieval & RRF Fusion -->
+      <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
+        <div class="bg-slate-100 dark:bg-slate-800/80 px-4 py-3 border-b border-slate-200 dark:border-slate-700 flex justify-between items-center">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">Lesson 06</span>
+            <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm">Hybrid Retrieval: BM25 + Dense + Reciprocal Rank Fusion (RRF)</h3>
+          </div>
+          <span class="text-xs bg-slate-200 dark:bg-slate-700 px-2 py-0.5 rounded font-mono">Python</span>
+        </div>
+        <div class="p-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div>
+            <pre class="bg-slate-900 text-slate-100 p-3 rounded-lg text-xs overflow-x-auto leading-relaxed"><code>from rank_bm25 import BM25Okapi
+
+# 1. BM25 Sparse Index
+tokens = [c["text"].lower().split() for c in chunks]
+bm25 = BM25Okapi(tokens, k1=1.5, b=0.75)
+
+def sparse_search(query, top_n=50):
+    scores = bm25.get_scores(query.lower().split())
+    order = sorted(range(len(scores)), key=lambda i: -scores[i])
+    return [chunks[i]["id"] for i in order[:top_n]]
+
+# 2. Reciprocal Rank Fusion (The whole algorithm)
+def fuse(*ranked_lists, k=60, top_k=5):
+    fused = {}
+    for ids in ranked_lists:
+        # NOTE: enumerate must start at 1 (1-based rank)
+        for rank, doc_id in enumerate(ids, start=1):
+            fused[doc_id] = fused.get(doc_id, 0.0) + 1.0 / (k + rank)
+    
+    # Sort descending by fused score
+    return sorted(fused, key=fused.get, reverse=True)[:top_k]
+
+# Stage 1: Broad Retrieval & Fusion
+top5 = fuse(dense_search(q, 50), sparse_search(q, 50))</code></pre>
+          </div>
+          <div class="bg-slate-50 dark:bg-slate-800/50 p-3 rounded-lg text-xs space-y-2 border border-slate-200 dark:border-slate-700">
+            <h4 class="font-bold text-slate-800 dark:text-slate-200 flex items-center space-x-1 text-xs">
+              <i class="fa-solid fa-triangle-exclamation text-amber-500"></i>
+              <span>Exam Traps & Key Concepts:</span>
+            </h4>
+            <p><strong>1. The 1-Based Rank Trap:</strong> Look at <code>enumerate(ids, start=1)</code>. Ranks must be 1-based ($1, 2, 3...$). Starting at 0 silently distorts all reciprocal scores!</p>
+            <p><strong>2. Join Key:</strong> Both indexes must use the <em>identical chunk ID</em> (e.g. <code>source::chunk_n</code>) to join properly.</p>
+            <p><strong>3. Discarding Raw Scores:</strong> RRF discards cosine distances and BM25 float scores entirely; it uses <strong>only positions</strong>, avoiding score normalization issues.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Code Example 3: Cross-Encoder Reranking & Lost in the Middle -->
+      <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
+        <div class="bg-slate-100 dark:bg-slate-800/80 px-4 py-3 border-b border-slate-200 dark:border-slate-700 flex justify-between items-center">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-wider text-purple-600 dark:text-purple-400">Lesson 06</span>
+            <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm">Two-Stage Pipeline & Context Reordering (Lost in the Middle)</h3>
+          </div>
+          <span class="text-xs bg-slate-200 dark:bg-slate-700 px-2 py-0.5 rounded font-mono">Python</span>
+        </div>
+        <div class="p-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div>
+            <pre class="bg-slate-900 text-slate-100 p-3 rounded-lg text-xs overflow-x-auto leading-relaxed"><code>from sentence_transformers import CrossEncoder
+
+# Loaded ONCE at startup (module scope)
+reranker = CrossEncoder("BAAI/bge-reranker-base", max_length=512)
+
+def rerank(query, candidates, top_k=5):
+    pairs = [(query, c["text"]) for c in candidates]
+    scores = reranker.predict(pairs, batch_size=16)
+    # Higher is better for CrossEncoder logits
+    ranked = sorted(zip(candidates, scores), key=lambda p: p[1], reverse=True)
+    return [c for c, _ in ranked[:top_k]]
+
+def reorder_lost_in_middle(picked_chunks):
+    # Even/odd split puts Rank 1 first, Rank 2 last, weakest in middle
+    head, tail = [], []
+    for i, c in enumerate(picked_chunks):
+        (head if i % 2 == 0 else tail).append(c)
+    return head + tail[::-1]</code></pre>
+          </div>
+          <div class="bg-slate-50 dark:bg-slate-800/50 p-3 rounded-lg text-xs space-y-2 border border-slate-200 dark:border-slate-700">
+            <h4 class="font-bold text-slate-800 dark:text-slate-200 flex items-center space-x-1 text-xs">
+              <i class="fa-solid fa-triangle-exclamation text-amber-500"></i>
+              <span>Exam Traps & Key Concepts:</span>
+            </h4>
+            <p><strong>1. Startup Load Trap:</strong> Never initialize <code>CrossEncoder(...)</code> inside the per-query request function! It downloads or instantiates transformer weights, adding seconds of latency.</p>
+            <p><strong>2. Sorting Direction:</strong> <code>reverse=True</code> because Cross-Encoder outputs logits where higher numbers represent higher relevance (unlike ChromaDB distance where lower is closer).</p>
+            <p><strong>3. Lost in the Middle Fix:</strong> Placing Rank 1 at head and Rank 2 at the tail capitalizes on the transformer's primacy and recency attention bias.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Code Example 4: Tool Schema & FastMCP Server -->
+      <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
+        <div class="bg-slate-100 dark:bg-slate-800/80 px-4 py-3 border-b border-slate-200 dark:border-slate-700 flex justify-between items-center">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-wider text-rose-600 dark:text-rose-400">Lesson 07</span>
+            <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm">Tool Definition Schema & FastMCP 15-Line Server</h3>
+          </div>
+          <span class="text-xs bg-slate-200 dark:bg-slate-700 px-2 py-0.5 rounded font-mono">Python</span>
+        </div>
+        <div class="p-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div>
+            <pre class="bg-slate-900 text-slate-100 p-3 rounded-lg text-xs overflow-x-auto leading-relaxed"><code>from mcp.server.fastmcp import FastMCP
+
+# Create server instance
+mcp = FastMCP("warehouse-service")
+
+# 1. TOOL (Model-controlled action)
+@mcp.tool()
+def check_stock(product_id: int) -> dict:
+    """Check remaining stock for a product ID in inventory."""
+    if product_id <= 0:
+        return {"error": "Invalid product_id"}
+    return {"product_id": product_id, "in_stock": True, "qty": 42}
+
+# 2. RESOURCE (Readable data attachment)
+@mcp.resource("inventory://catalog")
+def get_catalog() -> str:
+    """Read-only catalog data attached like a file."""
+    return "SKU-101: Laptop, SKU-102: Monitor"
+
+if __name__ == "__main__":
+    mcp.run(transport="stdio")</code></pre>
+          </div>
+          <div class="bg-slate-50 dark:bg-slate-800/50 p-3 rounded-lg text-xs space-y-2 border border-slate-200 dark:border-slate-700">
+            <h4 class="font-bold text-slate-800 dark:text-slate-200 flex items-center space-x-1 text-xs">
+              <i class="fa-solid fa-triangle-exclamation text-amber-500"></i>
+              <span>Exam Traps & Key Concepts:</span>
+            </h4>
+            <p><strong>1. Tool vs Resource:</strong> <code>@mcp.tool()</code> is invoked by the model with model-generated arguments. <code>@mcp.resource()</code> is read by the host/user like opening a file.</p>
+            <p><strong>2. Docstrings Matter:</strong> In FastMCP, the docstring and type hints automatically generate the JSON Schema. If you omit the docstring, the model has no description to know when to route to it!</p>
+            <p><strong>3. stdio Transport:</strong> <code>stdio</code> connects via local subprocess streams. Its lifecycle is tied directly to the parent application process.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Code Example: Neo4j Cypher Scripting & Graph RAG -->
+      <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
+        <div class="bg-slate-100 dark:bg-slate-800/80 px-4 py-3 border-b border-slate-200 dark:border-slate-700 flex justify-between items-center">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-wider text-cyan-600 dark:text-cyan-400">Lesson 06 — Exam Highlight</span>
+            <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm">Neo4j Cypher Scripting: Triple Creation & Multi-Hop Traversal</h3>
+          </div>
+          <span class="text-xs bg-cyan-100 dark:bg-cyan-900/50 text-cyan-700 dark:text-cyan-300 px-2 py-0.5 rounded font-mono font-bold">Cypher</span>
+        </div>
+        <div class="p-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div>
+            <pre class="bg-slate-900 text-slate-100 p-3 rounded-lg text-xs overflow-x-auto leading-relaxed"><code>// 1. BASIC TRIPLE CREATION (THE EXAM SCRIPT)
+CREATE (a:Entity {name: "Sokha"})-[r:WORKS_ON]->(b:Entity {name: "Invoicing Service"})
+RETURN a, r, b;
+
+// 2. IDEMPOTENT LOADING (Slide 29: Always MERGE, never CREATE)
+MERGE (a:Person {name: "Sokha"})
+MERGE (b:Service {name: "Invoicing Service"})
+MERGE (a)-[r:OWNS]->(b)
+SET r.chunk_id = "handbook::chunk_12", r.weight = 8
+RETURN a, r, b;
+
+// 3. ONE-HOP MATCHING
+MATCH (p:Person {name: "Sokha"})-[:MEMBER_OF]->(t:Team)
+RETURN t.name;
+
+// 4. MULTI-HOP GRAPH RAG TRAVERSAL (Service &lt;- OWNS - Person - MEMBER_OF -&gt; Team)
+MATCH (s:Service {name: "Billing"})&lt;-[:OWNS]-(p:Person)-[:MEMBER_OF]-&gt;(t:Team)
+RETURN p.name AS owner, t.name AS team;
+
+// 5. VARIABLE-LENGTH BOUNDED PATH TRAVERSAL (1 to 3 hops)
+MATCH path = (a:Entity {name: "LegacyPay"})-[*1..3]-(b:Entity)
+RETURN path
+LIMIT 25;
+
+// 6. SAFE NODE DELETION
+MATCH (a:Entity {name: "Sokha"})
+DETACH DELETE a;</code></pre>
+          </div>
+          <div class="bg-slate-50 dark:bg-slate-800/50 p-3 rounded-lg text-xs space-y-2 border border-slate-200 dark:border-slate-700">
+            <h4 class="font-bold text-slate-800 dark:text-slate-200 flex items-center space-x-1 text-xs">
+              <i class="fa-solid fa-triangle-exclamation text-amber-500"></i>
+              <span>Exam Traps & Key Concepts:</span>
+            </h4>
+            <p><strong>1. CREATE vs MERGE:</strong> <code>CREATE</code> is NOT idempotent. Running it twice gives you duplicate nodes and duplicate edges. <code>MERGE</code> finds or creates, preventing graph duplication.</p>
+            <p><strong>2. Directed Edges:</strong> <code>(a)-[r:WORKS_ON]-&gt;(b)</code> specifies directed relationship from <code>a</code> to <code>b</code>. Arrow direction determines semantic meaning.</p>
+            <p><strong>3. DETACH DELETE:</strong> Running <code>DELETE a</code> on a node with connected relationships throws an error. Use <code>DETACH DELETE a</code> to safely delete connected relationships first.</p>
+            <p><strong>4. Bound Traversals:</strong> Never run unbounded <code>[*]</code>; always cap depth with <code>[*1..3]</code> and <code>LIMIT</code> to prevent exponential path search freezing the server.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: CLI & COMMANDS LAB -->
+    <div id="tab-content-commands" class="hidden space-y-6">
+      <div class="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white rounded-2xl p-6 border border-slate-800 shadow-xl">
+        <div class="flex items-center space-x-2 text-cyan-400 text-xs font-bold uppercase tracking-wider mb-1">
+          <i class="fa-solid fa-terminal"></i>
+          <span>Exam CLI & Terminal Lab</span>
+        </div>
+        <h2 class="text-2xl font-black">Ollama, Docker, GraphRAG & Serving Commands</h2>
+        <p class="text-xs text-slate-400 mt-1 max-w-2xl">
+          Complete command cheat sheet with flags, terminal outputs, port mappings, and exact exam trap explanations based on course presentation slides.
+        </p>
+      </div>
+
+      <!-- Commands Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+        <!-- 1. Ollama Pull -->
+        <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm flex flex-col justify-between">
+          <div class="p-5 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-cyan-100 dark:bg-cyan-900/50 text-cyan-800 dark:text-cyan-300">Ollama CLI</span>
+              <span class="text-xs text-slate-400"><i class="fa-solid fa-book mr-1"></i>Lesson 02 Slide 11</span>
+            </div>
+            <h3 class="text-sm font-bold text-slate-900 dark:text-white">Download Model Without Running</h3>
+            <div class="relative">
+              <pre class="bg-slate-950 text-emerald-400 p-3 rounded-lg text-xs font-mono overflow-x-auto"><code>ollama pull llama3.2:1b</code></pre>
+              <button onclick="navigator.clipboard.writeText('ollama pull llama3.2:1b'); alert('Copied!')" class="absolute top-2 right-2 px-2 py-1 bg-slate-800 hover:bg-slate-700 text-[11px] text-slate-300 rounded"><i class="fa-regular fa-copy"></i></button>
+            </div>
+            <p class="text-xs text-slate-600 dark:text-slate-300">Downloads weights and tokenizer without starting chat.</p>
+          </div>
+          <div class="bg-amber-50 dark:bg-amber-950/20 border-t border-amber-200 dark:border-amber-900/30 p-3 text-[11px] text-amber-800 dark:text-amber-200">
+            <strong>Exam Trap:</strong> 'ollama pull' only downloads; it does NOT load into memory. Use 'ollama run' for chat.
+          </div>
+        </div>
+
+        <!-- 2. Ollama Run -->
+        <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm flex flex-col justify-between">
+          <div class="p-5 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-cyan-100 dark:bg-cyan-900/50 text-cyan-800 dark:text-cyan-300">Ollama CLI</span>
+              <span class="text-xs text-slate-400"><i class="fa-solid fa-book mr-1"></i>Lesson 02 Slide 11, 12</span>
+            </div>
+            <h3 class="text-sm font-bold text-slate-900 dark:text-white">Pull, Load, and Start Interactive Chat</h3>
+            <div class="relative">
+              <pre class="bg-slate-950 text-emerald-400 p-3 rounded-lg text-xs font-mono overflow-x-auto"><code>ollama run llama3.2 "Explain vector embeddings in one sentence."</code></pre>
+              <button onclick="navigator.clipboard.writeText('ollama run llama3.2'); alert('Copied!')" class="absolute top-2 right-2 px-2 py-1 bg-slate-800 hover:bg-slate-700 text-[11px] text-slate-300 rounded"><i class="fa-regular fa-copy"></i></button>
+            </div>
+            <p class="text-xs text-slate-600 dark:text-slate-300">Loads model into GPU/CPU memory and opens interactive chat. Exit with /bye.</p>
+          </div>
+          <div class="bg-amber-50 dark:bg-amber-950/20 border-t border-amber-200 dark:border-amber-900/30 p-3 text-[11px] text-amber-800 dark:text-amber-200">
+            <strong>Exam Trap:</strong> In interactive terminal mode, exit by typing <code>/bye</code> or pressing Ctrl+D.
+          </div>
+        </div>
+
+        <!-- 3. Ollama ps vs list -->
+        <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm flex flex-col justify-between">
+          <div class="p-5 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-cyan-100 dark:bg-cyan-900/50 text-cyan-800 dark:text-cyan-300">Ollama CLI</span>
+              <span class="text-xs text-slate-400"><i class="fa-solid fa-book mr-1"></i>Lesson 02 Slide 11</span>
+            </div>
+            <h3 class="text-sm font-bold text-slate-900 dark:text-white">Active Memory vs. Disk Storage</h3>
+            <div class="relative">
+              <pre class="bg-slate-950 text-emerald-400 p-3 rounded-lg text-xs font-mono overflow-x-auto"><code>ollama ps    # Models loaded in VRAM / RAM
+ollama list  # Models downloaded on disk</code></pre>
+            </div>
+            <p class="text-xs text-slate-600 dark:text-slate-300">Shows loaded models, processor allocation (100% GPU / CPU), and expiry timer.</p>
+          </div>
+          <div class="bg-amber-50 dark:bg-amber-950/20 border-t border-amber-200 dark:border-amber-900/30 p-3 text-[11px] text-amber-800 dark:text-amber-200">
+            <strong>High-Yield Question:</strong> Which command shows running models in memory? <code>ollama ps</code> (NOT <code>ollama list</code>).
+          </div>
+        </div>
+
+        <!-- 4. Ollama Modelfile -->
+        <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm flex flex-col justify-between">
+          <div class="p-5 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-cyan-100 dark:bg-cyan-900/50 text-cyan-800 dark:text-cyan-300">Ollama Modelfile</span>
+              <span class="text-xs text-slate-400"><i class="fa-solid fa-book mr-1"></i>Lesson 02 Slide 14</span>
+            </div>
+            <h3 class="text-sm font-bold text-slate-900 dark:text-white">Modelfile Directives & Build Command</h3>
+            <div class="relative">
+              <pre class="bg-slate-950 text-emerald-400 p-3 rounded-lg text-xs font-mono overflow-x-auto"><code>FROM llama3.2:1b
+PARAMETER temperature 0.3
+PARAMETER num_ctx 8192
+SYSTEM """You are a patient Python tutor."""
+
+# Build:
+ollama create py-tutor -f Modelfile</code></pre>
+            </div>
+            <p class="text-xs text-slate-600 dark:text-slate-300">Compiles custom model with baked-in system prompt and context window.</p>
+          </div>
+          <div class="bg-amber-50 dark:bg-amber-950/20 border-t border-amber-200 dark:border-amber-900/30 p-3 text-[11px] text-amber-800 dark:text-amber-200">
+            <strong>Exam Trap:</strong> Context window in Modelfile is set using <code>PARAMETER num_ctx &lt;tokens&gt;</code>, NOT <code>max_tokens</code>!
+          </div>
+        </div>
+
+        <!-- 5. Docker Neo4j -->
+        <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm flex flex-col justify-between">
+          <div class="p-5 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-300">Docker Container</span>
+              <span class="text-xs text-slate-400"><i class="fa-solid fa-book mr-1"></i>Lesson 06 Slide 30</span>
+            </div>
+            <h3 class="text-sm font-bold text-slate-900 dark:text-white">Run Neo4j Knowledge Graph Container</h3>
+            <div class="relative">
+              <pre class="bg-slate-950 text-emerald-400 p-3 rounded-lg text-xs font-mono overflow-x-auto"><code>docker run -d --name neo4j \
+  -p 7474:7474 -p 7687:7687 \
+  -e NEO4J_AUTH=neo4j/kshrd2026 neo4j:5</code></pre>
+              <button onclick="navigator.clipboard.writeText('docker run -d --name neo4j -p 7474:7474 -p 7687:7687 -e NEO4J_AUTH=neo4j/kshrd2026 neo4j:5'); alert('Copied!')" class="absolute top-2 right-2 px-2 py-1 bg-slate-800 hover:bg-slate-700 text-[11px] text-slate-300 rounded"><i class="fa-regular fa-copy"></i></button>
+            </div>
+            <p class="text-xs text-slate-600 dark:text-slate-300">Deploys Neo4j graph database for GraphRAG multi-hop Cypher queries.</p>
+          </div>
+          <div class="bg-amber-50 dark:bg-amber-950/20 border-t border-amber-200 dark:border-amber-900/30 p-3 text-[11px] text-amber-800 dark:text-amber-200">
+            <strong>Port Exam Trap:</strong> <code>7474</code> = HTTP Web Browser UI; <code>7687</code> = Bolt binary protocol used by Python drivers.
+          </div>
+        </div>
+
+        <!-- 6. Docker vLLM & --ipc=host -->
+        <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm flex flex-col justify-between">
+          <div class="p-5 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-300">Docker Container</span>
+              <span class="text-xs text-slate-400"><i class="fa-solid fa-book mr-1"></i>Lesson 02 Slide 38</span>
+            </div>
+            <h3 class="text-sm font-bold text-slate-900 dark:text-white">vLLM Container & --ipc=host Requirement</h3>
+            <div class="relative">
+              <pre class="bg-slate-950 text-emerald-400 p-3 rounded-lg text-xs font-mono overflow-x-auto"><code>docker run -d --rm --gpus '"device=0"' \
+  -p 9040:9040 --ipc=host \
+  -v ~/.cache/huggingface:/root/.cache/huggingface \
+  vllm/vllm-openai:latest \
+  --model Qwen/Qwen2.5-3B-Instruct \
+  --gpu-memory-utilization 0.25 --port 9040</code></pre>
+            </div>
+            <p class="text-xs text-slate-600 dark:text-slate-300">Production serving container pinned to GPU 0 with cache persistence.</p>
+          </div>
+          <div class="bg-amber-50 dark:bg-amber-950/20 border-t border-amber-200 dark:border-amber-900/30 p-3 text-[11px] text-amber-800 dark:text-amber-200">
+            <strong>Why --ipc=host?</strong> PyTorch multiprocessing workers need shared memory to exchange tensor buffers. Docker's default 64MB crashes!
+          </div>
+        </div>
+
+        <!-- 7. Microsoft GraphRAG CLI -->
+        <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm flex flex-col justify-between">
+          <div class="p-5 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-purple-100 dark:bg-purple-900/50 text-purple-800 dark:text-purple-300">GraphRAG CLI</span>
+              <span class="text-xs text-slate-400"><i class="fa-solid fa-book mr-1"></i>Lesson 06 Slide 30</span>
+            </div>
+            <h3 class="text-sm font-bold text-slate-900 dark:text-white">GraphRAG Init, Index & Queries</h3>
+            <div class="relative">
+              <pre class="bg-slate-950 text-emerald-400 p-3 rounded-lg text-xs font-mono overflow-x-auto"><code>graphrag init --root ./rag-graph
+graphrag index --root ./rag-graph
+# Global search (themes across whole corpus):
+graphrag query --root ./rag-graph --method global --query "..."
+# Local search (entity subgraphs):
+graphrag query --root ./rag-graph --method local --query "..."</code></pre>
+            </div>
+            <p class="text-xs text-slate-600 dark:text-slate-300">Microsoft GraphRAG CLI pipeline for offline graph extraction and multi-level search.</p>
+          </div>
+          <div class="bg-amber-50 dark:bg-amber-950/20 border-t border-amber-200 dark:border-amber-900/30 p-3 text-[11px] text-amber-800 dark:text-amber-200">
+            <strong>Global vs. Local:</strong> Global = map-reduce over Leiden community summaries. Local = entity subgraph traversal.
+          </div>
+        </div>
+
+        <!-- 8. Hardware & Environment Validation -->
+        <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm flex flex-col justify-between">
+          <div class="p-5 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300">GPU & Validation</span>
+              <span class="text-xs text-slate-400"><i class="fa-solid fa-book mr-1"></i>Lesson 01 Slide 28-39</span>
+            </div>
+            <h3 class="text-sm font-bold text-slate-900 dark:text-white">nvidia-smi & GPU Smoke Test</h3>
+            <div class="relative">
+              <pre class="bg-slate-950 text-emerald-400 p-3 rounded-lg text-xs font-mono overflow-x-auto"><code>nvidia-smi
+# Docker GPU passthrough verification:
+docker run --rm --gpus all nvidia/cuda:12.4.1-base-ubuntu22.04 nvidia-smi
+# Check CUDA dynamic libraries:
+echo $LD_LIBRARY_PATH | tr ':' '\n' | grep cuda</code></pre>
+            </div>
+            <p class="text-xs text-slate-600 dark:text-slate-300">Primary validation commands for GPU health, VRAM, and Docker GPU passthrough.</p>
+          </div>
+          <div class="bg-amber-50 dark:bg-amber-950/20 border-t border-amber-200 dark:border-amber-900/30 p-3 text-[11px] text-amber-800 dark:text-amber-200">
+            <strong>Perf States:</strong> P0 = Maximum performance state under load; P8 = Lowest power idle state.
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- TAB 3: INTERACTIVE EXAM SIMULATOR -->
+    <div id="tab-content-quiz" class="hidden space-y-8">
+      <!-- Quiz Header & Stats -->
+      <div class="bg-white dark:bg-slate-900 rounded-xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">Exam Testing Engine</span>
+          <h2 class="text-xl font-bold text-slate-900 dark:text-white">Monthly Exam Practice Simulator</h2>
+          <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Test your understanding with actual scenario, formula, and code questions.</p>
+        </div>
+        <div class="flex items-center space-x-4 bg-slate-50 dark:bg-slate-800 px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700">
+          <div class="text-center">
+            <span class="block text-xs text-slate-400 font-medium">Score</span>
+            <span id="quiz-score" class="text-lg font-bold text-blue-600 dark:text-blue-400">0 / 0</span>
+          </div>
+          <div class="w-px h-8 bg-slate-200 dark:bg-slate-700"></div>
+          <div class="text-center">
+            <span class="block text-xs text-slate-400 font-medium">Progress</span>
+            <span id="quiz-progress-text" class="text-lg font-bold text-slate-700 dark:text-slate-200">0%</span>
+          </div>
+          <button onclick="resetQuiz()" class="px-3 py-1.5 bg-slate-200 hover:bg-slate-300 dark:bg-slate-700 dark:hover:bg-slate-600 text-xs font-semibold rounded-lg transition">
+            <i class="fa-solid fa-rotate-left mr-1"></i> Reset
+          </button>
+        </div>
+      </div>
+
+      <!-- Quiz Questions Container -->
+      <div id="quiz-container" class="space-y-6">
+        <!-- Rendered dynamically by JavaScript -->
+      </div>
+    </div>
+
+    <!-- TAB 4: QUICK FLASHCARDS -->
+    <div id="tab-content-flashcards" class="hidden space-y-8">
+      <div class="bg-white dark:bg-slate-900 rounded-xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm flex justify-between items-center">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">Rapid Recall Mode</span>
+          <h2 class="text-xl font-bold text-slate-900 dark:text-white">Exam Key Concepts Flashcards</h2>
+          <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Click any card to flip and reveal the definition or formula.</p>
+        </div>
+        <span class="text-xs font-semibold bg-indigo-100 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 px-3 py-1 rounded-full">
+          12 Core Cards
+        </span>
+      </div>
+
+      <div id="flashcards-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <!-- Flashcards generated dynamically by JavaScript -->
+      </div>
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="mt-20 border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-6 text-center text-xs text-slate-500">
+    <p>ITE / AX Specialize Program — Mastering Local LLM | KSGA (Korea Software HRD Center)</p>
+    <p class="mt-1">Prepared for Monthly Exam Review &bull; Based on Course Modules 04, 05, 06, and 07</p>
+  </footer>
+
+  <!-- QUIZ DATA & SCRIPTS -->
+  <script>
+    // Questions Dataset covering all 4 modules and code
+    const quizData = [
+      // MODULE 04
+      {
+        id: 1,
+        module: 'mod04',
+        type: 'concept',
+        question: 'What is the primary difference between State and Memory in an AI workflow?',
+        options: [
+          'State is long-term across all users; Memory is short-term for one function call.',
+          'State is short-term execution context for the current run; Memory is long-term context retained across multiple sessions.',
+          'State holds model weights; Memory holds document embeddings.',
+          'State is stored in a vector DB; Memory is stored in a text file.'
+        ],
+        correct: 1,
+        explanation: 'According to Lesson 04 (Slide 39), State manages the current execution context (inputs, intermediate variables, step pointer) and is temporary, whereas Memory records long-term user preferences and history across sessions.'
+      },
+      {
+        id: 2,
+        module: 'mod04',
+        type: 'code',
+        question: 'In LangGraph, which component handles short-term memory scoped to a single ongoing conversation thread?',
+        code: `builder = StateGraph(State)
+checkpointer = InMemorySaver()
+app = builder.compile(checkpointer=checkpointer)
+config = {"configurable": {"thread_id": "conv-1"}}`,
+        options: [
+          'InMemoryStore scoped by user namespace',
+          'InMemorySaver (Checkpointer) scoped by thread_id',
+          'TitleExtractor scoped by document id',
+          'SentenceSplitter scoped by chunk_size'
+        ],
+        correct: 1,
+        explanation: 'Lesson 04 Slide 114 explains that Checkpointer (e.g. InMemorySaver) handles short-term memory scoped to a thread_id, ensuring two calls with the same thread_id share history.'
+      },
+      {
+        id: 3,
+        module: 'mod04',
+        type: 'concept',
+        question: 'In a document ingestion pipeline, why does the pipeline check a cryptographic content hash in the docstore before running transformations?',
+        options: [
+          'To encrypt the document against unauthorized user viewing.',
+          'To avoid expensive chunking and embedding generation if the file has not changed.',
+          'To format Markdown headers into JSON tables.',
+          'To convert text into audio tokens.'
+        ],
+        correct: 1,
+        explanation: 'Lesson 04 Slide 51 emphasizes that checking the docstore content hash prevents redundant, expensive chunking and embedding operations for unmodified documents.'
+      },
+      {
+        id: 4,
+        module: 'mod04',
+        type: 'code',
+        question: 'In LangGraph, how does the newer `Command` primitive simplify conditional routing compared to `add_conditional_edges`?',
+        code: `def classify(state: State) -> Command[Literal["billing", "tech"]]:
+    if "billing" in state["ticket"]:
+        return Command(update={"status": "routed"}, goto="billing")
+    return Command(update={"status": "routed"}, goto="tech")`,
+        options: [
+          'It replaces Python functions with raw shell commands.',
+          'It combines returning state updates and selecting the next destination node in a single return statement.',
+          'It forces the graph to run synchronously without threading.',
+          'It converts LangGraph into a linear LangChain LCEL pipe.'
+        ],
+        correct: 1,
+        explanation: 'Lesson 04 Slide 107 states that Command lets a node return a state update and the next node to route to in one return value, avoiding a separate routing function.'
+      },
+
+      // MODULE 05
+      {
+        id: 5,
+        module: 'mod05',
+        type: 'concept',
+        question: 'When should an engineer choose RAG instead of Fine-Tuning?',
+        options: [
+          'When the goal is to alter the model’s linguistic style, tone, or dialect.',
+          'When information changes frequently, private documents are needed, and exact citations are mandatory.',
+          'When you have no access to an embedding model or vector database.',
+          'When training compute is unlimited and latency must be zero.'
+        ],
+        correct: 1,
+        explanation: 'Lesson 05 Slide 4 & 5 highlight that RAG is ideal for dynamic knowledge updates, preventing staleness and hallucination, and providing exact source attribution.'
+      },
+      {
+        id: 6,
+        module: 'mod05',
+        type: 'concept',
+        question: 'What is the primary purpose of Chunk Overlap in document splitting?',
+        options: [
+          'To compress the document so it uses fewer total tokens.',
+          'To prevent sentences or concepts from being severed at chunk boundaries.',
+          'To make vector dimensions smaller for faster cosine search.',
+          'To automatically translate English text into Khmer.'
+        ],
+        correct: 1,
+        explanation: 'Lesson 05 Slide 24 & Lesson 06 Slide 72 explain that chunk overlap repeats 10–20% of tokens across boundaries so sentences split mid-cut remain whole in at least one chunk.'
+      },
+      {
+        id: 7,
+        module: 'mod05',
+        type: 'concept',
+        question: 'If two embedding vectors A and B are unit-normalized (length = 1.0), what is the relationship between their Dot Product and Cosine Similarity?',
+        options: [
+          'Dot Product is the square of Cosine Similarity.',
+          'Dot Product is mathematically identical to Cosine Similarity.',
+          'Dot Product is always negative, while Cosine is positive.',
+          'Dot Product requires GPU, while Cosine requires CPU.'
+        ],
+        correct: 1,
+        explanation: 'Because Cosine Similarity = (A &middot; B) / (||A|| * ||B||), when ||A|| = 1 and ||B|| = 1, the denominator is 1, making Dot Product exactly equal to Cosine Similarity!'
+      },
+      {
+        id: 8,
+        module: 'mod05',
+        type: 'code',
+        question: 'In ChromaDB, what does the following query call return?',
+        code: `results = collection.query(
+    query_texts=["quarterly revenue growth"],
+    n_results=3
+)`,
+        options: [
+          'The entire text of all documents in the collection.',
+          'The top-3 most semantically similar chunks to the query text along with distances and IDs.',
+          'A fine-tuned LoRA checkpoint for the query.',
+          'A BM25 keyword frequency count table.'
+        ],
+        correct: 1,
+        explanation: 'Lesson 05 Slide 51 demonstrates that collection.query embeds query_texts and retrieves the top n_results closest chunks by similarity.'
+      },
+
+      // MODULE 06
+      {
+        id: 9,
+        module: 'mod06',
+        type: 'concept',
+        question: 'What is the main blind spot of pure dense (vector) retrieval that keyword search (BM25) solves?',
+        options: [
+          'Dense search cannot handle synonyms like "car" vs "vehicle".',
+          'Dense search misses exact identifiers, part numbers (SKU-4471), error codes (E-1147), and rare acronyms.',
+          'Dense search is too slow on large corpora.',
+          'Dense search requires keyword stemming.'
+        ],
+        correct: 1,
+        explanation: 'Lesson 06 Slide 5 emphasizes that dense search compresses text into general semantic meaning, losing tokens that carry identity rather than meaning (exact error codes, SKUs, jargon).'
+      },
+      {
+        id: 10,
+        module: 'mod06',
+        type: 'code',
+        question: 'In Reciprocal Rank Fusion (RRF), what is the formula and standard smoothing constant k?',
+        code: `fused[doc_id] += 1.0 / (k + rank)`,
+        options: [
+          'k = 1.5 (from BM25)',
+          'k = 60 (standard damping constant)',
+          'k = 0.75 (length normalization)',
+          'k = 512 (context limit)'
+        ],
+        correct: 1,
+        explanation: 'Lesson 06 Slide 10 states that RRF(d) = &Sigma; 1 / (k + rank_i(d)) with k = 60 as the standard constant to damp the gap between rank 1 and rank 2.'
+      },
+      {
+        id: 11,
+        module: 'mod06',
+        type: 'concept',
+        question: 'Why does Graph RAG succeed on multi-hop questions where standard chunk-based top-k retrieval fails?',
+        options: [
+          'Graph RAG uses larger LLMs with 10M token context windows.',
+          'Graph RAG connects facts across separate chunks using typed entity-relationship edges (A &rarr; B &rarr; C).',
+          'Graph RAG replaces all text with images.',
+          'Graph RAG only uses BM25 keyword matching.'
+        ],
+        correct: 1,
+        explanation: 'Lesson 06 Slide 18–20 explains that multi-hop questions have half the answer in Chunk 14 and half in Chunk 902; knowledge graph edges connect them structurally.'
+      },
+      {
+        id: 12,
+        module: 'mod06',
+        type: 'concept',
+        question: 'In Microsoft GraphRAG, what is the key difference between Local Search and Global Search?',
+        options: [
+          'Local search runs on localhost; Global runs in cloud.',
+          'Local search is entity-focused (traversing 1-2 hops); Global search is theme-focused (map-reducing over community summaries).',
+          'Local search uses BM25; Global search uses ChromaDB.',
+          'Local search requires GPU; Global search requires CPU.'
+        ],
+        correct: 1,
+        explanation: 'Lesson 06 Slide 27: Local search focuses on specific entities and walks outward; Global search queries community summary reports to answer corpus-wide thematic questions.'
+      },
+      {
+        id: 13,
+        module: 'mod06',
+        type: 'concept',
+        question: 'What is the architectural difference between a Bi-Encoder and a Cross-Encoder?',
+        options: [
+          'Bi-Encoder uses two GPUs; Cross-Encoder uses one GPU.',
+          'Bi-Encoder encodes query and doc separately (two towers); Cross-Encoder passes query and doc concatenated into one transformer with full cross-attention.',
+          'Bi-Encoder is only for images; Cross-Encoder is for text.',
+          'Bi-Encoder is slower than Cross-Encoder.'
+        ],
+        correct: 1,
+        explanation: 'Lesson 06 Slide 45 & 46: Bi-encoders encode independently so comparisons happen in vector space; Cross-encoders concatenate [CLS] query [SEP] doc with full token-to-token cross-attention.'
+      },
+      {
+        id: 14,
+        module: 'mod06',
+        type: 'code',
+        question: 'How does context reordering mitigate the "Lost in the Middle" phenomenon?',
+        code: `head, tail = [], []
+for i, c in enumerate(picked):
+    (head if i % 2 == 0 else tail).append(c)
+ordered = head + tail[::-1]`,
+        options: [
+          'It reverses all words in the document.',
+          'It places Rank 1 at the beginning, Rank 2 at the very end, and buries weaker chunks in the middle.',
+          'It removes all punctuation.',
+          'It duplicates every chunk twice.'
+        ],
+        correct: 1,
+        explanation: 'Lesson 06 Slide 55 & 60: LLMs attend best to the start and end of prompt context; the even/odd split places strongest chunks at the extremes and buries lower-ranked chunks in the middle.'
+      },
+
+      // MODULE 07
+      {
+        id: 15,
+        module: 'mod07',
+        type: 'concept',
+        question: 'What is the fundamental rule of Tool Calling architecture in autonomous agents?',
+        options: [
+          'The model directly opens sockets and runs SQL queries.',
+          'The model requests the action; the application executes it.',
+          'The tool writes prompts; the model reads files.',
+          'Local models cannot request tools.'
+        ],
+        correct: 1,
+        explanation: 'Lesson 07 Slide 16 & 48 emphasizes: "The model requests the action; the application executes it." LLMs propose structured calls; the application host validates and runs them.'
+      },
+      {
+        id: 16,
+        module: 'mod07',
+        type: 'concept',
+        question: 'Which of the following is an example of Business Validation rather than Schema Validation?',
+        options: [
+          'Checking if `order_id` is an integer.',
+          'Checking if `product_id` is present in required fields.',
+          'Checking whether product ID 101 currently has sufficient stock in the inventory database.',
+          'Checking if `user_email` matches a string type.'
+        ],
+        correct: 2,
+        explanation: 'Lesson 07 Slide 28 explains that Schema validation checks types and shapes, whereas Business validation checks domain rules and database reality (e.g. is item in stock? does user have permission?).'
+      },
+      {
+        id: 17,
+        module: 'mod07',
+        type: 'concept',
+        question: 'What is the principle of "Bounded Actions" and "Least Privilege" in agent security?',
+        options: [
+          'Giving the agent root shell access so it can fix bugs automatically.',
+          'Giving agents capabilities through narrow allowlisted tools, avoiding raw exec() or arbitrary SQL strings.',
+          'Allowing the agent to retry failing tools infinitely.',
+          'Removing all timeouts from the execution harness.'
+        ],
+        correct: 1,
+        explanation: 'Lesson 07 Slide 36–40: Give agents capabilities, not unlimited power. Use allowlists of narrow parameterized tools and never hand over raw interpreters.'
+      },
+      {
+        id: 18,
+        module: 'mod07',
+        type: 'concept',
+        question: 'In the OS-Kernel analogy for Agent Harness design, what corresponds to the Kernel and the CPU?',
+        options: [
+          'The Model is the Kernel; the Database is the CPU.',
+          'The Harness is the Kernel (controls syscalls, safety, memory); the Model is an untrusted CPU (generates next tokens).',
+          'The Python interpreter is the CPU; Ollama is the Kernel.',
+          'The Tool is the Kernel; the Prompt is the CPU.'
+        ],
+        correct: 1,
+        explanation: 'Lesson 07 Slide 82: The model is an untrusted CPU (instruction generator); the harness is the operating system kernel (enforces permissions, sandbox, memory, and budgets).'
+      },
+      {
+        id: 19,
+        module: 'mod07',
+        type: 'concept',
+        question: 'What problem does the Model Context Protocol (MCP) solve?',
+        options: [
+          'It replaces Python with Rust for faster execution.',
+          'It solves the M x N integration problem between AI applications (hosts) and external tools/servers.',
+          'It eliminates the need for vector databases.',
+          'It increases GPU VRAM size.'
+        ],
+        correct: 1,
+        explanation: 'Lesson 07 Slide 91 & 92 explains that MCP establishes a standard protocol so M clients connecting to N tools require only M+N integrations instead of M x N bespoke code.'
+      },
+      {
+        id: 20,
+        module: 'mod07',
+        type: 'concept',
+        question: 'Which of the following distinguishes Human-IN-the-loop (HITL) from Human-ON-the-loop (HOTL)?',
+        options: [
+          'HITL suspends execution and blocks until approved; HOTL executes immediately while streaming to an audit feed where humans can abort.',
+          'HITL is only for images; HOTL is for databases.',
+          'HOTL is always slower than HITL.',
+          'HITL never requires human review.'
+        ],
+        correct: 0,
+        explanation: 'Lesson 07 Slide 118: In-the-loop halts execution until approved (highest safety); On-the-loop executes immediately with real-time human oversight and rollback.'
+      },
+      {
+        id: 21,
+        module: 'mod02',
+        type: 'concept',
+        question: 'Which Ollama command displays models that are actively loaded into memory (RAM/VRAM) right now?',
+        options: [
+          'ollama list',
+          'ollama ps',
+          'ollama status',
+          'ollama inspect'
+        ],
+        correct: 1,
+        explanation: 'Lesson 02 Slide 11: "ollama ps" lists models currently loaded in memory with GPU processor allocation and expiry, whereas "ollama list" shows downloaded models on disk.'
+      },
+      {
+        id: 22,
+        module: 'mod02',
+        type: 'concept',
+        question: 'In an Ollama Modelfile, which directive configures the context window token limit?',
+        options: [
+          'PARAMETER max_tokens 8192',
+          'PARAMETER num_ctx 8192',
+          'SET context_window 8192',
+          'CONFIG tokens 8192'
+        ],
+        correct: 1,
+        explanation: 'Lesson 02 Slide 14 & Lesson 03 Slide 27: Ollama native parameter for context window is "PARAMETER num_ctx <tokens>".'
+      },
+      {
+        id: 23,
+        module: 'mod06',
+        type: 'concept',
+        question: 'When launching Neo4j with "docker run -d -p 7474:7474 -p 7687:7687 ...", what is port 7687 used for?',
+        options: [
+          'HTTP Web Browser visual interface',
+          'Bolt binary protocol used by Python drivers and LangChain GraphCypherQAChain',
+          'Prometheus metrics endpoint',
+          'Container SSH access'
+        ],
+        correct: 1,
+        explanation: 'Lesson 06 Slide 30: Port 7474 is HTTP Web UI; Port 7687 is the Bolt binary protocol for LangChain and Python drivers.'
+      },
+      {
+        id: 24,
+        module: 'mod02',
+        type: 'concept',
+        question: 'Why is the "--ipc=host" flag required when running high-performance vLLM containers in Docker?',
+        options: [
+          'It bypasses Docker firewall restrictions.',
+          'It shares host IPC memory so PyTorch multi-worker processes can exchange tensor buffers without shared memory exhaustion.',
+          'It auto-mounts Hugging Face cache.',
+          'It allows remote SSH debugging.'
+        ],
+        correct: 1,
+        explanation: 'Lesson 02 Slide 38: PyTorch and CUDA workers need large shared memory for tensor exchange; Docker default 64MB IPC crashes without "--ipc=host".'
+      },
+      {
+        id: 25,
+        module: 'mod06',
+        type: 'concept',
+        question: 'In Microsoft GraphRAG, which query command answers questions about overarching themes across the entire dataset?',
+        options: [
+          'graphrag query --root ./rag-graph --method local --query "..."',
+          'graphrag query --root ./rag-graph --method global --query "..."',
+          'graphrag index --full',
+          'graphrag search --summary'
+        ],
+        correct: 1,
+        explanation: 'Lesson 06 Slide 30: "--method global" runs map-reduce over Leiden community summaries for broad corpus sensemaking.'
+      },
+      {
+        id: 26,
+        module: 'mod01',
+        type: 'concept',
+        question: 'Which command provides end-to-end proof that Docker can expose host NVIDIA GPUs to containers?',
+        options: [
+          'docker run --rm --gpus all nvidia/cuda:12.4.1-base-ubuntu22.04 nvidia-smi',
+          'docker inspect --gpu',
+          'docker pull cuda-driver',
+          'nvidia-smi --docker'
+        ],
+        correct: 0,
+        explanation: 'Lesson 01 Slide 39: Running nvidia-smi inside an official CUDA container with "--gpus all" verifies complete GPU passthrough.'
+      },
+      {
+        id: 27,
+        module: 'mod01',
+        type: 'concept',
+        question: 'In nvidia-smi, what does performance state P0 represent compared to P8?',
+        options: [
+          'P0 is offline; P8 is fully active.',
+          'P0 is highest performance state under heavy workload; P8 is lowest power idle state.',
+          'P0 indicates overheating; P8 indicates normal temperature.',
+          'P0 is fan speed 0%; P8 is fan speed 80%.'
+        ],
+        correct: 1,
+        explanation: 'Lesson 01 Slide 33: Performance states range from P0 (highest performance under workload) to P8 (lowest power state when idle).'
+      },
+      {
+        id: 28,
+        module: 'mod03',
+        type: 'concept',
+        question: 'Why should developers bind to "OLLAMA_HOST=127.0.0.1:11434" instead of 0.0.0.0 in an office network?',
+        options: [
+          'Ollama crashes if bound to 0.0.0.0.',
+          'Local model servers have no authentication by default; 0.0.0.0 exposes the server to anyone on the LAN to exhaust GPU compute.',
+          'Binding to 127.0.0.1 increases token generation speed.',
+          'Local models only support English on 127.0.0.1.'
+        ],
+        correct: 1,
+        explanation: 'Lesson 03 Slide 63-64: Local servers have no auth by default. Binding to 0.0.0.0 allows unauthenticated LAN users to call models and exhaust compute.'
+      },
+      {
+        id: 29,
+        module: 'mod06',
+        type: 'code',
+        question: 'In Neo4j Cypher, what happens if you execute "CREATE (a:Entity {name: \'Sokha\'})-[r:WORKS_ON]->(b:Entity {name: \'Invoicing Service\'})" multiple times?',
+        options: [
+          'It updates existing nodes without duplicates.',
+          'It creates duplicate nodes and relationships on every run. Use MERGE instead to ensure idempotency.',
+          'It throws a primary key error.',
+          'It deletes the graph.'
+        ],
+        correct: 1,
+        explanation: 'Lesson 06 Slide 29: CREATE is not idempotent; re-running it creates duplicate nodes and edges. Always use MERGE for idempotent loading.'
+      },
+      {
+        id: 30,
+        module: 'mod06',
+        type: 'code',
+        question: 'Why does "MATCH (n:Entity {name: \'Sokha\'}) DELETE n;" fail if Sokha is connected to other nodes?',
+        options: [
+          'Cypher does not allow deleting by name.',
+          'A node cannot be deleted while relationships are attached to it; you must use "DETACH DELETE n" to delete connected edges first.',
+          'The database must be dropped first.',
+          'Nodes named Sokha are reserved.'
+        ],
+        correct: 1,
+        explanation: 'Neo4j referential integrity prevents deleting nodes with active relationships. DETACH DELETE removes all attached relationships first.'
+      },
+      {
+        id: 31,
+        module: 'mod06',
+        type: 'code',
+        question: 'Which Cypher pattern matches a multi-hop traversal to find who owns a service that replaced LegacyPay?',
+        options: [
+          'MATCH (p:Person)-[:OWNS]->(s:Service)-[:REPLACED]->(old:Service {name: "LegacyPay"}) RETURN p.name, s.name',
+          'SELECT Person WHERE Service == LegacyPay',
+          'SEARCH FOR Person JOIN LegacyPay',
+          'MATCH (p)->(s)->(old)'
+        ],
+        correct: 0,
+        explanation: 'Lesson 06 Slide 29: Cypher uses ASCII drawings to represent multi-hop patterns: (p:Person)-[:OWNS]->(s:Service)-[:REPLACED]->(old:Service {name: "LegacyPay"}).'
+      },
+      {
+        id: 32,
+        module: 'mod06',
+        type: 'concept',
+        question: 'Why is variable-length path traversal written as "[*1..3]" instead of an unbounded "[*]"?',
+        options: [
+          'Cypher syntax disallows asterisks.',
+          'An unbounded "[*]" on a connected or cyclic graph can cause exponential path explosion, exhausting RAM and freezing the database.',
+          'It limits execution to 3 milliseconds.',
+          'It turns graphs into JSON tables.'
+        ],
+        correct: 1,
+        explanation: 'Lesson 06 Slide 29: "An unbounded [*] on a real graph will hang. Cap the hops, always."'
+      }
+    ];
+
+    // Flashcards Dataset
+    const flashcardsData = [
+      {
+        front: "State vs. Memory",
+        back: "State = short-term context for current task (temporary, scratchpad). Memory = long-term information retained across multiple sessions/threads."
+      },
+      {
+        front: "RRF Formula (Reciprocal Rank Fusion)",
+        back: "RRF(d) = Σ 1 / (k + rank_i(d)) with standard k = 60. Discards raw scores and fuses solely by rank position!"
+      },
+      {
+        front: "Core Rule of Tool Calling",
+        back: ""The model requests the action; the application executes it." Models emit structured JSON; host Python runs the code."
+      },
+      {
+        front: "Bi-Encoder vs. Cross-Encoder",
+        back: "Bi-Encoder: Two towers, independent embeddings, fast vector search. Cross-Encoder: Single tower, concatenated tokens, full cross-attention, high accuracy reranking."
+      },
+      {
+        front: "Lost in the Middle & Fix",
+        back: "LLMs recall best at prompt beginning and end. Fix: Reorder chunks so Rank 1 is first, Rank 2 is last, and lower ranks sit in the middle."
+      },
+      {
+        front: "The 4 Levels of AI Automation",
+        back: "Level 1: Prompting (Single Q&A)
+Level 2: Chaining (Fixed workflows)
+Level 3: Agents (Dynamic decision loop)
+Level 4: Multi-Agent Systems"
+      },
+      {
+        front: "The 3 MCP Primitives",
+        back: "1. Tools (model-called functions)
+2. Resources (readable data attachments)
+3. Prompts (user-triggered slash commands)"
+      },
+      {
+        front: "Schema vs. Business Validation",
+        back: "Schema = shape, types, required fields ("well-formed?"). Business = domain logic, stock, permissions ("allowed right now?"). -5 is valid int, invalid product ID!"
+      },
+      {
+        front: "Harness OS-Kernel Analogy",
+        back: "The LLM is an untrusted CPU (token generator); the Harness is the Kernel (enforces syscalls, permissions, sandboxing, budgets)."
+      },
+      {
+        front: "Graph RAG: Local vs. Global",
+        back: "Local = entity-focused, traverses 1-2 hops for specific facts. Global = theme-focused, map-reduces over community summaries."
+      },
+      {
+        front: "Self-Reflective RAG (3 Checks)",
+        back: "Check 1: Are retrieved chunks relevant?
+Check 2: Is draft answer grounded?
+Check 3: Does it answer the original question?"
+      },
+      {
+        front: "HITL vs. HOTL vs. HOOTL",
+        back: "HITL (In-the-loop): Suspends until human approves.\nHOTL (On-the-loop): Executes immediately with rollback audit.\nHOOTL (Out-of-the-loop): Full autonomy."
+      },
+      {
+        front: "ollama list vs. ollama ps",
+        back: "ollama list = Downloaded model weights on disk.\nollama ps = Models actively loaded in memory (RAM/VRAM) with GPU % and expiry."
+      },
+      {
+        front: "Modelfile Context Parameter",
+        back: "PARAMETER num_ctx 8192\nSets total context window token budget in Ollama Modelfile (not max_tokens)."
+      },
+      {
+        front: "Neo4j Docker Ports (7474 vs 7687)",
+        back: "Port 7474 = HTTP Web Browser UI.\nPort 7687 = Bolt binary protocol used by Python drivers and LangChain."
+      },
+      {
+        front: "vLLM Docker --ipc=host",
+        back: "Shares host IPC memory so PyTorch multi-worker processes can exchange tensor buffers without hitting Docker 64MB limit."
+      },
+      {
+        front: "GraphRAG Global vs. Local Query",
+        back: "--method global = Map-reduce over community summaries for corpus themes.\n--method local = Subgraph traversal around specific seed entities."
+      },
+      {
+        front: "nvidia-smi Perf States (P0 vs P8)",
+        back: "P0 = Maximum performance state under active compute load.\nP8 = Lowest power idle state."
+      }
+    ];
+
+    // App State
+    let currentFilter = 'all';
+    let userAnswers = {};
+
+    // Initialize Page
+    document.addEventListener('DOMContentLoaded', () => {
+      renderQuiz();
+      renderFlashcards();
+    });
+
+    // Theme Toggle
+    function toggleDarkMode() {
+      const html = document.documentElement;
+      const icon = document.getElementById('theme-icon');
+      if (html.classList.contains('dark')) {
+        html.classList.remove('dark');
+        icon.className = 'fa-solid fa-moon';
+      } else {
+        html.classList.add('dark');
+        icon.className = 'fa-solid fa-sun text-amber-400';
+      }
+    }
+
+    // Main Tab Switching
+    function switchMainTab(tab) {
+      ['review', 'code', 'commands', 'quiz', 'flashcards'].forEach(t => {
+        const content = document.getElementById('tab-content-' + t);
+        const nav = document.getElementById('nav-' + t);
+        if (t === tab) {
+          content.classList.remove('hidden');
+          nav.classList.add('tab-active');
+          nav.classList.remove('border-transparent', 'text-slate-600', 'dark:text-slate-400');
+        } else {
+          content.classList.add('hidden');
+          nav.classList.remove('tab-active');
+          nav.classList.add('border-transparent', 'text-slate-600', 'dark:text-slate-400');
+        }
+      });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Module Filtering
+    function filterModule(mod) {
+      currentFilter = mod;
+      document.querySelectorAll('.mod-filter-btn').forEach(btn => {
+        if (btn.dataset.mod === mod) {
+          btn.className = 'mod-filter-btn px-3 py-1.5 rounded-full bg-blue-600 text-white font-medium';
+        } else {
+          btn.className = 'mod-filter-btn px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-medium';
+        }
+      });
+
+      // Filter review sections
+      document.querySelectorAll('.mod-section').forEach(sec => {
+        if (mod === 'all' || sec.dataset.mod === mod) {
+          sec.style.display = 'block';
+        } else {
+          sec.style.display = 'none';
+        }
+      });
+
+      renderQuiz();
+    }
+
+    // Render Quiz Questions
+    function renderQuiz() {
+      const container = document.getElementById('quiz-container');
+      const filtered = currentFilter === 'all' 
+        ? quizData 
+        : quizData.filter(q => q.module === currentFilter);
+
+      document.getElementById('quiz-count-badge').textContent = `${filtered.length} Qs`;
+
+      container.innerHTML = filtered.map((q, idx) => {
+        const isAnswered = userAnswers[q.id] !== undefined;
+        const selectedOpt = userAnswers[q.id];
+        const isCorrect = selectedOpt === q.correct;
+
+        return `
+          <div class="bg-white dark:bg-slate-900 rounded-xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm transition">
+            <div class="flex items-center justify-between gap-2 mb-3">
+              <div class="flex items-center space-x-2">
+                <span class="w-6 h-6 rounded-full bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 font-bold text-xs flex items-center justify-center">
+                  ${idx + 1}
+                </span>
+                <span class="text-xs uppercase font-bold tracking-wider text-slate-400">
+                  ${q.module.toUpperCase()} &bull; ${q.type.toUpperCase()}
+                </span>
+              </div>
+              ${isAnswered ? `
+                <span class="text-xs font-bold px-2 py-0.5 rounded-full ${isCorrect ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300' : 'bg-rose-100 text-rose-800 dark:bg-rose-950/60 dark:text-rose-300'}">
+                  ${isCorrect ? '<i class="fa-solid fa-check mr-1"></i> Correct' : '<i class="fa-solid fa-xmark mr-1"></i> Incorrect'}
+                </span>
+              ` : ''}
+            </div>
+
+            <h3 class="font-semibold text-sm sm:text-base text-slate-800 dark:text-slate-100 mb-2">
+              ${q.question}
+            </h3>
+
+            ${q.code ? `
+              <pre class="bg-slate-900 text-slate-100 p-3 rounded-lg text-xs overflow-x-auto my-3 leading-relaxed"><code>${escapeHtml(q.code)}</code></pre>
+            ` : ''}
+
+            <div class="space-y-2 mt-3">
+              ${q.options.map((opt, optIdx) => {
+                let btnStyle = "border-slate-200 dark:border-slate-800 hover:border-blue-300 dark:hover:border-blue-700 bg-slate-50/50 dark:bg-slate-800/40 text-slate-700 dark:text-slate-300";
+                
+                if (isAnswered) {
+                  if (optIdx === q.correct) {
+                    btnStyle = "border-emerald-500 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-900 dark:text-emerald-200 font-semibold ring-1 ring-emerald-500";
+                  } else if (optIdx === selectedOpt) {
+                    btnStyle = "border-rose-500 bg-rose-50 dark:bg-rose-950/40 text-rose-900 dark:text-rose-200 ring-1 ring-rose-500";
+                  } else {
+                    btnStyle = "opacity-50 border-slate-200 dark:border-slate-800";
+                  }
+                }
+
+                return `
+                  <button 
+                    onclick="selectAnswer(${q.id}, ${optIdx})" 
+                    ${isAnswered ? 'disabled' : ''}
+                    class="w-full text-left p-3 rounded-lg border text-xs sm:text-sm transition flex items-start space-x-2.5 ${btnStyle}">
+                    <span class="w-5 h-5 rounded-full border border-current flex-shrink-0 flex items-center justify-center text-[10px] font-bold mt-0.5">
+                      ${String.fromCharCode(65 + optIdx)}
+                    </span>
+                    <span>${opt}</span>
+                  </button>
+                `;
+              }).join('')}
+            </div>
+
+            ${isAnswered ? `
+              <div class="mt-4 p-3 rounded-lg bg-blue-50/80 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900/60 text-xs text-blue-900 dark:text-blue-200 space-y-1">
+                <p class="font-bold flex items-center space-x-1">
+                  <i class="fa-solid fa-lightbulb text-amber-500"></i>
+                  <span>Slide Reference & Explanation:</span>
+                </p>
+                <p class="text-slate-700 dark:text-slate-300 leading-relaxed">${q.explanation}</p>
+              </div>
+            ` : ''}
+          </div>
+        `;
+      }).join('');
+
+      updateQuizScore();
+    }
+
+    function selectAnswer(qid, optIdx) {
+      userAnswers[qid] = optIdx;
+      renderQuiz();
+    }
+
+    function updateQuizScore() {
+      const answeredKeys = Object.keys(userAnswers);
+      let correctCount = 0;
+      answeredKeys.forEach(k => {
+        const q = quizData.find(item => item.id === parseInt(k));
+        if (q && userAnswers[k] === q.correct) correctCount++;
+      });
+      document.getElementById('quiz-score').textContent = `${correctCount} / ${answeredKeys.length}`;
+      const pct = quizData.length ? Math.round((answeredKeys.length / quizData.length) * 100) : 0;
+      document.getElementById('quiz-progress-text').textContent = `${pct}%`;
+    }
+
+    function resetQuiz() {
+      userAnswers = {};
+      renderQuiz();
+    }
+
+    // Render Flashcards
+    function renderFlashcards() {
+      const container = document.getElementById('flashcards-grid');
+      container.innerHTML = flashcardsData.map((card, idx) => `
+        <div onclick="flipCard(this)" class="cursor-pointer group perspective">
+          <div class="relative bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition h-44 flex flex-col justify-between">
+            <div class="flex items-center justify-between text-[11px] text-slate-400 font-semibold uppercase tracking-wider">
+              <span>Card #${idx + 1}</span>
+              <span class="text-blue-500 group-hover:translate-x-0.5 transition"><i class="fa-solid fa-arrows-rotate"></i> Flip</span>
+            </div>
+            
+            <!-- Card Front -->
+            <div class="card-front flex-1 flex items-center justify-center text-center p-2">
+              <h4 class="font-bold text-sm sm:text-base text-slate-800 dark:text-slate-100">${card.front}</h4>
+            </div>
+
+            <!-- Card Back -->
+            <div class="card-back hidden flex-1 flex items-center justify-center text-center p-2 bg-blue-50/70 dark:bg-blue-950/40 rounded-lg">
+              <p class="text-xs text-blue-900 dark:text-blue-200 font-medium leading-relaxed whitespace-pre-line">${card.back}</p>
+            </div>
+
+            <div class="text-[10px] text-slate-400 text-center">Click to toggle answer</div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function flipCard(el) {
+      const front = el.querySelector('.card-front');
+      const back = el.querySelector('.card-back');
+      if (front.classList.contains('hidden')) {
+        front.classList.remove('hidden');
+        back.classList.add('hidden');
+      } else {
+        front.classList.add('hidden');
+        back.classList.remove('hidden');
+      }
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+  </script>
+</body>
+</html>
