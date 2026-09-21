@@ -144,7 +144,7 @@ export const Header: React.FC<HeaderProps> = ({
             <CheckCircle className="w-4 h-4" />
             <span>Interactive Simulator</span>
             <span className="text-[10px] font-bold px-1.5 py-0.2 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40">
-              37 Qs
+              50 Qs
             </span>
           </button>
 

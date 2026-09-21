@@ -82,7 +82,7 @@
         <button onclick="switchMainTab('quiz')" id="nav-quiz" class="py-3 px-1 border-b-2 border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 font-medium flex items-center space-x-2">
           <i class="fa-solid fa-clipboard-check"></i>
           <span>Interactive Exam Simulator</span>
-          <span id="quiz-count-badge" class="bg-amber-100 dark:bg-amber-900/50 text-amber-800 dark:text-amber-300 text-[10px] font-bold px-1.5 py-0.5 rounded-full">37 Qs</span>
+          <span id="quiz-count-badge" class="bg-amber-100 dark:bg-amber-900/50 text-amber-800 dark:text-amber-300 text-[10px] font-bold px-1.5 py-0.5 rounded-full">50 Qs</span>
         </button>
         <button onclick="switchMainTab('flashcards')" id="nav-flashcards" class="py-3 px-1 border-b-2 border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 font-medium flex items-center space-x-2">
           <i class="fa-solid fa-bolt"></i>
@@ -1124,563 +1124,738 @@ echo $LD_LIBRARY_PATH | tr ':' '\n' | grep cuda</code></pre>
   <script>
     // Questions Dataset covering all 4 modules and code
     const quizData = [
-      // MODULE 04
-      {
-        id: 1,
-        module: 'mod04',
-        type: 'concept',
-        question: 'What is the primary difference between State and Memory in an AI workflow?',
-        options: [
-          'State is long-term across all users; Memory is short-term for one function call.',
-          'State is short-term execution context for the current run; Memory is long-term context retained across multiple sessions.',
-          'State holds model weights; Memory holds document embeddings.',
-          'State is stored in a vector DB; Memory is stored in a text file.'
-        ],
-        correct: 1,
-        explanation: 'According to Lesson 04 (Slide 39), State manages the current execution context (inputs, intermediate variables, step pointer) and is temporary, whereas Memory records long-term user preferences and history across sessions.'
-      },
-      {
-        id: 2,
-        module: 'mod04',
-        type: 'code',
-        question: 'In LangGraph, which component handles short-term memory scoped to a single ongoing conversation thread?',
-        code: `builder = StateGraph(State)
+  {
+    id: 1,
+    module: "mod04",
+    type: "concept",
+    question: "What is the primary difference between State and Memory in an AI workflow?",
+    options: [
+      "State is long-term across all users; Memory is short-term for one function call.",
+      "State holds model weights; Memory holds document embeddings.",
+      "State is short-term execution context for the current run; Memory is long-term context retained across multiple sessions.",
+      "State is stored in a vector DB; Memory is stored in a text file."
+    ],
+    correct: 2,
+    explanation: "According to Lesson 04 (Slide 39), State manages the current execution context (inputs, intermediate variables, step pointer) and is temporary, whereas Memory records long-term user preferences and history across sessions.",
+    slideRef: "Lesson 04 Slide 39"
+  },
+  {
+    id: 2,
+    module: "mod04",
+    type: "code",
+    question: "In LangGraph, which component handles short-term memory scoped to a single ongoing conversation thread?",
+    code: `builder = StateGraph(State)
 checkpointer = InMemorySaver()
 app = builder.compile(checkpointer=checkpointer)
 config = {"configurable": {"thread_id": "conv-1"}}`,
-        options: [
-          'InMemoryStore scoped by user namespace',
-          'InMemorySaver (Checkpointer) scoped by thread_id',
-          'TitleExtractor scoped by document id',
-          'SentenceSplitter scoped by chunk_size'
-        ],
-        correct: 1,
-        explanation: 'Lesson 04 Slide 114 explains that Checkpointer (e.g. InMemorySaver) handles short-term memory scoped to a thread_id, ensuring two calls with the same thread_id share history.'
-      },
-      {
-        id: 3,
-        module: 'mod04',
-        type: 'concept',
-        question: 'In a document ingestion pipeline, why does the pipeline check a cryptographic content hash in the docstore before running transformations?',
-        options: [
-          'To encrypt the document against unauthorized user viewing.',
-          'To avoid expensive chunking and embedding generation if the file has not changed.',
-          'To format Markdown headers into JSON tables.',
-          'To convert text into audio tokens.'
-        ],
-        correct: 1,
-        explanation: 'Lesson 04 Slide 51 emphasizes that checking the docstore content hash prevents redundant, expensive chunking and embedding operations for unmodified documents.'
-      },
-      {
-        id: 4,
-        module: 'mod04',
-        type: 'code',
-        question: 'In LangGraph, how does the newer `Command` primitive simplify conditional routing compared to `add_conditional_edges`?',
-        code: `def classify(state: State) -> Command[Literal["billing", "tech"]]:
+    options: [
+      "InMemorySaver (Checkpointer) scoped by thread_id",
+      "InMemoryStore scoped by user namespace",
+      "TitleExtractor scoped by document id",
+      "SentenceSplitter scoped by chunk_size"
+    ],
+    correct: 0,
+    explanation: "Lesson 04 Slide 114 explains that Checkpointer (e.g. InMemorySaver) handles short-term memory scoped to a thread_id, ensuring two calls with the same thread_id share history.",
+    slideRef: "Lesson 04 Slide 114"
+  },
+  {
+    id: 3,
+    module: "mod04",
+    type: "concept",
+    question: "In a document ingestion pipeline, why does the pipeline check a cryptographic content hash in the docstore before running transformations?",
+    options: [
+      "To encrypt the document against unauthorized user viewing.",
+      "To convert text into audio tokens.",
+      "To format Markdown headers into JSON tables.",
+      "To avoid expensive chunking and embedding generation if the file has not changed."
+    ],
+    correct: 3,
+    explanation: "Lesson 04 Slide 51 emphasizes that checking the docstore content hash prevents redundant, expensive chunking and embedding operations for unmodified documents.",
+    slideRef: "Lesson 04 Slide 51"
+  },
+  {
+    id: 4,
+    module: "mod04",
+    type: "code",
+    question: "In LangGraph, how does the newer 'Command' primitive simplify conditional routing compared to 'add_conditional_edges'?",
+    code: `def classify(state: State) -> Command[Literal["billing", "tech"]]:
     if "billing" in state["ticket"]:
         return Command(update={"status": "routed"}, goto="billing")
     return Command(update={"status": "routed"}, goto="tech")`,
-        options: [
-          'It replaces Python functions with raw shell commands.',
-          'It combines returning state updates and selecting the next destination node in a single return statement.',
-          'It forces the graph to run synchronously without threading.',
-          'It converts LangGraph into a linear LangChain LCEL pipe.'
-        ],
-        correct: 1,
-        explanation: 'Lesson 04 Slide 107 states that Command lets a node return a state update and the next node to route to in one return value, avoiding a separate routing function.'
-      },
-
-      // MODULE 05
-      {
-        id: 5,
-        module: 'mod05',
-        type: 'concept',
-        question: 'When should an engineer choose RAG instead of Fine-Tuning?',
-        options: [
-          'When the goal is to alter the model’s linguistic style, tone, or dialect.',
-          'When information changes frequently, private documents are needed, and exact citations are mandatory.',
-          'When you have no access to an embedding model or vector database.',
-          'When training compute is unlimited and latency must be zero.'
-        ],
-        correct: 1,
-        explanation: 'Lesson 05 Slide 4 & 5 highlight that RAG is ideal for dynamic knowledge updates, preventing staleness and hallucination, and providing exact source attribution.'
-      },
-      {
-        id: 6,
-        module: 'mod05',
-        type: 'concept',
-        question: 'What is the primary purpose of Chunk Overlap in document splitting?',
-        options: [
-          'To compress the document so it uses fewer total tokens.',
-          'To prevent sentences or concepts from being severed at chunk boundaries.',
-          'To make vector dimensions smaller for faster cosine search.',
-          'To automatically translate English text into Khmer.'
-        ],
-        correct: 1,
-        explanation: 'Lesson 05 Slide 24 & Lesson 06 Slide 72 explain that chunk overlap repeats 10–20% of tokens across boundaries so sentences split mid-cut remain whole in at least one chunk.'
-      },
-      {
-        id: 7,
-        module: 'mod05',
-        type: 'concept',
-        question: 'If two embedding vectors A and B are unit-normalized (length = 1.0), what is the relationship between their Dot Product and Cosine Similarity?',
-        options: [
-          'Dot Product is the square of Cosine Similarity.',
-          'Dot Product is mathematically identical to Cosine Similarity.',
-          'Dot Product is always negative, while Cosine is positive.',
-          'Dot Product requires GPU, while Cosine requires CPU.'
-        ],
-        correct: 1,
-        explanation: 'Because Cosine Similarity = (A &middot; B) / (||A|| * ||B||), when ||A|| = 1 and ||B|| = 1, the denominator is 1, making Dot Product exactly equal to Cosine Similarity!'
-      },
-      {
-        id: 8,
-        module: 'mod05',
-        type: 'code',
-        question: 'In ChromaDB, what does the following query call return?',
-        code: `results = collection.query(
+    options: [
+      "It replaces Python functions with raw shell commands.",
+      "It combines returning state updates and selecting the next destination node in a single return statement.",
+      "It forces the graph to run synchronously without threading.",
+      "It converts LangGraph into a linear LangChain LCEL pipe."
+    ],
+    correct: 1,
+    explanation: "Lesson 04 Slide 107 states that Command lets a node return a state update and the next node to route to in one return value, avoiding a separate routing function.",
+    slideRef: "Lesson 04 Slide 107"
+  },
+  {
+    id: 5,
+    module: "mod04",
+    type: "concept",
+    question: "What are the 3 core principles of Modular Workflow Design?",
+    options: [
+      "Single responsibility, standard interfaces, and composability",
+      "High coupling, complex inheritance, raw execution",
+      "All-in-one scripts, static prompts, and global variables",
+      "Multi-GPU training, fine-tuning, and long context"
+    ],
+    correct: 0,
+    explanation: "Lesson 04 Slide 60 outlines the 3 principles: Single responsibility (each piece has one job), Standard interfaces (swappable without touching adjacent code), and Composability (small pieces easily link together).",
+    slideRef: "Lesson 04 Slide 60"
+  },
+  {
+    id: 6,
+    module: "mod05",
+    type: "concept",
+    question: "When should an engineer choose RAG instead of Fine-Tuning?",
+    options: [
+      "When the goal is to alter the model’s linguistic style, tone, or dialect.",
+      "When you have no access to an embedding model or vector database.",
+      "When information changes frequently, private documents are needed, and exact citations are mandatory.",
+      "When training compute is unlimited and latency must be zero."
+    ],
+    correct: 2,
+    explanation: "Lesson 05 Slide 4 & 5 highlight that RAG is ideal for dynamic knowledge updates, preventing staleness and hallucination, and providing exact source attribution.",
+    slideRef: "Lesson 05 Slide 4-5"
+  },
+  {
+    id: 7,
+    module: "mod05",
+    type: "concept",
+    question: "What is the primary purpose of Chunk Overlap in document splitting?",
+    options: [
+      "To compress the document so it uses fewer total tokens.",
+      "To automatically translate English text into Khmer.",
+      "To make vector dimensions smaller for faster cosine search.",
+      "To prevent sentences or concepts from being severed at chunk boundaries."
+    ],
+    correct: 3,
+    explanation: "Lesson 05 Slide 24 & Lesson 06 Slide 72 explain that chunk overlap repeats 10–20% of tokens across boundaries so sentences split mid-cut remain whole in at least one chunk.",
+    slideRef: "Lesson 05 Slide 24"
+  },
+  {
+    id: 8,
+    module: "mod05",
+    type: "concept",
+    question: "If two embedding vectors A and B are unit-normalized (length = 1.0), what is the relationship between their Dot Product and Cosine Similarity?",
+    options: [
+      "Dot Product is the square of Cosine Similarity.",
+      "Dot Product is mathematically identical to Cosine Similarity.",
+      "Dot Product is always negative, while Cosine is positive.",
+      "Dot Product requires GPU, while Cosine requires CPU."
+    ],
+    correct: 1,
+    explanation: "Because Cosine Similarity = (A · B) / (||A|| * ||B||), when ||A|| = 1 and ||B|| = 1, the denominator is 1, making Dot Product exactly equal to Cosine Similarity!",
+    slideRef: "Lesson 05 Slide 34"
+  },
+  {
+    id: 9,
+    module: "mod05",
+    type: "code",
+    question: "In ChromaDB, what does the following query call return?",
+    code: `results = collection.query(
     query_texts=["quarterly revenue growth"],
-    n_results=3
+    n_results=3,
+    where={"dept": "Finance"}
 )`,
-        options: [
-          'The entire text of all documents in the collection.',
-          'The top-3 most semantically similar chunks to the query text along with distances and IDs.',
-          'A fine-tuned LoRA checkpoint for the query.',
-          'A BM25 keyword frequency count table.'
-        ],
-        correct: 1,
-        explanation: 'Lesson 05 Slide 51 demonstrates that collection.query embeds query_texts and retrieves the top n_results closest chunks by similarity.'
-      },
-
-      // MODULE 06
-      {
-        id: 9,
-        module: 'mod06',
-        type: 'concept',
-        question: 'What is the main blind spot of pure dense (vector) retrieval that keyword search (BM25) solves?',
-        options: [
-          'Dense search cannot handle synonyms like "car" vs "vehicle".',
-          'Dense search misses exact identifiers, part numbers (SKU-4471), error codes (E-1147), and rare acronyms.',
-          'Dense search is too slow on large corpora.',
-          'Dense search requires keyword stemming.'
-        ],
-        correct: 1,
-        explanation: 'Lesson 06 Slide 5 emphasizes that dense search compresses text into general semantic meaning, losing tokens that carry identity rather than meaning (exact error codes, SKUs, jargon).'
-      },
-      {
-        id: 10,
-        module: 'mod06',
-        type: 'code',
-        question: 'In Reciprocal Rank Fusion (RRF), what is the formula and standard smoothing constant k?',
-        code: `fused[doc_id] += 1.0 / (k + rank)`,
-        options: [
-          'k = 1.5 (from BM25)',
-          'k = 60 (standard damping constant)',
-          'k = 0.75 (length normalization)',
-          'k = 512 (context limit)'
-        ],
-        correct: 1,
-        explanation: 'Lesson 06 Slide 10 states that RRF(d) = &Sigma; 1 / (k + rank_i(d)) with k = 60 as the standard constant to damp the gap between rank 1 and rank 2.'
-      },
-      {
-        id: 11,
-        module: 'mod06',
-        type: 'concept',
-        question: 'Why does Graph RAG succeed on multi-hop questions where standard chunk-based top-k retrieval fails?',
-        options: [
-          'Graph RAG uses larger LLMs with 10M token context windows.',
-          'Graph RAG connects facts across separate chunks using typed entity-relationship edges (A &rarr; B &rarr; C).',
-          'Graph RAG replaces all text with images.',
-          'Graph RAG only uses BM25 keyword matching.'
-        ],
-        correct: 1,
-        explanation: 'Lesson 06 Slide 18–20 explains that multi-hop questions have half the answer in Chunk 14 and half in Chunk 902; knowledge graph edges connect them structurally.'
-      },
-      {
-        id: 12,
-        module: 'mod06',
-        type: 'concept',
-        question: 'In Microsoft GraphRAG, what is the key difference between Local Search and Global Search?',
-        options: [
-          'Local search runs on localhost; Global runs in cloud.',
-          'Local search is entity-focused (traversing 1-2 hops); Global search is theme-focused (map-reducing over community summaries).',
-          'Local search uses BM25; Global search uses ChromaDB.',
-          'Local search requires GPU; Global search requires CPU.'
-        ],
-        correct: 1,
-        explanation: 'Lesson 06 Slide 27: Local search focuses on specific entities and walks outward; Global search queries community summary reports to answer corpus-wide thematic questions.'
-      },
-      {
-        id: 13,
-        module: 'mod06',
-        type: 'concept',
-        question: 'What is the architectural difference between a Bi-Encoder and a Cross-Encoder?',
-        options: [
-          'Bi-Encoder uses two GPUs; Cross-Encoder uses one GPU.',
-          'Bi-Encoder encodes query and doc separately (two towers); Cross-Encoder passes query and doc concatenated into one transformer with full cross-attention.',
-          'Bi-Encoder is only for images; Cross-Encoder is for text.',
-          'Bi-Encoder is slower than Cross-Encoder.'
-        ],
-        correct: 1,
-        explanation: 'Lesson 06 Slide 45 & 46: Bi-encoders encode independently so comparisons happen in vector space; Cross-encoders concatenate [CLS] query [SEP] doc with full token-to-token cross-attention.'
-      },
-      {
-        id: 14,
-        module: 'mod06',
-        type: 'code',
-        question: 'How does context reordering mitigate the "Lost in the Middle" phenomenon?',
-        code: `head, tail = [], []
+    options: [
+      "All documents in the collection formatted as CSV.",
+      "A BM25 keyword frequency count table.",
+      "A fine-tuned LoRA checkpoint for the query.",
+      "The top-3 most semantically similar chunks belonging to the Finance department."
+    ],
+    correct: 3,
+    explanation: "Lesson 05 Slide 51 demonstrates that collection.query embeds query_texts and retrieves the top n_results closest chunks by similarity, filtered by payload metadata.",
+    slideRef: "Lesson 05 Slide 51"
+  },
+  {
+    id: 10,
+    module: "mod05",
+    type: "concept",
+    question: "What does an Approximate Nearest Neighbor (ANN) index like HNSW do differently from a traditional SQL database B-Tree index?",
+    options: [
+      "It enables sub-linear similarity search across high-dimensional vector spaces instead of exact relational matches.",
+      "It only works with integer primary keys.",
+      "It encrypts strings into SHA-256 hashes.",
+      "It requires retraining on every select query."
+    ],
+    correct: 0,
+    explanation: "Lesson 05 Slide 47 explains that HNSW indexes allow searching millions of high-dimensional vectors in sub-linear time, whereas B-trees only support 1D exact or range matching.",
+    slideRef: "Lesson 05 Slide 47"
+  },
+  {
+    id: 11,
+    module: "mod06",
+    type: "concept",
+    question: "What is the main blind spot of pure dense (vector) retrieval that keyword search (BM25) solves?",
+    options: [
+      "Dense search cannot handle synonyms like 'car' vs 'vehicle'.",
+      "Dense search misses exact identifiers, part numbers (SKU-4471), error codes (E-1147), and rare acronyms.",
+      "Dense search is too slow on large corpora.",
+      "Dense search requires keyword stemming."
+    ],
+    correct: 1,
+    explanation: "Lesson 06 Slide 5 emphasizes that dense search compresses text into general semantic meaning, losing tokens that carry identity rather than meaning (exact error codes, SKUs, jargon).",
+    slideRef: "Lesson 06 Slide 5"
+  },
+  {
+    id: 12,
+    module: "mod06",
+    type: "code",
+    question: "In Reciprocal Rank Fusion (RRF), what is the formula and standard smoothing constant k?",
+    code: `fused[doc_id] += 1.0 / (k + rank)`,
+    options: [
+      "k = 1.5 (from BM25)",
+      "k = 0.75 (length normalization)",
+      "k = 60 (standard damping constant)",
+      "k = 512 (context limit)"
+    ],
+    correct: 2,
+    explanation: "Lesson 06 Slide 10 states that RRF(d) = Σ 1 / (k + rank_i(d)) with k = 60 as the standard constant to damp the gap between rank 1 and rank 2.",
+    slideRef: "Lesson 06 Slide 10"
+  },
+  {
+    id: 13,
+    module: "mod06",
+    type: "concept",
+    question: "Why does Graph RAG succeed on multi-hop questions where standard chunk-based top-k retrieval fails?",
+    options: [
+      "Graph RAG connects facts across separate chunks using typed entity-relationship edges (A -> B -> C).",
+      "Graph RAG uses larger LLMs with 10M token context windows.",
+      "Graph RAG replaces all text with images.",
+      "Graph RAG only uses BM25 keyword matching."
+    ],
+    correct: 0,
+    explanation: "Lesson 06 Slide 18–20 explains that multi-hop questions have half the answer in Chunk 14 and half in Chunk 902; knowledge graph edges connect them structurally.",
+    slideRef: "Lesson 06 Slide 18-20"
+  },
+  {
+    id: 14,
+    module: "mod06",
+    type: "concept",
+    question: "In Microsoft GraphRAG, what is the key difference between Local Search and Global Search?",
+    options: [
+      "Local search runs on localhost; Global runs in cloud.",
+      "Local search requires GPU; Global search requires CPU.",
+      "Local search uses BM25; Global search uses ChromaDB.",
+      "Local search is entity-focused (traversing 1-2 hops); Global search is theme-focused (map-reducing over community summaries)."
+    ],
+    correct: 3,
+    explanation: "Lesson 06 Slide 27: Local search focuses on specific entities and walks outward; Global search queries community summary reports to answer corpus-wide thematic questions.",
+    slideRef: "Lesson 06 Slide 27"
+  },
+  {
+    id: 15,
+    module: "mod06",
+    type: "concept",
+    question: "What is the architectural difference between a Bi-Encoder and a Cross-Encoder?",
+    options: [
+      "Bi-Encoder uses two GPUs; Cross-Encoder uses one GPU.",
+      "Bi-Encoder is only for images; Cross-Encoder is for text.",
+      "Bi-Encoder encodes query and doc separately (two towers); Cross-Encoder passes query and doc concatenated into one transformer with full cross-attention.",
+      "Bi-Encoder is slower than Cross-Encoder."
+    ],
+    correct: 2,
+    explanation: "Lesson 06 Slide 45 & 46: Bi-encoders encode independently so comparisons happen in vector space; Cross-encoders concatenate [CLS] query [SEP] doc with full token-to-token cross-attention.",
+    slideRef: "Lesson 06 Slide 45"
+  },
+  {
+    id: 16,
+    module: "mod06",
+    type: "code",
+    question: "How does context reordering mitigate the 'Lost in the Middle' phenomenon?",
+    code: `head, tail = [], []
 for i, c in enumerate(picked):
     (head if i % 2 == 0 else tail).append(c)
 ordered = head + tail[::-1]`,
-        options: [
-          'It reverses all words in the document.',
-          'It places Rank 1 at the beginning, Rank 2 at the very end, and buries weaker chunks in the middle.',
-          'It removes all punctuation.',
-          'It duplicates every chunk twice.'
-        ],
-        correct: 1,
-        explanation: 'Lesson 06 Slide 55 & 60: LLMs attend best to the start and end of prompt context; the even/odd split places strongest chunks at the extremes and buries lower-ranked chunks in the middle.'
-      },
-
-      // MODULE 07
-      {
-        id: 15,
-        module: 'mod07',
-        type: 'concept',
-        question: 'What is the fundamental rule of Tool Calling architecture in autonomous agents?',
-        options: [
-          'The model directly opens sockets and runs SQL queries.',
-          'The model requests the action; the application executes it.',
-          'The tool writes prompts; the model reads files.',
-          'Local models cannot request tools.'
-        ],
-        correct: 1,
-        explanation: 'Lesson 07 Slide 16 & 48 emphasizes: "The model requests the action; the application executes it." LLMs propose structured calls; the application host validates and runs them.'
-      },
-      {
-        id: 16,
-        module: 'mod07',
-        type: 'concept',
-        question: 'Which of the following is an example of Business Validation rather than Schema Validation?',
-        options: [
-          'Checking if `order_id` is an integer.',
-          'Checking if `product_id` is present in required fields.',
-          'Checking whether product ID 101 currently has sufficient stock in the inventory database.',
-          'Checking if `user_email` matches a string type.'
-        ],
-        correct: 2,
-        explanation: 'Lesson 07 Slide 28 explains that Schema validation checks types and shapes, whereas Business validation checks domain rules and database reality (e.g. is item in stock? does user have permission?).'
-      },
-      {
-        id: 17,
-        module: 'mod07',
-        type: 'concept',
-        question: 'What is the principle of "Bounded Actions" and "Least Privilege" in agent security?',
-        options: [
-          'Giving the agent root shell access so it can fix bugs automatically.',
-          'Giving agents capabilities through narrow allowlisted tools, avoiding raw exec() or arbitrary SQL strings.',
-          'Allowing the agent to retry failing tools infinitely.',
-          'Removing all timeouts from the execution harness.'
-        ],
-        correct: 1,
-        explanation: 'Lesson 07 Slide 36–40: Give agents capabilities, not unlimited power. Use allowlists of narrow parameterized tools and never hand over raw interpreters.'
-      },
-      {
-        id: 18,
-        module: 'mod07',
-        type: 'concept',
-        question: 'In the OS-Kernel analogy for Agent Harness design, what corresponds to the Kernel and the CPU?',
-        options: [
-          'The Model is the Kernel; the Database is the CPU.',
-          'The Harness is the Kernel (controls syscalls, safety, memory); the Model is an untrusted CPU (generates next tokens).',
-          'The Python interpreter is the CPU; Ollama is the Kernel.',
-          'The Tool is the Kernel; the Prompt is the CPU.'
-        ],
-        correct: 1,
-        explanation: 'Lesson 07 Slide 82: The model is an untrusted CPU (instruction generator); the harness is the operating system kernel (enforces permissions, sandbox, memory, and budgets).'
-      },
-      {
-        id: 19,
-        module: 'mod07',
-        type: 'concept',
-        question: 'What problem does the Model Context Protocol (MCP) solve?',
-        options: [
-          'It replaces Python with Rust for faster execution.',
-          'It solves the M x N integration problem between AI applications (hosts) and external tools/servers.',
-          'It eliminates the need for vector databases.',
-          'It increases GPU VRAM size.'
-        ],
-        correct: 1,
-        explanation: 'Lesson 07 Slide 91 & 92 explains that MCP establishes a standard protocol so M clients connecting to N tools require only M+N integrations instead of M x N bespoke code.'
-      },
-      {
-        id: 20,
-        module: 'mod07',
-        type: 'concept',
-        question: 'Which of the following distinguishes Human-IN-the-loop (HITL) from Human-ON-the-loop (HOTL)?',
-        options: [
-          'HITL suspends execution and blocks until approved; HOTL executes immediately while streaming to an audit feed where humans can abort.',
-          'HITL is only for images; HOTL is for databases.',
-          'HOTL is always slower than HITL.',
-          'HITL never requires human review.'
-        ],
-        correct: 0,
-        explanation: 'Lesson 07 Slide 118: In-the-loop halts execution until approved (highest safety); On-the-loop executes immediately with real-time human oversight and rollback.'
-      },
-      {
-        id: 21,
-        module: 'mod02',
-        type: 'concept',
-        question: 'Which Ollama command displays models that are actively loaded into memory (RAM/VRAM) right now?',
-        options: [
-          'ollama list',
-          'ollama ps',
-          'ollama status',
-          'ollama inspect'
-        ],
-        correct: 1,
-        explanation: 'Lesson 02 Slide 11: "ollama ps" lists models currently loaded in memory with GPU processor allocation and expiry, whereas "ollama list" shows downloaded models on disk.'
-      },
-      {
-        id: 22,
-        module: 'mod02',
-        type: 'concept',
-        question: 'In an Ollama Modelfile, which directive configures the context window token limit?',
-        options: [
-          'PARAMETER max_tokens 8192',
-          'PARAMETER num_ctx 8192',
-          'SET context_window 8192',
-          'CONFIG tokens 8192'
-        ],
-        correct: 1,
-        explanation: 'Lesson 02 Slide 14 & Lesson 03 Slide 27: Ollama native parameter for context window is "PARAMETER num_ctx <tokens>".'
-      },
-      {
-        id: 23,
-        module: 'mod06',
-        type: 'concept',
-        question: 'When launching Neo4j with "docker run -d -p 7474:7474 -p 7687:7687 ...", what is port 7687 used for?',
-        options: [
-          'HTTP Web Browser visual interface',
-          'Bolt binary protocol used by Python drivers and LangChain GraphCypherQAChain',
-          'Prometheus metrics endpoint',
-          'Container SSH access'
-        ],
-        correct: 1,
-        explanation: 'Lesson 06 Slide 30: Port 7474 is HTTP Web UI; Port 7687 is the Bolt binary protocol for LangChain and Python drivers.'
-      },
-      {
-        id: 24,
-        module: 'mod02',
-        type: 'concept',
-        question: 'Why is the "--ipc=host" flag required when running high-performance vLLM containers in Docker?',
-        options: [
-          'It bypasses Docker firewall restrictions.',
-          'It shares host IPC memory so PyTorch multi-worker processes can exchange tensor buffers without shared memory exhaustion.',
-          'It auto-mounts Hugging Face cache.',
-          'It allows remote SSH debugging.'
-        ],
-        correct: 1,
-        explanation: 'Lesson 02 Slide 38: PyTorch and CUDA workers need large shared memory for tensor exchange; Docker default 64MB IPC crashes without "--ipc=host".'
-      },
-      {
-        id: 25,
-        module: 'mod06',
-        type: 'concept',
-        question: 'In Microsoft GraphRAG, which query command answers questions about overarching themes across the entire dataset?',
-        options: [
-          'graphrag query --root ./rag-graph --method local --query "..."',
-          'graphrag query --root ./rag-graph --method global --query "..."',
-          'graphrag index --full',
-          'graphrag search --summary'
-        ],
-        correct: 1,
-        explanation: 'Lesson 06 Slide 30: "--method global" runs map-reduce over Leiden community summaries for broad corpus sensemaking.'
-      },
-      {
-        id: 26,
-        module: 'mod01',
-        type: 'concept',
-        question: 'Which command provides end-to-end proof that Docker can expose host NVIDIA GPUs to containers?',
-        options: [
-          'docker run --rm --gpus all nvidia/cuda:12.4.1-base-ubuntu22.04 nvidia-smi',
-          'docker inspect --gpu',
-          'docker pull cuda-driver',
-          'nvidia-smi --docker'
-        ],
-        correct: 0,
-        explanation: 'Lesson 01 Slide 39: Running nvidia-smi inside an official CUDA container with "--gpus all" verifies complete GPU passthrough.'
-      },
-      {
-        id: 27,
-        module: 'mod01',
-        type: 'concept',
-        question: 'In nvidia-smi, what does performance state P0 represent compared to P8?',
-        options: [
-          'P0 is offline; P8 is fully active.',
-          'P0 is highest performance state under heavy workload; P8 is lowest power idle state.',
-          'P0 indicates overheating; P8 indicates normal temperature.',
-          'P0 is fan speed 0%; P8 is fan speed 80%.'
-        ],
-        correct: 1,
-        explanation: 'Lesson 01 Slide 33: Performance states range from P0 (highest performance under workload) to P8 (lowest power state when idle).'
-      },
-      {
-        id: 28,
-        module: 'mod03',
-        type: 'concept',
-        question: 'Why should developers bind to "OLLAMA_HOST=127.0.0.1:11434" instead of 0.0.0.0 in an office network?',
-        options: [
-          'Ollama crashes if bound to 0.0.0.0.',
-          'Local model servers have no authentication by default; 0.0.0.0 exposes the server to anyone on the LAN to exhaust GPU compute.',
-          'Binding to 127.0.0.1 increases token generation speed.',
-          'Local models only support English on 127.0.0.1.'
-        ],
-        correct: 1,
-        explanation: 'Lesson 03 Slide 63-64: Local servers have no auth by default. Binding to 0.0.0.0 allows unauthenticated LAN users to call models and exhaust compute.'
-      },
-      {
-        id: 29,
-        module: 'mod06',
-        type: 'code',
-        question: 'In Neo4j Cypher, what happens if you execute "CREATE (a:Entity {name: \'Sokha\'})-[r:WORKS_ON]->(b:Entity {name: \'Invoicing Service\'})" multiple times?',
-        options: [
-          'It updates existing nodes without duplicates.',
-          'It creates duplicate nodes and relationships on every run. Use MERGE instead to ensure idempotency.',
-          'It throws a primary key error.',
-          'It deletes the graph.'
-        ],
-        correct: 1,
-        explanation: 'Lesson 06 Slide 29: CREATE is not idempotent; re-running it creates duplicate nodes and edges. Always use MERGE for idempotent loading.'
-      },
-      {
-        id: 30,
-        module: 'mod06',
-        type: 'code',
-        question: 'Why does "MATCH (n:Entity {name: \'Sokha\'}) DELETE n;" fail if Sokha is connected to other nodes?',
-        options: [
-          'Cypher does not allow deleting by name.',
-          'A node cannot be deleted while relationships are attached to it; you must use "DETACH DELETE n" to delete connected edges first.',
-          'The database must be dropped first.',
-          'Nodes named Sokha are reserved.'
-        ],
-        correct: 1,
-        explanation: 'Neo4j referential integrity prevents deleting nodes with active relationships. DETACH DELETE removes all attached relationships first.'
-      },
-      {
-        id: 31,
-        module: 'mod06',
-        type: 'code',
-        question: 'Which Cypher pattern matches a multi-hop traversal to find who owns a service that replaced LegacyPay?',
-        options: [
-          'MATCH (p:Person)-[:OWNS]->(s:Service)-[:REPLACED]->(old:Service {name: "LegacyPay"}) RETURN p.name, s.name',
-          'SELECT Person WHERE Service == LegacyPay',
-          'SEARCH FOR Person JOIN LegacyPay',
-          'MATCH (p)->(s)->(old)'
-        ],
-        correct: 0,
-        explanation: 'Lesson 06 Slide 29: Cypher uses ASCII drawings to represent multi-hop patterns: (p:Person)-[:OWNS]->(s:Service)-[:REPLACED]->(old:Service {name: "LegacyPay"}).'
-      },
-      {
-        id: 32,
-        module: 'mod06',
-        type: 'concept',
-        question: 'Why is variable-length path traversal written as "[*1..3]" instead of an unbounded "[*]"?',
-        options: [
-          'Cypher syntax disallows asterisks.',
-          'An unbounded "[*]" on a connected or cyclic graph can cause exponential path explosion, exhausting RAM and freezing the database.',
-          'It limits execution to 3 milliseconds.',
-          'It turns graphs into JSON tables.'
-        ],
-        correct: 1,
-        explanation: 'Lesson 06 Slide 29: "An unbounded [*] on a real graph will hang. Cap the hops, always."'
-      }
+    options: [
+      "It reverses all words in the document.",
+      "It places Rank 1 at the beginning, Rank 2 at the very end, and buries weaker chunks in the middle.",
+      "It removes all punctuation.",
+      "It duplicates every chunk twice."
+    ],
+    correct: 1,
+    explanation: "Lesson 06 Slide 55 & 60: LLMs attend best to the start and end of prompt context; the even/odd split places strongest chunks at the extremes and buries lower-ranked chunks in the middle.",
+    slideRef: "Lesson 06 Slide 55, 60"
+  },
+  {
+    id: 17,
+    module: "mod06",
+    type: "concept",
+    question: "What are the three verification checks performed in Self-Reflective RAG?",
+    options: [
+      "Token count, syntax check, spell check",
+      "1. Is chunk relevant? 2. Is draft answer grounded? 3. Does it answer the question?",
+      "Latency check, GPU temperature, API credit",
+      "HTML validation, CSS styling, responsive layout"
+    ],
+    correct: 1,
+    explanation: "Lesson 06 Slide 39: Self-Reflective RAG checks: 1. Relevant chunks before generation, 2. Groundedness against context after draft, 3. Relevance to user question.",
+    slideRef: "Lesson 06 Slide 39"
+  },
+  {
+    id: 18,
+    module: "mod07",
+    type: "concept",
+    question: "What is the fundamental rule of Tool Calling architecture in autonomous agents?",
+    options: [
+      "The model directly opens sockets and runs SQL queries.",
+      "Local models cannot request tools.",
+      "The tool writes prompts; the model reads files.",
+      "The model requests the action; the application executes it."
+    ],
+    correct: 3,
+    explanation: "Lesson 07 Slide 16 & 48 emphasizes: 'The model requests the action; the application executes it.' LLMs propose structured calls; the application host validates and runs them.",
+    slideRef: "Lesson 07 Slide 16"
+  },
+  {
+    id: 19,
+    module: "mod07",
+    type: "concept",
+    question: "Which of the following is an example of Business Validation rather than Schema Validation?",
+    options: [
+      "Checking whether product ID 101 currently has sufficient stock in the inventory database.",
+      "Checking if `product_id` is present in required fields.",
+      "Checking if `order_id` is an integer.",
+      "Checking if `user_email` matches a string type."
+    ],
+    correct: 0,
+    explanation: "Lesson 07 Slide 28 explains that Schema validation checks types and shapes, whereas Business validation checks domain rules and database reality (e.g. is item in stock? does user have permission?).",
+    slideRef: "Lesson 07 Slide 28"
+  },
+  {
+    id: 20,
+    module: "mod07",
+    type: "concept",
+    question: "What is the principle of 'Bounded Actions' and 'Least Privilege' in agent security?",
+    options: [
+      "Giving the agent root shell access so it can fix bugs automatically.",
+      "Allowing the agent to retry failing tools infinitely.",
+      "Giving agents capabilities through narrow allowlisted tools, avoiding raw exec() or arbitrary SQL strings.",
+      "Removing all timeouts from the execution harness."
+    ],
+    correct: 2,
+    explanation: "Lesson 07 Slide 36–40: Give agents capabilities, not unlimited power. Use allowlists of narrow parameterized tools and never hand over raw interpreters.",
+    slideRef: "Lesson 07 Slide 36-40"
+  },
+  {
+    id: 21,
+    module: "mod07",
+    type: "concept",
+    question: "In the OS-Kernel analogy for Agent Harness design, what corresponds to the Kernel and the CPU?",
+    options: [
+      "The Model is the Kernel; the Database is the CPU.",
+      "The Tool is the Kernel; the Prompt is the CPU.",
+      "The Python interpreter is the CPU; Ollama is the Kernel.",
+      "The Harness is the Kernel (controls syscalls, safety, memory); the Model is an untrusted CPU (generates next tokens)."
+    ],
+    correct: 3,
+    explanation: "Lesson 07 Slide 82: The model is an untrusted CPU (instruction generator); the harness is the operating system kernel (enforces permissions, sandbox, memory, and budgets).",
+    slideRef: "Lesson 07 Slide 82"
+  },
+  {
+    id: 22,
+    module: "mod07",
+    type: "concept",
+    question: "What problem does the Model Context Protocol (MCP) solve?",
+    options: [
+      "It replaces Python with Rust for faster execution.",
+      "It solves the M x N integration problem between AI applications (hosts) and external tools/servers.",
+      "It eliminates the need for vector databases.",
+      "It increases GPU VRAM size."
+    ],
+    correct: 1,
+    explanation: "Lesson 07 Slide 91 & 92 explains that MCP establishes a standard protocol so M clients connecting to N tools require only M+N integrations instead of M x N bespoke code.",
+    slideRef: "Lesson 07 Slide 91-92"
+  },
+  {
+    id: 23,
+    module: "mod07",
+    type: "concept",
+    question: "Which of the following distinguishes Human-IN-the-loop (HITL) from Human-ON-the-loop (HOTL)?",
+    options: [
+      "HITL suspends execution and blocks until approved; HOTL executes immediately while streaming to an audit feed where humans can abort.",
+      "HITL is only for images; HOTL is for databases.",
+      "HOTL is always slower than HITL.",
+      "HITL never requires human review."
+    ],
+    correct: 0,
+    explanation: "Lesson 07 Slide 118: In-the-loop halts execution until approved (highest safety); On-the-loop executes immediately with real-time human oversight and rollback.",
+    slideRef: "Lesson 07 Slide 118"
+  },
+  {
+    id: 24,
+    module: "mod07",
+    type: "code",
+    question: "In FastMCP, which decorator is used to expose an executable action that an AI model can invoke with arguments?",
+    code: `@mcp.???()
+def check_inventory(sku: str) -> dict:
+    """Check stock for SKU."""
+    return {"sku": sku, "in_stock": True}`,
+    options: [
+      "@mcp.resource()",
+      "@mcp.prompt()",
+      "@mcp.tool()",
+      "@mcp.agent()"
+    ],
+    correct: 2,
+    explanation: "Lesson 07 Slide 101: @mcp.tool() exposes callable functions with model-constructed arguments; @mcp.resource() exposes readable data attachments.",
+    slideRef: "Lesson 07 Slide 101"
+  },
+  {
+    id: 25,
+    module: "mod07",
+    type: "concept",
+    question: "In the ReAct agent design pattern, what does ReAct stand for?",
+    options: [
+      "Reason + Act (Thought -> Action -> Observation loop)",
+      "Reactive Action",
+      "Recursive Activation",
+      "Real-time Authentication"
+    ],
+    correct: 0,
+    explanation: "Lesson 07 Slide 57 & 58: ReAct stands for Reason + Act, alternating between model thoughts, tool actions, and observation checks.",
+    slideRef: "Lesson 07 Slide 57"
+  },
+  {
+    id: 26,
+    module: "mod02",
+    type: "concept",
+    question: "Which Ollama command displays models that are actively loaded into GPU/system memory right now?",
+    options: [
+      "ollama list",
+      "ollama show --active",
+      "ollama ps",
+      "ollama memory"
+    ],
+    correct: 2,
+    explanation: "Lesson 02 Slide 11: 'ollama ps' shows models currently loaded in memory, processor allocation (100% GPU / CPU), and expiry timer, whereas 'ollama list' shows downloaded models stored on disk.",
+    slideRef: "Lesson 02 Slide 11"
+  },
+  {
+    id: 27,
+    module: "mod02",
+    type: "code",
+    question: "In an Ollama Modelfile, which directive configures the context window token budget?",
+    code: `FROM llama3.2:1b
+PARAMETER num_ctx 8192
+SYSTEM """You are a patient CS tutor."""`,
+    options: [
+      "PARAMETER max_tokens 8192",
+      "PARAMETER num_ctx 8192",
+      "SET context_length 8192",
+      "CONTEXT_WINDOW 8192"
+    ],
+    correct: 1,
+    explanation: "Lesson 02 Slide 14 & Lesson 03 Slide 24, 27: Ollama's native parameter for context window size is 'num_ctx' (whereas in vLLM CLI it is '--max-model-len' and in generation requests it is 'max_tokens').",
+    slideRef: "Lesson 02 Slide 14"
+  },
+  {
+    id: 28,
+    module: "mod06",
+    type: "concept",
+    question: "When launching the Neo4j container with 'docker run -d -p 7474:7474 -p 7687:7687 ...', what is port 7687 specifically used for?",
+    options: [
+      "The Neo4j Web Browser visual graph explorer UI",
+      "SSH shell container administration",
+      "The Prometheus metrics scraping daemon",
+      "The Bolt binary protocol used by Python drivers and LangChain GraphCypherQAChain"
+    ],
+    correct: 3,
+    explanation: "Lesson 06 Slide 30: Port 7474 is the HTTP Web Browser UI; port 7687 is the Bolt binary protocol used by LangChain, Neo4j Python driver, and Cypher query execution.",
+    slideRef: "Lesson 06 Slide 30"
+  },
+  {
+    id: 29,
+    module: "mod02",
+    type: "concept",
+    question: "Why is the '--ipc=host' flag essential when running high-performance vLLM inference containers in Docker?",
+    code: `docker run -d --rm --gpus '"device=0"' \\
+  -p 9040:9040 \\
+  --ipc=host \\
+  vllm/vllm-openai:latest ...`,
+    options: [
+      "It allows the container to bypass host firewall rules.",
+      "It enables Docker to forward audio and video devices.",
+      "It shares host IPC memory so PyTorch multi-process workers can exchange tensor buffers without hitting Docker's small default shared memory limit.",
+      "It automatically downloads CUDA drivers into the container."
+    ],
+    correct: 2,
+    explanation: "Lesson 02 Slide 38: PyTorch and CUDA multi-worker processes need large shared memory for tensor exchange. Docker's default 64MB IPC memory will cause crashes without '--ipc=host'.",
+    slideRef: "Lesson 02 Slide 38"
+  },
+  {
+    id: 30,
+    module: "mod06",
+    type: "concept",
+    question: "In Microsoft GraphRAG, which query command and method should be executed to synthesize overarching themes across the entire knowledge repository?",
+    options: [
+      "graphrag query --root ./rag-graph --method global --query \"...\"",
+      "graphrag query --root ./rag-graph --method local --query \"...\"",
+      "graphrag search --all --query \"...\"",
+      "graphrag extract --summary --query \"...\""
+    ],
+    correct: 0,
+    explanation: "Lesson 06 Slide 30: Microsoft GraphRAG '--method global' performs map-reduce over pre-computed hierarchical Leiden community summaries for corpus-level themes, while '--method local' traverses specific entity subgraphs.",
+    slideRef: "Lesson 06 Slide 30"
+  },
+  {
+    id: 31,
+    module: "mod01",
+    type: "code",
+    question: "Which command provides end-to-end smoke test validation that the Docker daemon can successfully expose NVIDIA GPUs to containers?",
+    options: [
+      "nvidia-container-cli status",
+      "docker system info --gpu",
+      "docker run --device /dev/nvidia0 ubuntu bash",
+      "docker run --rm --gpus all nvidia/cuda:12.4.1-base-ubuntu22.04 nvidia-smi"
+    ],
+    correct: 3,
+    explanation: "Lesson 01 Slide 39: Running 'nvidia-smi' inside an official NVIDIA CUDA base container with '--gpus all' is the standard end-to-end verification of GPU container passthrough.",
+    slideRef: "Lesson 01 Slide 39"
+  },
+  {
+    id: 32,
+    module: "mod01",
+    type: "concept",
+    question: "In the nvidia-smi output breakdown, what do Performance States (Perf) P0 and P8 represent?",
+    options: [
+      "P0 means GPU is powered off; P8 means GPU is running at 100% capacity.",
+      "P0 is the highest performance state under heavy workload; P8 is the lowest power idle state.",
+      "P0 is PCIe Gen 0; P8 is PCIe Gen 8.",
+      "P0 indicates overheating; P8 indicates normal operating temperature."
+    ],
+    correct: 1,
+    explanation: "Lesson 01 Slide 33: Performance states range from P0 (highest performance under compute workload) to P8 (lowest power state during idle).",
+    slideRef: "Lesson 01 Slide 33"
+  },
+  {
+    id: 33,
+    module: "mod03",
+    type: "concept",
+    question: "Why should developers configure 'OLLAMA_HOST=127.0.0.1:11434 ollama serve' instead of binding to 0.0.0.0 in an office network?",
+    options: [
+      "Ollama fails to boot if bound to any address other than localhost.",
+      "Local model servers default to unauthenticated HTTP; binding to 0.0.0.0 allows any network device to send prompts and exhaust local GPU compute.",
+      "Binding to 127.0.0.1 enables GPU memory compression.",
+      "Ollama only supports encrypted HTTPS when bound to 127.0.0.1."
+    ],
+    correct: 1,
+    explanation: "Lesson 03 Slide 63-64: Local model servers commonly have no authentication by default. Binding to 0.0.0.0 exposes the server to anyone on the network. A reverse proxy (Nginx) is required if remote access is needed.",
+    slideRef: "Lesson 03 Slide 63-64"
+  },
+  {
+    id: 34,
+    module: "mod06",
+    type: "code",
+    question: "In Neo4j Cypher, what happens if you execute this script multiple times?",
+    code: `CREATE (a:Entity {name: "Sokha"})-[r:WORKS_ON]->(b:Entity {name: "Invoicing Service"})
+RETURN a, r, b;`,
+    options: [
+      "It updates the existing Sokha node without creating duplicates.",
+      "It throws a uniqueness constraint violation error.",
+      "It creates duplicate nodes and relationships on every run. To ensure idempotency, MERGE should be used instead of CREATE.",
+      "It overwrites the graph and deletes all prior data."
+    ],
+    correct: 2,
+    explanation: "Lesson 06 Slide 29: CREATE is not idempotent; re-running your loader with CREATE gives you the same graph twice. Always use MERGE to find or create nodes and relationships safely.",
+    slideRef: "Lesson 06 Slide 29"
+  },
+  {
+    id: 35,
+    module: "mod06",
+    type: "code",
+    question: "Why does the query 'MATCH (n:Entity {name: \"Sokha\"}) DELETE n;' fail if Sokha is connected to 'Invoicing Service'?",
+    code: `MATCH (n:Entity {name: "Sokha"})
+DELETE n;`,
+    options: [
+      "A node cannot be deleted while relationships are still attached to it; you must use 'DETACH DELETE n' to cascade and remove connected edges.",
+      "Cypher syntax does not allow filtering by property in MATCH.",
+      "You must drop the database index before deleting any node.",
+      "Nodes named Sokha are reserved by the schema."
+    ],
+    correct: 0,
+    explanation: "Lesson 06 Slide 29: Neo4j prevents deleting nodes that have active incoming or outgoing relationships to protect referential integrity. DETACH DELETE removes all connected relationships first.",
+    slideRef: "Lesson 06 Slide 29"
+  },
+  {
+    id: 36,
+    module: "mod06",
+    type: "code",
+    question: "Which Cypher query correctly performs a multi-hop graph traversal to discover who owns a service that replaced 'LegacyPay'?",
+    code: `// Multi-hop relationship traversal`,
+    options: [
+      "MATCH (p:Person)->(s:Service)->(old:Service) WHERE old = LegacyPay",
+      "SELECT Person.name, Service.name WHERE Service.replaced == 'LegacyPay'",
+      "SEARCH GRAPH FOR Person WITH Service == LegacyPay",
+      "MATCH (p:Person)-[:OWNS]->(s:Service)-[:REPLACED]->(old:Service {name: \"LegacyPay\"}) RETURN p.name, s.name"
+    ],
+    correct: 3,
+    explanation: "Lesson 06 Slide 29: Cypher queries are drawings of the pattern you want to match: (p:Person)-[:OWNS]->(s:Service)-[:REPLACED]->(old:Service {name: 'LegacyPay'}) matches the two-hop path in one line.",
+    slideRef: "Lesson 06 Slide 29"
+  },
+  {
+    id: 37,
+    module: "mod06",
+    type: "concept",
+    question: "Why is variable-length path traversal written with bounds like '[*1..3]' instead of an unbounded '[*]'?",
+    code: `MATCH path = (a:Entity {name: "LegacyPay"})-[*1..3]-(b)
+RETURN path
+LIMIT 25;`,
+    options: [
+      "Cypher throws a compilation error if asterisks are used alone.",
+      "`[*1..3]` disables GPU acceleration.",
+      "An unbounded '[*]' on a cyclic or dense graph can lead to exponential path explosion, exhausting memory and hanging the server.",
+      "`[*1..3]` limits the query strictly to 3 characters of text."
+    ],
+    correct: 2,
+    explanation: "Lesson 06 Slide 29 explicitly warns: 'Bound your traversals. An unbounded [*] on a real graph will hang. Cap the hops, always.'",
+    slideRef: "Lesson 06 Slide 29"
+  },
+  {
+    id: 38,
+    module: "mod04",
+    type: "fill-in-blank",
+    question: "In LangGraph, to persist execution state within a single thread across execution steps, the checkpointer (e.g., InMemorySaver) is scoped by ________.",
+    accepted: ["thread_id", "thread id", "thread-id"],
+    placeholder: "e.g., thread_id",
+    explanation: "Lesson 04 Slide 26 & 114 explains that LangGraph Checkpointers persist short-term state scoped to a 'thread_id'. Two calls using the same thread_id share execution history.",
+    slideRef: "Lesson 04 Slide 114"
+  },
+  {
+    id: 39,
+    module: "mod04",
+    type: "fill-in-blank",
+    question: "In LangGraph, instead of defining a separate routing function with add_conditional_edges, a node can directly return state updates and specify the next destination node using the ________ primitive.",
+    code: `def route_step(state: State) -> Command[Literal["billing", "support"]]:
+    return Command(update={"status": "routed"}, goto="billing")`,
+    accepted: ["Command", "command", "Command()"],
+    placeholder: "e.g., Command",
+    explanation: "Lesson 04 Slide 107 explains that the 'Command' primitive combines returning state updates and selecting the next destination node in a single return statement.",
+    slideRef: "Lesson 04 Slide 107"
+  },
+  {
+    id: 40,
+    module: "mod05",
+    type: "fill-in-blank",
+    question: "In the Qdrant vector database, the default port used for REST API requests is ________, whereas port 6334 is reserved for gRPC.",
+    accepted: ["6333"],
+    placeholder: "e.g., 6333",
+    explanation: "Lesson 05 Qdrant Architecture specifies port 6333 for HTTP REST client requests and port 6334 for high-throughput gRPC connections.",
+    slideRef: "Lesson 05 Qdrant Ports"
+  },
+  {
+    id: 41,
+    module: "mod05",
+    type: "fill-in-blank",
+    question: "When chunking documents with sliding windows, adding chunk ________ ensures that semantic context is not abruptly severed between adjacent chunks.",
+    accepted: ["overlap", "chunk overlap", "chunk_overlap"],
+    placeholder: "e.g., overlap",
+    explanation: "Lesson 05 Slide 18 states that chunk overlap (typically 10-20% of chunk size) repeats boundary tokens so sentences spanning the cut point remain intact in at least one chunk.",
+    slideRef: "Lesson 05 Slide 18"
+  },
+  {
+    id: 42,
+    module: "mod06",
+    type: "fill-in-blank",
+    question: "In Neo4j Cypher ingestion pipelines, to ensure idempotency and avoid creating duplicate nodes and relationships upon re-running scripts, engineers should always use ________ instead of CREATE.",
+    code: `// Idempotent ingestion pattern:
+________ (a:Entity {name: "Sokha"})-[r:WORKS_ON]->(b:Entity {name: "Invoicing Service"})
+RETURN a, r, b;`,
+    accepted: ["MERGE", "merge"],
+    placeholder: "e.g., MERGE",
+    explanation: "Teacher Highlight & Lesson 06 Slide 34: Always use MERGE in data ingestion pipelines. CREATE always produces new nodes/edges, leading to duplicate entities and graph pollution.",
+    slideRef: "Lesson 06 Slide 34 (Teacher Highlight)"
+  },
+  {
+    id: 43,
+    module: "mod06",
+    type: "fill-in-blank",
+    question: "The binary database driver protocol port used by Python applications (via LangChain or neo4j driver) to connect to Neo4j is ________.",
+    accepted: ["7687"],
+    placeholder: "e.g., 7687",
+    explanation: "Exam Trap Alert: Port 7474 is for the HTTP Browser UI only. Python applications and LangChain GraphCypherQAChain must connect via Bolt binary protocol on port 7687 (bolt://localhost:7687).",
+    slideRef: "Lesson 06 Neo4j Ports (7474 vs 7687)"
+  },
+  {
+    id: 44,
+    module: "mod06",
+    type: "fill-in-blank",
+    question: "In Reciprocal Rank Fusion (RRF), the formula RRF_Score = 1 / (k + rank) uses a standard smoothing constant k = ________.",
+    accepted: ["60", "k=60", "k = 60"],
+    placeholder: "e.g., 60",
+    explanation: "Lesson 06 Slide 22 states that k=60 is the empirical standard constant in Reciprocal Rank Fusion to prevent high-ranking outliers from completely dominating the fused score.",
+    slideRef: "Lesson 06 Slide 22 (RRF Constant)"
+  },
+  {
+    id: 45,
+    module: "mod06",
+    type: "fill-in-blank",
+    question: "To completely delete a node and all of its connected relationships in Neo4j without triggering constraint violation errors, use the command: MATCH (n:Entity) ________ DELETE n;",
+    accepted: ["DETACH", "detach"],
+    placeholder: "e.g., DETACH",
+    explanation: "Lesson 06 Slide 30: Neo4j prevents deleting a node that still has active relationships attached. The DETACH keyword removes all attached relationships before deleting the node.",
+    slideRef: "Lesson 06 Slide 30"
+  },
+  {
+    id: 46,
+    module: "mod07",
+    type: "fill-in-blank",
+    question: "In autonomous agent architectures, the ReAct pattern combines ________ and Acting in an iterative loop to solve complex tasks with external tools.",
+    accepted: ["Reasoning", "reasoning", "Reason", "reason"],
+    placeholder: "e.g., Reasoning",
+    explanation: "Lesson 07 Slide 14: ReAct stands for 'Reasoning + Acting'. The agent generates a reasoning trace (Thought), invokes an action/tool (Action), observes the result (Observation), and repeats.",
+    slideRef: "Lesson 07 Slide 14"
+  },
+  {
+    id: 47,
+    module: "mod07",
+    type: "fill-in-blank",
+    question: "In Model Context Protocol (MCP) and FastMCP, executable functions that an LLM can actively invoke to perform actions are defined using the @mcp.________() decorator.",
+    accepted: ["tool", "tool()", "@mcp.tool"],
+    placeholder: "e.g., tool",
+    explanation: "Lesson 07 Slide 38: In FastMCP, '@mcp.tool()' defines callable actions with side-effects or dynamic computation, while '@mcp.resource()' provides read-only static data/files.",
+    slideRef: "Lesson 07 Slide 38"
+  },
+  {
+    id: 48,
+    module: "mod04",
+    type: "fill-in-blank",
+    question: "When deploying a multi-worker vLLM model inference container with Docker, you must specify the flag --ipc=________ to prevent PyTorch shared memory crashes.",
+    code: `docker run -d --gpus all --shm-size 1g -p 8000:8000 --ipc=________ vllm/vllm-openai:latest`,
+    accepted: ["host", "--ipc=host"],
+    placeholder: "e.g., host",
+    explanation: "Lesson 02 Serving & CLI Cheatsheet: The '--ipc=host' flag is mandatory for PyTorch NCCL multi-process tensor parallelism so workers can share host IPC memory without crashing.",
+    slideRef: "Lesson 02 Docker Serving"
+  },
+  {
+    id: 49,
+    module: "mod04",
+    type: "fill-in-blank",
+    question: "In Ollama CLI, to view currently running models loaded in GPU VRAM and their active memory usage, use the command: ollama ________.",
+    accepted: ["ps", "ollama ps"],
+    placeholder: "e.g., ps",
+    explanation: "Ollama CLI Cheatsheet: 'ollama ps' displays active models in VRAM/RAM, processor split (e.g. 100% GPU vs 58% CPU), and the time until automatic keep_alive unload.",
+    slideRef: "Lesson 02 Ollama CLI"
+  },
+  {
+    id: 50,
+    module: "mod04",
+    type: "fill-in-blank",
+    question: "In an Ollama Modelfile, the parameter used to expand the context window size (for example, from 2048 to 8192 tokens) is PARAMETER ________.",
+    code: `FROM qwen2.5:3b
+PARAMETER ________ 8192
+SYSTEM You are an exam review assistant.`,
+    accepted: ["num_ctx", "num_ctx 8192", "num_ctx=8192"],
+    placeholder: "e.g., num_ctx",
+    explanation: "Lesson 02 Modelfile Configuration: 'PARAMETER num_ctx 8192' sets the maximum KV cache context window allocated for model attention during inference.",
+    slideRef: "Lesson 02 Modelfiles"
+  }
     ];
-
-    // Flashcards Dataset
-    const flashcardsData = [
-      {
-        front: "State vs. Memory",
-        back: "State = short-term context for current task (temporary, scratchpad). Memory = long-term information retained across multiple sessions/threads."
-      },
-      {
-        front: "RRF Formula (Reciprocal Rank Fusion)",
-        back: "RRF(d) = Σ 1 / (k + rank_i(d)) with standard k = 60. Discards raw scores and fuses solely by rank position!"
-      },
-      {
-        front: "Core Rule of Tool Calling",
-        back: ""The model requests the action; the application executes it." Models emit structured JSON; host Python runs the code."
-      },
-      {
-        front: "Bi-Encoder vs. Cross-Encoder",
-        back: "Bi-Encoder: Two towers, independent embeddings, fast vector search. Cross-Encoder: Single tower, concatenated tokens, full cross-attention, high accuracy reranking."
-      },
-      {
-        front: "Lost in the Middle & Fix",
-        back: "LLMs recall best at prompt beginning and end. Fix: Reorder chunks so Rank 1 is first, Rank 2 is last, and lower ranks sit in the middle."
-      },
-      {
-        front: "The 4 Levels of AI Automation",
-        back: "Level 1: Prompting (Single Q&A)
-Level 2: Chaining (Fixed workflows)
-Level 3: Agents (Dynamic decision loop)
-Level 4: Multi-Agent Systems"
-      },
-      {
-        front: "The 3 MCP Primitives",
-        back: "1. Tools (model-called functions)
-2. Resources (readable data attachments)
-3. Prompts (user-triggered slash commands)"
-      },
-      {
-        front: "Schema vs. Business Validation",
-        back: "Schema = shape, types, required fields ("well-formed?"). Business = domain logic, stock, permissions ("allowed right now?"). -5 is valid int, invalid product ID!"
-      },
-      {
-        front: "Harness OS-Kernel Analogy",
-        back: "The LLM is an untrusted CPU (token generator); the Harness is the Kernel (enforces syscalls, permissions, sandboxing, budgets)."
-      },
-      {
-        front: "Graph RAG: Local vs. Global",
-        back: "Local = entity-focused, traverses 1-2 hops for specific facts. Global = theme-focused, map-reduces over community summaries."
-      },
-      {
-        front: "Self-Reflective RAG (3 Checks)",
-        back: "Check 1: Are retrieved chunks relevant?
-Check 2: Is draft answer grounded?
-Check 3: Does it answer the original question?"
-      },
-      {
-        front: "HITL vs. HOTL vs. HOOTL",
-        back: "HITL (In-the-loop): Suspends until human approves.\nHOTL (On-the-loop): Executes immediately with rollback audit.\nHOOTL (Out-of-the-loop): Full autonomy."
-      },
-      {
-        front: "ollama list vs. ollama ps",
-        back: "ollama list = Downloaded model weights on disk.\nollama ps = Models actively loaded in memory (RAM/VRAM) with GPU % and expiry."
-      },
-      {
-        front: "Modelfile Context Parameter",
-        back: "PARAMETER num_ctx 8192\nSets total context window token budget in Ollama Modelfile (not max_tokens)."
-      },
-      {
-        front: "Neo4j Docker Ports (7474 vs 7687)",
-        back: "Port 7474 = HTTP Web Browser UI.\nPort 7687 = Bolt binary protocol used by Python drivers and LangChain."
-      },
-      {
-        front: "vLLM Docker --ipc=host",
-        back: "Shares host IPC memory so PyTorch multi-worker processes can exchange tensor buffers without hitting Docker 64MB limit."
-      },
-      {
-        front: "GraphRAG Global vs. Local Query",
-        back: "--method global = Map-reduce over community summaries for corpus themes.\n--method local = Subgraph traversal around specific seed entities."
-      },
-      {
-        front: "nvidia-smi Perf States (P0 vs P8)",
-        back: "P0 = Maximum performance state under active compute load.\nP8 = Lowest power idle state."
-      }
-    ];
-
     // App State
     let currentFilter = 'all';
     let userAnswers = {};
@@ -1755,9 +1930,18 @@ Check 3: Does it answer the original question?"
       document.getElementById('quiz-count-badge').textContent = `${filtered.length} Qs`;
 
       container.innerHTML = filtered.map((q, idx) => {
+        const isFillIn = q.type === 'fill-in-blank';
         const isAnswered = userAnswers[q.id] !== undefined;
+        let isCorrect = false;
+        if (isAnswered) {
+          if (isFillIn) {
+            const val = (userAnswers[q.id] || '').trim().toLowerCase();
+            isCorrect = Boolean(q.accepted && q.accepted.some(a => a.trim().toLowerCase() === val));
+          } else {
+            isCorrect = userAnswers[q.id] === q.correct;
+          }
+        }
         const selectedOpt = userAnswers[q.id];
-        const isCorrect = selectedOpt === q.correct;
 
         return `
           <div class="bg-white dark:bg-slate-900 rounded-xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm transition">
@@ -1786,7 +1970,32 @@ Check 3: Does it answer the original question?"
             ` : ''}
 
             <div class="space-y-2 mt-3">
-              ${q.options.map((opt, optIdx) => {
+              ${isFillIn ? `
+                <div class="space-y-2">
+                  <div class="flex gap-2">
+                    <input 
+                      type="text" 
+                      id="fill-in-${q.id}" 
+                      ${isAnswered ? 'disabled' : ''} 
+                      value="${userAnswers[q.id] || ''}" 
+                      placeholder="${q.placeholder || 'Type answer...'}" 
+                      class="flex-1 px-3.5 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-100 text-xs sm:text-sm font-mono focus:outline-none focus:border-blue-500"
+                      onkeydown="if(event.key==='Enter'&&!${isAnswered}){ submitFillIn(${q.id}); }"
+                    />
+                    <button 
+                      onclick="submitFillIn(${q.id})" 
+                      ${isAnswered ? 'disabled' : ''} 
+                      class="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-semibold text-xs rounded-lg transition">
+                      Submit
+                    </button>
+                  </div>
+                  ${isAnswered ? `
+                    <div class="text-xs p-2.5 rounded-lg font-mono ${isCorrect ? 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800' : 'bg-rose-100 dark:bg-rose-950/60 text-rose-800 dark:text-rose-300 border border-rose-300 dark:border-rose-800'}">
+                      <span>${isCorrect ? '✓ Correct!' : '✗ Incorrect.'} Accepted: <strong>${(q.accepted || []).join(' | ')}</strong></span>
+                    </div>
+                  ` : ''}
+                </div>
+              ` : (q.options || []).map((opt, optIdx) => {
                 let btnStyle = "border-slate-200 dark:border-slate-800 hover:border-blue-300 dark:hover:border-blue-700 bg-slate-50/50 dark:bg-slate-800/40 text-slate-700 dark:text-slate-300";
                 
                 if (isAnswered) {
@@ -1834,12 +2043,26 @@ Check 3: Does it answer the original question?"
       renderQuiz();
     }
 
+    function submitFillIn(qid) {
+      const input = document.getElementById('fill-in-' + qid);
+      if (!input || !input.value.trim()) return;
+      userAnswers[qid] = input.value.trim();
+      renderQuiz();
+    }
+
     function updateQuizScore() {
       const answeredKeys = Object.keys(userAnswers);
       let correctCount = 0;
       answeredKeys.forEach(k => {
         const q = quizData.find(item => item.id === parseInt(k));
-        if (q && userAnswers[k] === q.correct) correctCount++;
+        if (q) {
+          if (q.type === 'fill-in-blank') {
+            const val = (userAnswers[k] || '').trim().toLowerCase();
+            if (q.accepted && q.accepted.some(a => a.trim().toLowerCase() === val)) correctCount++;
+          } else if (userAnswers[k] === q.correct) {
+            correctCount++;
+          }
+        }
       });
       document.getElementById('quiz-score').textContent = `${correctCount} / ${answeredKeys.length}`;
       const pct = quizData.length ? Math.round((answeredKeys.length / quizData.length) * 100) : 0;

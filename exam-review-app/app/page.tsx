@@ -77,7 +77,7 @@ export default function Home() {
                   className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs transition flex items-center space-x-2 shadow-lg shadow-blue-600/30"
                 >
                   <Trophy className="w-4 h-4" />
-                  <span>Start Practice Exam (37 Questions)</span>
+                  <span>Start Practice Exam (50 Questions)</span>
                 </button>
                 <button
                   onClick={() => setActiveTab("commands")}

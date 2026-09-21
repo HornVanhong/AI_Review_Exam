@@ -31,11 +31,13 @@ export interface CodeSnippet {
 export interface QuizQuestion {
   id: number;
   moduleId: string;
-  type: 'concept' | 'code' | 'scenario';
+  type: 'concept' | 'code' | 'scenario' | 'fill-in-blank';
   question: string;
   codeSnippet?: string;
-  options: string[];
-  correctIndex: number;
+  options?: string[];
+  correctIndex?: number;
+  acceptedAnswers?: string[];
+  placeholder?: string;
   explanation: string;
   slideRef: string;
 }
@@ -741,11 +743,11 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     question: "What is the primary difference between State and Memory in an AI workflow?",
     options: [
       "State is long-term across all users; Memory is short-term for one function call.",
-      "State is short-term execution context for the current run; Memory is long-term context retained across multiple sessions.",
       "State holds model weights; Memory holds document embeddings.",
+      "State is short-term execution context for the current run; Memory is long-term context retained across multiple sessions.",
       "State is stored in a vector DB; Memory is stored in a text file."
     ],
-    correctIndex: 1,
+    correctIndex: 2,
     explanation: "According to Lesson 04 (Slide 39), State manages the current execution context (inputs, intermediate variables, step pointer) and is temporary, whereas Memory records long-term user preferences and history across sessions.",
     slideRef: "Lesson 04 Slide 39"
   },
@@ -759,12 +761,12 @@ checkpointer = InMemorySaver()
 app = builder.compile(checkpointer=checkpointer)
 config = {"configurable": {"thread_id": "conv-1"}}`,
     options: [
-      "InMemoryStore scoped by user namespace",
       "InMemorySaver (Checkpointer) scoped by thread_id",
+      "InMemoryStore scoped by user namespace",
       "TitleExtractor scoped by document id",
       "SentenceSplitter scoped by chunk_size"
     ],
-    correctIndex: 1,
+    correctIndex: 0,
     explanation: "Lesson 04 Slide 114 explains that Checkpointer (e.g. InMemorySaver) handles short-term memory scoped to a thread_id, ensuring two calls with the same thread_id share history.",
     slideRef: "Lesson 04 Slide 114"
   },
@@ -775,11 +777,11 @@ config = {"configurable": {"thread_id": "conv-1"}}`,
     question: "In a document ingestion pipeline, why does the pipeline check a cryptographic content hash in the docstore before running transformations?",
     options: [
       "To encrypt the document against unauthorized user viewing.",
-      "To avoid expensive chunking and embedding generation if the file has not changed.",
+      "To convert text into audio tokens.",
       "To format Markdown headers into JSON tables.",
-      "To convert text into audio tokens."
+      "To avoid expensive chunking and embedding generation if the file has not changed."
     ],
-    correctIndex: 1,
+    correctIndex: 3,
     explanation: "Lesson 04 Slide 51 emphasizes that checking the docstore content hash prevents redundant, expensive chunking and embedding operations for unmodified documents.",
     slideRef: "Lesson 04 Slide 51"
   },
@@ -808,12 +810,12 @@ config = {"configurable": {"thread_id": "conv-1"}}`,
     type: "concept",
     question: "What are the 3 core principles of Modular Workflow Design?",
     options: [
-      "High coupling, complex inheritance, raw execution",
       "Single responsibility, standard interfaces, and composability",
+      "High coupling, complex inheritance, raw execution",
       "All-in-one scripts, static prompts, and global variables",
       "Multi-GPU training, fine-tuning, and long context"
     ],
-    correctIndex: 1,
+    correctIndex: 0,
     explanation: "Lesson 04 Slide 60 outlines the 3 principles: Single responsibility (each piece has one job), Standard interfaces (swappable without touching adjacent code), and Composability (small pieces easily link together).",
     slideRef: "Lesson 04 Slide 60"
   },
@@ -824,11 +826,11 @@ config = {"configurable": {"thread_id": "conv-1"}}`,
     question: "When should an engineer choose RAG instead of Fine-Tuning?",
     options: [
       "When the goal is to alter the model’s linguistic style, tone, or dialect.",
-      "When information changes frequently, private documents are needed, and exact citations are mandatory.",
       "When you have no access to an embedding model or vector database.",
+      "When information changes frequently, private documents are needed, and exact citations are mandatory.",
       "When training compute is unlimited and latency must be zero."
     ],
-    correctIndex: 1,
+    correctIndex: 2,
     explanation: "Lesson 05 Slide 4 & 5 highlight that RAG is ideal for dynamic knowledge updates, preventing staleness and hallucination, and providing exact source attribution.",
     slideRef: "Lesson 05 Slide 4-5"
   },
@@ -839,11 +841,11 @@ config = {"configurable": {"thread_id": "conv-1"}}`,
     question: "What is the primary purpose of Chunk Overlap in document splitting?",
     options: [
       "To compress the document so it uses fewer total tokens.",
-      "To prevent sentences or concepts from being severed at chunk boundaries.",
+      "To automatically translate English text into Khmer.",
       "To make vector dimensions smaller for faster cosine search.",
-      "To automatically translate English text into Khmer."
+      "To prevent sentences or concepts from being severed at chunk boundaries."
     ],
-    correctIndex: 1,
+    correctIndex: 3,
     explanation: "Lesson 05 Slide 24 & Lesson 06 Slide 72 explain that chunk overlap repeats 10–20% of tokens across boundaries so sentences split mid-cut remain whole in at least one chunk.",
     slideRef: "Lesson 05 Slide 24"
   },
@@ -874,11 +876,11 @@ config = {"configurable": {"thread_id": "conv-1"}}`,
 )`,
     options: [
       "All documents in the collection formatted as CSV.",
-      "The top-3 most semantically similar chunks belonging to the Finance department.",
+      "A BM25 keyword frequency count table.",
       "A fine-tuned LoRA checkpoint for the query.",
-      "A BM25 keyword frequency count table."
+      "The top-3 most semantically similar chunks belonging to the Finance department."
     ],
-    correctIndex: 1,
+    correctIndex: 3,
     explanation: "Lesson 05 Slide 51 demonstrates that collection.query embeds query_texts and retrieves the top n_results closest chunks by similarity, filtered by payload metadata.",
     slideRef: "Lesson 05 Slide 51"
   },
@@ -888,12 +890,12 @@ config = {"configurable": {"thread_id": "conv-1"}}`,
     type: "concept",
     question: "What does an Approximate Nearest Neighbor (ANN) index like HNSW do differently from a traditional SQL database B-Tree index?",
     options: [
-      "It only works with integer primary keys.",
       "It enables sub-linear similarity search across high-dimensional vector spaces instead of exact relational matches.",
+      "It only works with integer primary keys.",
       "It encrypts strings into SHA-256 hashes.",
       "It requires retraining on every select query."
     ],
-    correctIndex: 1,
+    correctIndex: 0,
     explanation: "Lesson 05 Slide 47 explains that HNSW indexes allow searching millions of high-dimensional vectors in sub-linear time, whereas B-trees only support 1D exact or range matching.",
     slideRef: "Lesson 05 Slide 47"
   },
@@ -920,11 +922,11 @@ config = {"configurable": {"thread_id": "conv-1"}}`,
     codeSnippet: `fused[doc_id] += 1.0 / (k + rank)`,
     options: [
       "k = 1.5 (from BM25)",
-      "k = 60 (standard damping constant)",
       "k = 0.75 (length normalization)",
+      "k = 60 (standard damping constant)",
       "k = 512 (context limit)"
     ],
-    correctIndex: 1,
+    correctIndex: 2,
     explanation: "Lesson 06 Slide 10 states that RRF(d) = Σ 1 / (k + rank_i(d)) with k = 60 as the standard constant to damp the gap between rank 1 and rank 2.",
     slideRef: "Lesson 06 Slide 10"
   },
@@ -934,12 +936,12 @@ config = {"configurable": {"thread_id": "conv-1"}}`,
     type: "concept",
     question: "Why does Graph RAG succeed on multi-hop questions where standard chunk-based top-k retrieval fails?",
     options: [
-      "Graph RAG uses larger LLMs with 10M token context windows.",
       "Graph RAG connects facts across separate chunks using typed entity-relationship edges (A -> B -> C).",
+      "Graph RAG uses larger LLMs with 10M token context windows.",
       "Graph RAG replaces all text with images.",
       "Graph RAG only uses BM25 keyword matching."
     ],
-    correctIndex: 1,
+    correctIndex: 0,
     explanation: "Lesson 06 Slide 18–20 explains that multi-hop questions have half the answer in Chunk 14 and half in Chunk 902; knowledge graph edges connect them structurally.",
     slideRef: "Lesson 06 Slide 18-20"
   },
@@ -950,11 +952,11 @@ config = {"configurable": {"thread_id": "conv-1"}}`,
     question: "In Microsoft GraphRAG, what is the key difference between Local Search and Global Search?",
     options: [
       "Local search runs on localhost; Global runs in cloud.",
-      "Local search is entity-focused (traversing 1-2 hops); Global search is theme-focused (map-reducing over community summaries).",
+      "Local search requires GPU; Global search requires CPU.",
       "Local search uses BM25; Global search uses ChromaDB.",
-      "Local search requires GPU; Global search requires CPU."
+      "Local search is entity-focused (traversing 1-2 hops); Global search is theme-focused (map-reducing over community summaries)."
     ],
-    correctIndex: 1,
+    correctIndex: 3,
     explanation: "Lesson 06 Slide 27: Local search focuses on specific entities and walks outward; Global search queries community summary reports to answer corpus-wide thematic questions.",
     slideRef: "Lesson 06 Slide 27"
   },
@@ -965,11 +967,11 @@ config = {"configurable": {"thread_id": "conv-1"}}`,
     question: "What is the architectural difference between a Bi-Encoder and a Cross-Encoder?",
     options: [
       "Bi-Encoder uses two GPUs; Cross-Encoder uses one GPU.",
-      "Bi-Encoder encodes query and doc separately (two towers); Cross-Encoder passes query and doc concatenated into one transformer with full cross-attention.",
       "Bi-Encoder is only for images; Cross-Encoder is for text.",
+      "Bi-Encoder encodes query and doc separately (two towers); Cross-Encoder passes query and doc concatenated into one transformer with full cross-attention.",
       "Bi-Encoder is slower than Cross-Encoder."
     ],
-    correctIndex: 1,
+    correctIndex: 2,
     explanation: "Lesson 06 Slide 45 & 46: Bi-encoders encode independently so comparisons happen in vector space; Cross-encoders concatenate [CLS] query [SEP] doc with full token-to-token cross-attention.",
     slideRef: "Lesson 06 Slide 45"
   },
@@ -1014,11 +1016,11 @@ ordered = head + tail[::-1]`,
     question: "What is the fundamental rule of Tool Calling architecture in autonomous agents?",
     options: [
       "The model directly opens sockets and runs SQL queries.",
-      "The model requests the action; the application executes it.",
+      "Local models cannot request tools.",
       "The tool writes prompts; the model reads files.",
-      "Local models cannot request tools."
+      "The model requests the action; the application executes it."
     ],
-    correctIndex: 1,
+    correctIndex: 3,
     explanation: "Lesson 07 Slide 16 & 48 emphasizes: 'The model requests the action; the application executes it.' LLMs propose structured calls; the application host validates and runs them.",
     slideRef: "Lesson 07 Slide 16"
   },
@@ -1028,12 +1030,12 @@ ordered = head + tail[::-1]`,
     type: "concept",
     question: "Which of the following is an example of Business Validation rather than Schema Validation?",
     options: [
-      "Checking if `order_id` is an integer.",
-      "Checking if `product_id` is present in required fields.",
       "Checking whether product ID 101 currently has sufficient stock in the inventory database.",
+      "Checking if `product_id` is present in required fields.",
+      "Checking if `order_id` is an integer.",
       "Checking if `user_email` matches a string type."
     ],
-    correctIndex: 2,
+    correctIndex: 0,
     explanation: "Lesson 07 Slide 28 explains that Schema validation checks types and shapes, whereas Business validation checks domain rules and database reality (e.g. is item in stock? does user have permission?).",
     slideRef: "Lesson 07 Slide 28"
   },
@@ -1044,11 +1046,11 @@ ordered = head + tail[::-1]`,
     question: "What is the principle of 'Bounded Actions' and 'Least Privilege' in agent security?",
     options: [
       "Giving the agent root shell access so it can fix bugs automatically.",
-      "Giving agents capabilities through narrow allowlisted tools, avoiding raw exec() or arbitrary SQL strings.",
       "Allowing the agent to retry failing tools infinitely.",
+      "Giving agents capabilities through narrow allowlisted tools, avoiding raw exec() or arbitrary SQL strings.",
       "Removing all timeouts from the execution harness."
     ],
-    correctIndex: 1,
+    correctIndex: 2,
     explanation: "Lesson 07 Slide 36–40: Give agents capabilities, not unlimited power. Use allowlists of narrow parameterized tools and never hand over raw interpreters.",
     slideRef: "Lesson 07 Slide 36-40"
   },
@@ -1059,11 +1061,11 @@ ordered = head + tail[::-1]`,
     question: "In the OS-Kernel analogy for Agent Harness design, what corresponds to the Kernel and the CPU?",
     options: [
       "The Model is the Kernel; the Database is the CPU.",
-      "The Harness is the Kernel (controls syscalls, safety, memory); the Model is an untrusted CPU (generates next tokens).",
+      "The Tool is the Kernel; the Prompt is the CPU.",
       "The Python interpreter is the CPU; Ollama is the Kernel.",
-      "The Tool is the Kernel; the Prompt is the CPU."
+      "The Harness is the Kernel (controls syscalls, safety, memory); the Model is an untrusted CPU (generates next tokens)."
     ],
-    correctIndex: 1,
+    correctIndex: 3,
     explanation: "Lesson 07 Slide 82: The model is an untrusted CPU (instruction generator); the harness is the operating system kernel (enforces permissions, sandbox, memory, and budgets).",
     slideRef: "Lesson 07 Slide 82"
   },
@@ -1108,11 +1110,11 @@ def check_inventory(sku: str) -> dict:
     return {"sku": sku, "in_stock": True}`,
     options: [
       "@mcp.resource()",
-      "@mcp.tool()",
       "@mcp.prompt()",
+      "@mcp.tool()",
       "@mcp.agent()"
     ],
-    correctIndex: 1,
+    correctIndex: 2,
     explanation: "Lesson 07 Slide 101: @mcp.tool() exposes callable functions with model-constructed arguments; @mcp.resource() exposes readable data attachments.",
     slideRef: "Lesson 07 Slide 101"
   },
@@ -1122,12 +1124,12 @@ def check_inventory(sku: str) -> dict:
     type: "concept",
     question: "In the ReAct agent design pattern, what does ReAct stand for?",
     options: [
-      "Reactive Action",
       "Reason + Act (Thought -> Action -> Observation loop)",
+      "Reactive Action",
       "Recursive Activation",
       "Real-time Authentication"
     ],
-    correctIndex: 1,
+    correctIndex: 0,
     explanation: "Lesson 07 Slide 57 & 58: ReAct stands for Reason + Act, alternating between model thoughts, tool actions, and observation checks.",
     slideRef: "Lesson 07 Slide 57"
   },
@@ -1138,11 +1140,11 @@ def check_inventory(sku: str) -> dict:
     question: "Which Ollama command displays models that are actively loaded into GPU/system memory right now?",
     options: [
       "ollama list",
-      "ollama ps",
       "ollama show --active",
+      "ollama ps",
       "ollama memory"
     ],
-    correctIndex: 1,
+    correctIndex: 2,
     explanation: "Lesson 02 Slide 11: 'ollama ps' shows models currently loaded in memory, processor allocation (100% GPU / CPU), and expiry timer, whereas 'ollama list' shows downloaded models stored on disk.",
     slideRef: "Lesson 02 Slide 11"
   },
@@ -1171,11 +1173,11 @@ SYSTEM """You are a patient CS tutor."""`,
     question: "When launching the Neo4j container with 'docker run -d -p 7474:7474 -p 7687:7687 ...', what is port 7687 specifically used for?",
     options: [
       "The Neo4j Web Browser visual graph explorer UI",
-      "The Bolt binary protocol used by Python drivers and LangChain GraphCypherQAChain",
+      "SSH shell container administration",
       "The Prometheus metrics scraping daemon",
-      "SSH shell container administration"
+      "The Bolt binary protocol used by Python drivers and LangChain GraphCypherQAChain"
     ],
-    correctIndex: 1,
+    correctIndex: 3,
     explanation: "Lesson 06 Slide 30: Port 7474 is the HTTP Web Browser UI; port 7687 is the Bolt binary protocol used by LangChain, Neo4j Python driver, and Cypher query execution.",
     slideRef: "Lesson 06 Slide 30"
   },
@@ -1190,11 +1192,11 @@ SYSTEM """You are a patient CS tutor."""`,
   vllm/vllm-openai:latest ...`,
     options: [
       "It allows the container to bypass host firewall rules.",
-      "It shares host IPC memory so PyTorch multi-process workers can exchange tensor buffers without hitting Docker's small default shared memory limit.",
       "It enables Docker to forward audio and video devices.",
+      "It shares host IPC memory so PyTorch multi-process workers can exchange tensor buffers without hitting Docker's small default shared memory limit.",
       "It automatically downloads CUDA drivers into the container."
     ],
-    correctIndex: 1,
+    correctIndex: 2,
     explanation: "Lesson 02 Slide 38: PyTorch and CUDA multi-worker processes need large shared memory for tensor exchange. Docker's default 64MB IPC memory will cause crashes without '--ipc=host'.",
     slideRef: "Lesson 02 Slide 38"
   },
@@ -1204,12 +1206,12 @@ SYSTEM """You are a patient CS tutor."""`,
     type: "concept",
     question: "In Microsoft GraphRAG, which query command and method should be executed to synthesize overarching themes across the entire knowledge repository?",
     options: [
-      "graphrag query --root ./rag-graph --method local --query \"...\"",
       "graphrag query --root ./rag-graph --method global --query \"...\"",
+      "graphrag query --root ./rag-graph --method local --query \"...\"",
       "graphrag search --all --query \"...\"",
       "graphrag extract --summary --query \"...\""
     ],
-    correctIndex: 1,
+    correctIndex: 0,
     explanation: "Lesson 06 Slide 30: Microsoft GraphRAG '--method global' performs map-reduce over pre-computed hierarchical Leiden community summaries for corpus-level themes, while '--method local' traverses specific entity subgraphs.",
     slideRef: "Lesson 06 Slide 30"
   },
@@ -1219,12 +1221,12 @@ SYSTEM """You are a patient CS tutor."""`,
     type: "code",
     question: "Which command provides end-to-end smoke test validation that the Docker daemon can successfully expose NVIDIA GPUs to containers?",
     options: [
-      "docker run --rm --gpus all nvidia/cuda:12.4.1-base-ubuntu22.04 nvidia-smi",
+      "nvidia-container-cli status",
       "docker system info --gpu",
       "docker run --device /dev/nvidia0 ubuntu bash",
-      "nvidia-container-cli status"
+      "docker run --rm --gpus all nvidia/cuda:12.4.1-base-ubuntu22.04 nvidia-smi"
     ],
-    correctIndex: 0,
+    correctIndex: 3,
     explanation: "Lesson 01 Slide 39: Running 'nvidia-smi' inside an official NVIDIA CUDA base container with '--gpus all' is the standard end-to-end verification of GPU container passthrough.",
     slideRef: "Lesson 01 Slide 39"
   },
@@ -1267,11 +1269,11 @@ SYSTEM """You are a patient CS tutor."""`,
 RETURN a, r, b;`,
     options: [
       "It updates the existing Sokha node without creating duplicates.",
-      "It creates duplicate nodes and relationships on every run. To ensure idempotency, MERGE should be used instead of CREATE.",
       "It throws a uniqueness constraint violation error.",
+      "It creates duplicate nodes and relationships on every run. To ensure idempotency, MERGE should be used instead of CREATE.",
       "It overwrites the graph and deletes all prior data."
     ],
-    correctIndex: 1,
+    correctIndex: 2,
     explanation: "Lesson 06 Slide 29: CREATE is not idempotent; re-running your loader with CREATE gives you the same graph twice. Always use MERGE to find or create nodes and relationships safely.",
     slideRef: "Lesson 06 Slide 29"
   },
@@ -1283,12 +1285,12 @@ RETURN a, r, b;`,
     codeSnippet: `MATCH (n:Entity {name: "Sokha"})
 DELETE n;`,
     options: [
-      "Cypher syntax does not allow filtering by property in MATCH.",
       "A node cannot be deleted while relationships are still attached to it; you must use 'DETACH DELETE n' to cascade and remove connected edges.",
+      "Cypher syntax does not allow filtering by property in MATCH.",
       "You must drop the database index before deleting any node.",
       "Nodes named Sokha are reserved by the schema."
     ],
-    correctIndex: 1,
+    correctIndex: 0,
     explanation: "Lesson 06 Slide 29: Neo4j prevents deleting nodes that have active incoming or outgoing relationships to protect referential integrity. DETACH DELETE removes all connected relationships first.",
     slideRef: "Lesson 06 Slide 29"
   },
@@ -1299,12 +1301,12 @@ DELETE n;`,
     question: "Which Cypher query correctly performs a multi-hop graph traversal to discover who owns a service that replaced 'LegacyPay'?",
     codeSnippet: `// Multi-hop relationship traversal`,
     options: [
-      "MATCH (p:Person)-[:OWNS]->(s:Service)-[:REPLACED]->(old:Service {name: \"LegacyPay\"}) RETURN p.name, s.name",
+      "MATCH (p:Person)->(s:Service)->(old:Service) WHERE old = LegacyPay",
       "SELECT Person.name, Service.name WHERE Service.replaced == 'LegacyPay'",
       "SEARCH GRAPH FOR Person WITH Service == LegacyPay",
-      "MATCH (p:Person)->(s:Service)->(old:Service) WHERE old = LegacyPay"
+      "MATCH (p:Person)-[:OWNS]->(s:Service)-[:REPLACED]->(old:Service {name: \"LegacyPay\"}) RETURN p.name, s.name"
     ],
-    correctIndex: 0,
+    correctIndex: 3,
     explanation: "Lesson 06 Slide 29: Cypher queries are drawings of the pattern you want to match: (p:Person)-[:OWNS]->(s:Service)-[:REPLACED]->(old:Service {name: 'LegacyPay'}) matches the two-hop path in one line.",
     slideRef: "Lesson 06 Slide 29"
   },
@@ -1318,13 +1320,152 @@ RETURN path
 LIMIT 25;`,
     options: [
       "Cypher throws a compilation error if asterisks are used alone.",
-      "An unbounded '[*]' on a cyclic or dense graph can lead to exponential path explosion, exhausting memory and hanging the server.",
       "`[*1..3]` disables GPU acceleration.",
+      "An unbounded '[*]' on a cyclic or dense graph can lead to exponential path explosion, exhausting memory and hanging the server.",
       "`[*1..3]` limits the query strictly to 3 characters of text."
     ],
-    correctIndex: 1,
+    correctIndex: 2,
     explanation: "Lesson 06 Slide 29 explicitly warns: 'Bound your traversals. An unbounded [*] on a real graph will hang. Cap the hops, always.'",
     slideRef: "Lesson 06 Slide 29"
+  },
+  {
+    id: 38,
+    moduleId: "mod04",
+    type: "fill-in-blank",
+    question: "In LangGraph, to persist execution state within a single thread across execution steps, the checkpointer (e.g., InMemorySaver) is scoped by ________.",
+    acceptedAnswers: ["thread_id", "thread id", "thread-id"],
+    placeholder: "e.g., thread_id",
+    explanation: "Lesson 04 Slide 26 & 114 explains that LangGraph Checkpointers persist short-term state scoped to a 'thread_id'. Two calls using the same thread_id share execution history.",
+    slideRef: "Lesson 04 Slide 114"
+  },
+  {
+    id: 39,
+    moduleId: "mod04",
+    type: "fill-in-blank",
+    question: "In LangGraph, instead of defining a separate routing function with add_conditional_edges, a node can directly return state updates and specify the next destination node using the ________ primitive.",
+    codeSnippet: `def route_step(state: State) -> Command[Literal["billing", "support"]]:
+    return Command(update={"status": "routed"}, goto="billing")`,
+    acceptedAnswers: ["Command", "command", "Command()"],
+    placeholder: "e.g., Command",
+    explanation: "Lesson 04 Slide 107 explains that the 'Command' primitive combines returning state updates and selecting the next destination node in a single return statement.",
+    slideRef: "Lesson 04 Slide 107"
+  },
+  {
+    id: 40,
+    moduleId: "mod05",
+    type: "fill-in-blank",
+    question: "In the Qdrant vector database, the default port used for REST API requests is ________, whereas port 6334 is reserved for gRPC.",
+    acceptedAnswers: ["6333"],
+    placeholder: "e.g., 6333",
+    explanation: "Lesson 05 Qdrant Architecture specifies port 6333 for HTTP REST client requests and port 6334 for high-throughput gRPC connections.",
+    slideRef: "Lesson 05 Qdrant Ports"
+  },
+  {
+    id: 41,
+    moduleId: "mod05",
+    type: "fill-in-blank",
+    question: "When chunking documents with sliding windows, adding chunk ________ ensures that semantic context is not abruptly severed between adjacent chunks.",
+    acceptedAnswers: ["overlap", "chunk overlap", "chunk_overlap"],
+    placeholder: "e.g., overlap",
+    explanation: "Lesson 05 Slide 18 states that chunk overlap (typically 10-20% of chunk size) repeats boundary tokens so sentences spanning the cut point remain intact in at least one chunk.",
+    slideRef: "Lesson 05 Slide 18"
+  },
+  {
+    id: 42,
+    moduleId: "mod06",
+    type: "fill-in-blank",
+    question: "In Neo4j Cypher ingestion pipelines, to ensure idempotency and avoid creating duplicate nodes and relationships upon re-running scripts, engineers should always use ________ instead of CREATE.",
+    codeSnippet: `// Idempotent ingestion pattern:
+________ (a:Entity {name: "Sokha"})-[r:WORKS_ON]->(b:Entity {name: "Invoicing Service"})
+RETURN a, r, b;`,
+    acceptedAnswers: ["MERGE", "merge"],
+    placeholder: "e.g., MERGE",
+    explanation: "Teacher Highlight & Lesson 06 Slide 34: Always use MERGE in data ingestion pipelines. CREATE always produces new nodes/edges, leading to duplicate entities and graph pollution.",
+    slideRef: "Lesson 06 Slide 34 (Teacher Highlight)"
+  },
+  {
+    id: 43,
+    moduleId: "mod06",
+    type: "fill-in-blank",
+    question: "The binary database driver protocol port used by Python applications (via LangChain or neo4j driver) to connect to Neo4j is ________.",
+    acceptedAnswers: ["7687"],
+    placeholder: "e.g., 7687",
+    explanation: "Exam Trap Alert: Port 7474 is for the HTTP Browser UI only. Python applications and LangChain GraphCypherQAChain must connect via Bolt binary protocol on port 7687 (bolt://localhost:7687).",
+    slideRef: "Lesson 06 Neo4j Ports (7474 vs 7687)"
+  },
+  {
+    id: 44,
+    moduleId: "mod06",
+    type: "fill-in-blank",
+    question: "In Reciprocal Rank Fusion (RRF), the formula RRF_Score = 1 / (k + rank) uses a standard smoothing constant k = ________.",
+    acceptedAnswers: ["60", "k=60", "k = 60"],
+    placeholder: "e.g., 60",
+    explanation: "Lesson 06 Slide 22 states that k=60 is the empirical standard constant in Reciprocal Rank Fusion to prevent high-ranking outliers from completely dominating the fused score.",
+    slideRef: "Lesson 06 Slide 22 (RRF Constant)"
+  },
+  {
+    id: 45,
+    moduleId: "mod06",
+    type: "fill-in-blank",
+    question: "To completely delete a node and all of its connected relationships in Neo4j without triggering constraint violation errors, use the command: MATCH (n:Entity) ________ DELETE n;",
+    acceptedAnswers: ["DETACH", "detach"],
+    placeholder: "e.g., DETACH",
+    explanation: "Lesson 06 Slide 30: Neo4j prevents deleting a node that still has active relationships attached. The DETACH keyword removes all attached relationships before deleting the node.",
+    slideRef: "Lesson 06 Slide 30"
+  },
+  {
+    id: 46,
+    moduleId: "mod07",
+    type: "fill-in-blank",
+    question: "In autonomous agent architectures, the ReAct pattern combines ________ and Acting in an iterative loop to solve complex tasks with external tools.",
+    acceptedAnswers: ["Reasoning", "reasoning", "Reason", "reason"],
+    placeholder: "e.g., Reasoning",
+    explanation: "Lesson 07 Slide 14: ReAct stands for 'Reasoning + Acting'. The agent generates a reasoning trace (Thought), invokes an action/tool (Action), observes the result (Observation), and repeats.",
+    slideRef: "Lesson 07 Slide 14"
+  },
+  {
+    id: 47,
+    moduleId: "mod07",
+    type: "fill-in-blank",
+    question: "In Model Context Protocol (MCP) and FastMCP, executable functions that an LLM can actively invoke to perform actions are defined using the @mcp.________() decorator.",
+    acceptedAnswers: ["tool", "tool()", "@mcp.tool"],
+    placeholder: "e.g., tool",
+    explanation: "Lesson 07 Slide 38: In FastMCP, '@mcp.tool()' defines callable actions with side-effects or dynamic computation, while '@mcp.resource()' provides read-only static data/files.",
+    slideRef: "Lesson 07 Slide 38"
+  },
+  {
+    id: 48,
+    moduleId: "mod04",
+    type: "fill-in-blank",
+    question: "When deploying a multi-worker vLLM model inference container with Docker, you must specify the flag --ipc=________ to prevent PyTorch shared memory crashes.",
+    codeSnippet: `docker run -d --gpus all --shm-size 1g -p 8000:8000 --ipc=________ vllm/vllm-openai:latest`,
+    acceptedAnswers: ["host", "--ipc=host"],
+    placeholder: "e.g., host",
+    explanation: "Lesson 02 Serving & CLI Cheatsheet: The '--ipc=host' flag is mandatory for PyTorch NCCL multi-process tensor parallelism so workers can share host IPC memory without crashing.",
+    slideRef: "Lesson 02 Docker Serving"
+  },
+  {
+    id: 49,
+    moduleId: "mod04",
+    type: "fill-in-blank",
+    question: "In Ollama CLI, to view currently running models loaded in GPU VRAM and their active memory usage, use the command: ollama ________.",
+    acceptedAnswers: ["ps", "ollama ps"],
+    placeholder: "e.g., ps",
+    explanation: "Ollama CLI Cheatsheet: 'ollama ps' displays active models in VRAM/RAM, processor split (e.g. 100% GPU vs 58% CPU), and the time until automatic keep_alive unload.",
+    slideRef: "Lesson 02 Ollama CLI"
+  },
+  {
+    id: 50,
+    moduleId: "mod04",
+    type: "fill-in-blank",
+    question: "In an Ollama Modelfile, the parameter used to expand the context window size (for example, from 2048 to 8192 tokens) is PARAMETER ________.",
+    codeSnippet: `FROM qwen2.5:3b
+PARAMETER ________ 8192
+SYSTEM You are an exam review assistant.`,
+    acceptedAnswers: ["num_ctx", "num_ctx 8192", "num_ctx=8192"],
+    placeholder: "e.g., num_ctx",
+    explanation: "Lesson 02 Modelfile Configuration: 'PARAMETER num_ctx 8192' sets the maximum KV cache context window allocated for model attention during inference.",
+    slideRef: "Lesson 02 Modelfiles"
   }
 ];
 
