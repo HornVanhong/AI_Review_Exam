@@ -1098,11 +1098,10 @@ echo $LD_LIBRARY_PATH | tr ':' '\n' | grep cuda</code></pre>
         <!-- Part Filter -->
         <div class="flex flex-wrap items-center gap-2 text-xs">
           <span class="font-semibold text-slate-500 dark:text-slate-400 mr-1"><i class="fa-solid fa-layer-group text-blue-500 mr-1"></i> Part:</span>
-          <button onclick="filterQuizPart('all')" class="quiz-part-btn px-3 py-1 rounded-lg font-medium bg-blue-600 text-white" data-part="all">All Parts (96)</button>
-          <button onclick="filterQuizPart('part1')" class="quiz-part-btn px-3 py-1 rounded-lg font-medium bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100" data-part="part1">Part 1: Workflow (24)</button>
-          <button onclick="filterQuizPart('part2')" class="quiz-part-btn px-3 py-1 rounded-lg font-medium bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100" data-part="part2">Part 2: RAG Basics (16)</button>
-          <button onclick="filterQuizPart('part3')" class="quiz-part-btn px-3 py-1 rounded-lg font-medium bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100" data-part="part3">Part 3: Adv RAG (20)</button>
-          <button onclick="filterQuizPart('part4')" class="quiz-part-btn px-3 py-1 rounded-lg font-medium bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100" data-part="part4">Part 4: Agents (36)</button>
+          <button onclick="filterQuizPart('all')" class="quiz-part-btn px-3 py-1 rounded-lg font-medium bg-blue-600 text-white" data-part="all">All Highlights (96)</button>
+          <button onclick="filterQuizPart('mod1')" class="quiz-part-btn px-3 py-1 rounded-lg font-medium bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100" data-part="mod1">Module 1: RAG Basics (20)</button>
+          <button onclick="filterQuizPart('mod2')" class="quiz-part-btn px-3 py-1 rounded-lg font-medium bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100" data-part="mod2">Module 2: Advanced RAG (40)</button>
+          <button onclick="filterQuizPart('mod3')" class="quiz-part-btn px-3 py-1 rounded-lg font-medium bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100" data-part="mod3">Module 3: Autonomous Agents (36)</button>
         </div>
 
         <!-- Format Filter -->
@@ -1154,102 +1153,101 @@ echo $LD_LIBRARY_PATH | tr ':' '\n' | grep cuda</code></pre>
     const quizData = [
   {
     "id": 1,
-    "partId": "part1",
-    "partTitle": "Part 1: Workflow Engineering with LLM Frameworks",
-    "subtopic": "1.1 Introduction to LLM Workflow",
-    "module": "mod04",
+    "partId": "mod1",
+    "partTitle": "Module 1: RAG Fundamentals",
+    "subtopic": "1.1 RAG Architecture Overview",
+    "module": "mod05",
     "type": "qcm",
-    "question": "Why is it better to build a multi-step workflow instead of putting everything into one giant prompt?",
-    "explanation": "Lesson 04 Slide 12-15: Workflows split big problems into smaller, reliable steps with clear error handling.",
-    "slideRef": "Lesson 04 Slide 12-15",
+    "question": "Why do we build RAG systems instead of just relying on the AI model's built-in knowledge?",
+    "explanation": "Teacher Highlight: Pure LLM knowledge suffers from staleness, hallucinations, and lack of access to private data.",
+    "slideRef": "Teacher Review Doc: Module 1 Item 1",
     "options": [
-      "Workflows break the job into small steps that are easy to test, fix, and control when the AI makes a mistake.",
-      "One giant prompt takes more than 10 hours to send over the internet.",
-      "AI models will completely turn off if a prompt has more than 50 words.",
-      "Single prompts cannot be typed on a keyboard."
+      "Base AI models have frozen training data, cannot see private company files, and can make up fake answers (hallucinate).",
+      "AI models only run for 5 minutes before shutting down.",
+      "RAG completely replaces the need for an LLM model.",
+      "Computer CPUs cannot read text files without RAG."
     ],
     "correct": 0
   },
   {
     "id": 2,
-    "partId": "part1",
-    "partTitle": "Part 1: Workflow Engineering with LLM Frameworks",
-    "subtopic": "1.1 Introduction to LLM Workflow",
-    "module": "mod04",
+    "partId": "mod1",
+    "partTitle": "Module 1: RAG Fundamentals",
+    "subtopic": "1.1 RAG Architecture Overview",
+    "module": "mod05",
     "type": "true-false",
-    "question": "In AI workflow engineering, is it strictly forbidden for steps to loop back to let the AI fix its own mistakes?",
-    "explanation": "False. Loops (cycles) are essential so the AI can review its answer, see errors, and fix them before finishing.",
-    "slideRef": "Lesson 04 Slide 22-26",
+    "question": "In the RAG pipeline, the step where retrieved document text is inserted into the prompt for the AI to read is called the Augmentation step.",
+    "explanation": "True. The 5 steps are: Ingestion -> Indexing -> Retrieval -> Augmentation -> Generation.",
+    "slideRef": "Teacher Review Doc: Module 1 Item 1",
     "options": [
       "True",
       "False"
     ],
-    "correct": 1
+    "correct": 0
   },
   {
     "id": 3,
-    "partId": "part1",
-    "partTitle": "Part 1: Workflow Engineering with LLM Frameworks",
-    "subtopic": "1.1 Introduction to LLM Workflow",
-    "module": "mod04",
+    "partId": "mod1",
+    "partTitle": "Module 1: RAG Fundamentals",
+    "subtopic": "1.1 RAG Architecture Overview",
+    "module": "mod05",
     "type": "open-question",
-    "question": "Why are loops (cycles) useful in an AI workflow? Give a simple real-life example.",
-    "explanation": "Lesson 04 Slide 24-26: Evaluator-Optimizer loops allow iterative self-correction.",
-    "slideRef": "Lesson 04 Slide 24-26",
-    "modelAnswer": "Loops let an AI check its own work and fix mistakes.\nFor example: Step 1 writes code. Step 2 runs a test on the code. If the test fails, the workflow loops back to Step 1 with the error message so the AI can fix the code until it passes.",
+    "question": "In simple words, explain the difference between RAG and Fine-Tuning. When should you choose RAG?",
+    "explanation": "Teacher Highlight: RAG vs fine-tuning vs long-context prompting — when to use which.",
+    "slideRef": "Teacher Review Doc: Module 1 Item 1",
+    "modelAnswer": "RAG is like giving the AI an open reference book: it looks up relevant pages right when you ask a question. You can add or update private documents instantly with zero training costs and source citations.\nFine-Tuning is like sending the AI to school: it updates the model's internal weights. It is expensive, slow, and cannot easily update new daily documents.\nChoose RAG when you have private, dynamic company documents that change frequently.",
     "keyPoints": [
-      "Allows the AI to self-correct and improve its output.",
-      "Runs tests or checks on the result.",
-      "Loops back with feedback if something is wrong.",
-      "Stops once the answer is correct or reaches max tries."
+      "RAG retrieves external documents at query time without re-training.",
+      "Fine-tuning updates model weights and is costly/slow to update.",
+      "RAG provides source citations and prevents hallucinations on private data.",
+      "Choose RAG for dynamic, frequently updated company documents."
     ]
   },
   {
     "id": 4,
-    "partId": "part1",
-    "partTitle": "Part 1: Workflow Engineering with LLM Frameworks",
-    "subtopic": "1.1 Introduction to LLM Workflow",
-    "module": "mod04",
+    "partId": "mod1",
+    "partTitle": "Module 1: RAG Fundamentals",
+    "subtopic": "1.1 RAG Architecture Overview",
+    "module": "mod05",
     "type": "fill-in-blank",
-    "question": "In a graph workflow, each individual task or step is called a ________, and the lines connecting them are called edges.",
-    "explanation": "Lesson 04 Slide 22: Graphs are made of Nodes (steps) and Edges (connections).",
-    "slideRef": "Lesson 04 Slide 22",
+    "question": "The 5 main steps of the standard RAG pipeline in order are: Ingestion, Indexing, Retrieval, ________, and Generation.",
+    "explanation": "Teacher Highlight: RAG pipeline: Ingestion -> Indexing -> Retrieval -> Augmentation -> Generation.",
+    "slideRef": "Teacher Review Doc: Module 1 Item 1",
     "accepted": [
-      "node",
-      "Node",
-      "nodes",
-      "Nodes"
+      "Augmentation",
+      "augmentation",
+      "Prompt Augmentation"
     ],
     "placeholder": "Type your answer here..."
   },
   {
     "id": 5,
-    "partId": "part1",
-    "partTitle": "Part 1: Workflow Engineering with LLM Frameworks",
-    "subtopic": "1.2 Chaining & Execution Patterns",
-    "module": "mod04",
+    "partId": "mod1",
+    "partTitle": "Module 1: RAG Fundamentals",
+    "subtopic": "1.2 Ingestion, Chunking, Embeddings, Retrieval, Generation",
+    "module": "mod05",
     "type": "qcm",
-    "question": "In an 'Evaluator-Optimizer' workflow loop, what is the job of the Evaluator?",
-    "explanation": "Lesson 04 Slide 31-33: The Evaluator checks the generated result and tells the Optimizer what needs improvement.",
-    "slideRef": "Lesson 04 Slide 31-33",
+    "question": "What is an 'embedding' in simple words?",
+    "explanation": "Teacher Highlight: What an embedding is: a vector representation of meaning.",
+    "slideRef": "Teacher Review Doc: Module 1 Item 2",
     "options": [
-      "To delete the database files after each step.",
-      "To check the AI's answer, score it, and give helpful feedback on what to fix.",
-      "To turn your text into raw binary numbers (0s and 1s).",
-      "To connect your computer to the WiFi router."
+      "A photo taken of your computer screen.",
+      "A list of numbers (vector) that captures the meaning of a text so similar ideas are close together.",
+      "A password used to unlock your database.",
+      "A command that shuts down the server."
     ],
     "correct": 1
   },
   {
     "id": 6,
-    "partId": "part1",
-    "partTitle": "Part 1: Workflow Engineering with LLM Frameworks",
-    "subtopic": "1.2 Chaining & Execution Patterns",
-    "module": "mod04",
+    "partId": "mod1",
+    "partTitle": "Module 1: RAG Fundamentals",
+    "subtopic": "1.2 Ingestion, Chunking, Embeddings, Retrieval, Generation",
+    "module": "mod05",
     "type": "true-false",
-    "question": "In a Sequential Chain, all steps run at the exact same time in parallel.",
-    "explanation": "False. Sequential means one step after another in a line. Running at the same time is called Parallel execution.",
-    "slideRef": "Lesson 04 Slide 28",
+    "question": "Cosine similarity measures the geometric length of vectors while completely ignoring the angle between them.",
+    "explanation": "False. Cosine similarity measures the angle (direction) between two vectors, completely independent of their length.",
+    "slideRef": "Teacher Review Doc: Module 1 Item 2",
     "options": [
       "True",
       "False"
@@ -1258,68 +1256,67 @@ echo $LD_LIBRARY_PATH | tr ':' '\n' | grep cuda</code></pre>
   },
   {
     "id": 7,
-    "partId": "part1",
-    "partTitle": "Part 1: Workflow Engineering with LLM Frameworks",
-    "subtopic": "1.2 Chaining & Execution Patterns",
-    "module": "mod04",
+    "partId": "mod1",
+    "partTitle": "Module 1: RAG Fundamentals",
+    "subtopic": "1.2 Ingestion, Chunking, Embeddings, Retrieval, Generation",
+    "module": "mod05",
     "type": "open-question",
-    "question": "What is a 'Router' in an AI workflow, and how does it help handle different user questions?",
-    "explanation": "Lesson 04 Slide 29-30: Routers direct traffic to specialized sub-chains based on intent.",
-    "slideRef": "Lesson 04 Slide 29-30",
-    "modelAnswer": "A Router is a step that checks what the user wants and sends their question to the right specialist.\nFor example, if a customer asks about a broken product, the Router sends them to Tech Support. If they ask about a bill, the Router sends them to Billing. If the Router isn't sure, it sends them to a fallback helper.",
+    "question": "What does 'Top-K Retrieval' mean in a RAG system, and what happens if K is set too small or too large?",
+    "explanation": "Teacher Highlight: Top-k retrieval and similarity thresholds.",
+    "slideRef": "Teacher Review Doc: Module 1 Item 2",
+    "modelAnswer": "Top-K means retrieving the top 'K' most similar document chunks from the vector database (for example, K = 3).\n- If K is too small (e.g. K=1): You might miss important context needed to answer the question.\n- If K is too large (e.g. K=50): You flood the prompt with irrelevant text, wasting tokens and confusing the AI model.",
     "keyPoints": [
-      "A Router inspects user intent and picks the best path.",
-      "Routes to specialized chains (e.g., Tech support vs Billing).",
-      "Provides a fallback option when the question is unclear.",
-      "Keeps workflows organized instead of handling everything in one place."
+      "Top-K specifies how many best-matching chunks to retrieve.",
+      "K too small causes missing information (recall failure).",
+      "K too large adds noise, wastes tokens, and causes attention dilution.",
+      "Typical sweet spot is usually K = 3 to 5 chunks."
     ]
   },
   {
     "id": 8,
-    "partId": "part1",
-    "partTitle": "Part 1: Workflow Engineering with LLM Frameworks",
-    "subtopic": "1.2 Chaining & Execution Patterns",
-    "module": "mod04",
+    "partId": "mod1",
+    "partTitle": "Module 1: RAG Fundamentals",
+    "subtopic": "1.2 Ingestion, Chunking, Embeddings, Retrieval, Generation",
+    "module": "mod05",
     "type": "fill-in-blank",
-    "question": "When you run multiple AI tasks at the same time to save time and combine their results later, this is called ________ execution.",
-    "explanation": "Lesson 04 Slide 28: Parallel (Fan-out / Fan-in) runs multiple steps simultaneously.",
-    "slideRef": "Lesson 04 Slide 28",
+    "question": "The similarity search metric that measures the angle between two vectors (ignoring length) is called ________ Similarity.",
+    "explanation": "Teacher Highlight: Similarity search: cosine similarity, dot product, Euclidean distance.",
+    "slideRef": "Teacher Review Doc: Module 1 Item 2",
     "accepted": [
-      "parallel",
-      "Parallel",
-      "concurrent",
-      "Concurrent"
+      "Cosine",
+      "cosine",
+      "Cosine Similarity"
     ],
     "placeholder": "Type your answer here..."
   },
   {
     "id": 9,
-    "partId": "part1",
-    "partTitle": "Part 1: Workflow Engineering with LLM Frameworks",
-    "subtopic": "1.3 Managing State, Memory, and Persistence",
-    "module": "mod04",
+    "partId": "mod1",
+    "partTitle": "Module 1: RAG Fundamentals",
+    "subtopic": "1.3 Text Splitting Strategies & Local Embedding Models",
+    "module": "mod05",
     "type": "qcm",
-    "question": "What is the main difference between 'State' and 'Memory' in an AI workflow?",
-    "explanation": "Lesson 04 Slide 39-42: State is temporary for the active run; Memory remembers long-term facts across multiple sessions.",
-    "slideRef": "Lesson 04 Slide 39-42",
+    "question": "Why does 'chunk overlap' help when splitting a long document into chunks?",
+    "explanation": "Teacher Highlight: Chunk overlap — what it is and why it helps.",
+    "slideRef": "Teacher Review Doc: Module 1 Item 3",
     "options": [
-      "State and Memory are the exact same thing with different spellings.",
-      "State is stored in text files; Memory is stored on USB flash drives.",
-      "State is the temporary data for the current run right now; Memory saves user facts and history across future conversations.",
-      "State only works on mobile phones; Memory only works on supercomputers."
+      "It makes the PDF file smaller on disk.",
+      "It deletes all spelling mistakes.",
+      "It stops sentences and key thoughts from being accidentally cut in half at the split point.",
+      "It allows the AI to run without a GPU."
     ],
     "correct": 2
   },
   {
     "id": 10,
-    "partId": "part1",
-    "partTitle": "Part 1: Workflow Engineering with LLM Frameworks",
-    "subtopic": "1.3 Managing State, Memory, and Persistence",
-    "module": "mod04",
+    "partId": "mod1",
+    "partTitle": "Module 1: RAG Fundamentals",
+    "subtopic": "1.3 Text Splitting Strategies & Local Embedding Models",
+    "module": "mod05",
     "type": "true-false",
-    "question": "If you use `InMemorySaver` in LangGraph, your chat history will survive even if the server restarts or crashes.",
-    "explanation": "False. `InMemorySaver` stores data only in RAM. If the server restarts, everything is erased. You need a database checkpointer like `PostgresSaver` for real persistence.",
-    "slideRef": "Lesson 04 Slide 114",
+    "question": "Local embedding models (like BAAI/bge-small-en-v1.5 and all-MiniLM-L6-v2) require an active internet connection to cloud APIs to generate vectors.",
+    "explanation": "False. Local embedding models run 100% offline on your computer CPU or GPU with zero internet costs or privacy leaks.",
+    "slideRef": "Teacher Review Doc: Module 1 Item 3",
     "options": [
       "True",
       "False"
@@ -1328,446 +1325,32 @@ echo $LD_LIBRARY_PATH | tr ':' '\n' | grep cuda</code></pre>
   },
   {
     "id": 11,
-    "partId": "part1",
-    "partTitle": "Part 1: Workflow Engineering with LLM Frameworks",
-    "subtopic": "1.3 Managing State, Memory, and Persistence",
-    "module": "mod04",
+    "partId": "mod1",
+    "partTitle": "Module 1: RAG Fundamentals",
+    "subtopic": "1.3 Text Splitting Strategies & Local Embedding Models",
+    "module": "mod05",
     "type": "open-question",
-    "question": "In LangGraph, what is `thread_id`, and what bad thing happens if two different users accidentally share the same `thread_id`?",
-    "explanation": "Lesson 04 Slide 114: thread_id partitions conversation state in checkpointers.",
-    "slideRef": "Lesson 04 Slide 114",
-    "modelAnswer": "`thread_id` is a unique ID for a specific conversation.\nIf two different users share the same `thread_id`, their chat messages will get mixed together! User A will see User B's private messages and the AI will get confused and hallucinate.",
+    "question": "Why is Recursive Character Splitting better than naive Fixed-Size chunking?",
+    "explanation": "Teacher Highlight: Fixed-size chunking vs recursive character splitting.",
+    "slideRef": "Teacher Review Doc: Module 1 Item 3",
+    "modelAnswer": "Fixed-size chunking cuts text blindly at exact character counts (e.g. every 500 characters), splitting sentences and words in half.\nRecursive Character Splitting is smarter: it tries to split at paragraph breaks (`\\n\\n`) first, then single line breaks (`\\n`), and then spaces (` `). This keeps complete paragraphs and sentences together as meaningful units.",
     "keyPoints": [
-      "thread_id identifies and separates different chat sessions.",
-      "Keeps each user's history private and isolated.",
-      "Sharing thread_id causes chat messages to collide and leak private data.",
-      "Checkpointers use thread_id to save and load the right state."
+      "Fixed chunking blindly cuts sentences and paragraphs in half.",
+      "Recursive splitting uses a hierarchy of natural boundaries (\\n\\n, \\n, space).",
+      "Keeps semantic paragraphs and complete thoughts intact.",
+      "Produces higher quality chunks for embedding search."
     ]
   },
   {
     "id": 12,
-    "partId": "part1",
-    "partTitle": "Part 1: Workflow Engineering with LLM Frameworks",
-    "subtopic": "1.3 Managing State, Memory, and Persistence",
-    "module": "mod04",
-    "type": "fill-in-blank",
-    "question": "In LangGraph, the configuration key used to separate chat history for each user conversation is `thread_________`.",
-    "explanation": "Lesson 04 Slide 114: thread_id is passed in config={'configurable': {'thread_id': '...'}}.",
-    "slideRef": "Lesson 04 Slide 114",
-    "accepted": [
-      "id",
-      "ID",
-      "thread_id"
-    ],
-    "placeholder": "Type your answer here..."
-  },
-  {
-    "id": 13,
-    "partId": "part1",
-    "partTitle": "Part 1: Workflow Engineering with LLM Frameworks",
-    "subtopic": "1.4 Document Ingestion Pipelines",
-    "module": "mod04",
-    "type": "qcm",
-    "question": "Why do we clean text and add metadata (like titles and keywords) to document chunks before saving them?",
-    "explanation": "Lesson 04 Slide 48-52: Metadata tags and clean text help the retriever find exact matches and preserve parent document context.",
-    "slideRef": "Lesson 04 Slide 48-52",
-    "options": [
-      "To make the files look colorful on the screen.",
-      "To encrypt the text with a secret password.",
-      "To delete all the words and replace them with numbers.",
-      "To help the search engine find the right chunks easily and keep important context attached to each piece."
-    ],
-    "correct": 3
-  },
-  {
-    "id": 14,
-    "partId": "part1",
-    "partTitle": "Part 1: Workflow Engineering with LLM Frameworks",
-    "subtopic": "1.4 Document Ingestion Pipelines",
-    "module": "mod04",
-    "type": "true-false",
-    "question": "If your ingestion script does not check for duplicate files, re-running it will create duplicate copies of all your chunks in the vector database.",
-    "explanation": "True. Without deduplication or document hashing, re-uploading documents will insert duplicate vectors every time.",
-    "slideRef": "Lesson 04 Slide 54",
-    "options": [
-      "True",
-      "False"
-    ],
-    "correct": 0
-  },
-  {
-    "id": 15,
-    "partId": "part1",
-    "partTitle": "Part 1: Workflow Engineering with LLM Frameworks",
-    "subtopic": "1.4 Document Ingestion Pipelines",
-    "module": "mod04",
-    "type": "open-question",
-    "question": "What are the 5 simple steps to process a PDF document so an AI can search it in RAG?",
-    "explanation": "Lesson 04 Slide 45-56 outlines the Load -> Split -> Transform -> Embed -> Store pipeline.",
-    "slideRef": "Lesson 04 Slide 45-56",
-    "modelAnswer": "1. Load: Read text from the PDF file.\n2. Split (Chunk): Cut long text into small, readable chunks.\n3. Clean/Enrich: Remove messy headers/footers and add tags (titles, dates).\n4. Embed: Convert each text chunk into a vector (list of numbers).\n5. Save (Index): Store the vectors and chunks into a vector database.",
-    "keyPoints": [
-      "1. Load (read source document).",
-      "2. Split / Chunk (divide into smaller pieces).",
-      "3. Clean / Enrich (remove noise and add metadata).",
-      "4. Embed (convert text to vectors) and Store in database."
-    ]
-  },
-  {
-    "id": 16,
-    "partId": "part1",
-    "partTitle": "Part 1: Workflow Engineering with LLM Frameworks",
-    "subtopic": "1.4 Document Ingestion Pipelines",
-    "module": "mod04",
-    "type": "fill-in-blank",
-    "question": "In LlamaIndex, the component that automatically reads chunks and generates a title tag for each one is called ________Extractor.",
-    "explanation": "Lesson 04 Slide 51: TitleExtractor creates title metadata for chunks.",
-    "slideRef": "Lesson 04 Slide 51",
-    "accepted": [
-      "Title",
-      "title",
-      "TitleExtractor"
-    ],
-    "placeholder": "Type your answer here..."
-  },
-  {
-    "id": 17,
-    "partId": "part1",
-    "partTitle": "Part 1: Workflow Engineering with LLM Frameworks",
-    "subtopic": "1.5 Modular Workflow Design",
-    "module": "mod04",
-    "type": "qcm",
-    "question": "Why should each step (node) in an AI workflow do only ONE simple job?",
-    "explanation": "Lesson 04 Slide 60-63: Single Responsibility Principle (SRP) makes each node reliable, testable, and easy to debug.",
-    "slideRef": "Lesson 04 Slide 60-63",
-    "options": [
-      "It makes it easy to test, fix mistakes, and retry just that one step if it fails.",
-      "AI models can only understand one word per minute.",
-      "Computer CPUs stop working if you run two lines of code.",
-      "Python requires every function to have only 3 letters."
-    ],
-    "correct": 0
-  },
-  {
-    "id": 18,
-    "partId": "part1",
-    "partTitle": "Part 1: Workflow Engineering with LLM Frameworks",
-    "subtopic": "1.5 Modular Workflow Design",
-    "module": "mod04",
-    "type": "true-false",
-    "question": "Using Pydantic or TypedDict to define what data flows through your workflow helps prevent bugs and missing data errors.",
-    "explanation": "True. Explicit state schemas make sure every step receives the exact data fields it expects.",
-    "slideRef": "Lesson 04 Slide 66",
-    "options": [
-      "True",
-      "False"
-    ],
-    "correct": 0
-  },
-  {
-    "id": 19,
-    "partId": "part1",
-    "partTitle": "Part 1: Workflow Engineering with LLM Frameworks",
-    "subtopic": "1.5 Modular Workflow Design",
-    "module": "mod04",
-    "type": "open-question",
-    "question": "What goes wrong if you ask a single prompt to do 4 things at once: read a PDF, check legal rules, calculate taxes, and write an email?",
-    "explanation": "Lesson 04 Slide 60-68: Overloaded prompts violate Single Responsibility and increase failure rates.",
-    "slideRef": "Lesson 04 Slide 60-68",
-    "modelAnswer": "1. High chance of mistakes: The AI gets overloaded and starts hallucinating or skipping instructions.\n2. Hard to fix: If the tax calculation is wrong, you have to re-run the entire expensive prompt from the start.\n3. Hard to test: You cannot easily unit-test the tax math separately from the email writing.",
-    "keyPoints": [
-      "AI gets confused by too many instructions and hallucinates.",
-      "Cannot retry just the failed step (wastes tokens/money).",
-      "Impossible to test and debug individual parts in isolation.",
-      "Modular steps are much more reliable."
-    ]
-  },
-  {
-    "id": 20,
-    "partId": "part1",
-    "partTitle": "Part 1: Workflow Engineering with LLM Frameworks",
-    "subtopic": "1.5 Modular Workflow Design",
-    "module": "mod04",
-    "type": "fill-in-blank",
-    "question": "In LangGraph and Python, you can define your state fields with data validation using Pydantic's ________ class.",
-    "explanation": "Lesson 04 Slide 66: Pydantic BaseModel and TypedDict are standard state containers.",
-    "slideRef": "Lesson 04 Slide 66",
-    "accepted": [
-      "BaseModel",
-      "base_model",
-      "BaseModel()"
-    ],
-    "placeholder": "Type your answer here..."
-  },
-  {
-    "id": 21,
-    "partId": "part1",
-    "partTitle": "Part 1: Workflow Engineering with LLM Frameworks",
-    "subtopic": "1.6 Orchestration Frameworks: LlamaIndex, LangChain, LangGraph",
-    "module": "mod04",
-    "type": "qcm",
-    "question": "When should you choose LangGraph instead of simple LangChain chains?",
-    "explanation": "Lesson 04 Slide 105-112: LangGraph is built for stateful graphs, loops, multi-agent systems, and human-in-the-loop workflows.",
-    "slideRef": "Lesson 04 Slide 105-112",
-    "options": [
-      "When you only want to translate one sentence into French.",
-      "When your AI application needs loops, step-by-step state, and human approval buttons.",
-      "When you do not want to use any AI at all.",
-      "When your computer has no internet connection."
-    ],
-    "correct": 1
-  },
-  {
-    "id": 22,
-    "partId": "part1",
-    "partTitle": "Part 1: Workflow Engineering with LLM Frameworks",
-    "subtopic": "1.6 Orchestration Frameworks: LlamaIndex, LangChain, LangGraph",
-    "module": "mod04",
-    "type": "true-false",
-    "question": "In LangChain (LCEL), the pipe operator (`|`) can only be used for math operations, not for chaining prompts and models.",
-    "explanation": "False. The pipe symbol `|` in LCEL is specifically used to connect components together into a chain.",
-    "slideRef": "Lesson 04 Slide 92",
-    "options": [
-      "True",
-      "False"
-    ],
-    "correct": 1
-  },
-  {
-    "id": 23,
-    "partId": "part1",
-    "partTitle": "Part 1: Workflow Engineering with LLM Frameworks",
-    "subtopic": "1.6 Orchestration Frameworks: LlamaIndex, LangChain, LangGraph",
-    "module": "mod04",
-    "type": "open-question",
-    "question": "In simple words, what is LlamaIndex best at, and what is LangGraph best at?",
-    "explanation": "Lesson 04 Slide 85-118: LlamaIndex excels at data indexing; LangGraph excels at agent orchestration.",
-    "slideRef": "Lesson 04 Slide 85-118",
-    "modelAnswer": "LlamaIndex is best for data and documents: reading PDFs, splitting chunks, creating indexes, and retrieving answers (RAG).\nLangGraph is best for decision making and control flow: running loops, managing state, handling agents, and pausing for human approval.",
-    "keyPoints": [
-      "LlamaIndex: Data-centric, document ingestion, indexing, and smart search.",
-      "LangGraph: Agent control, state machines, cycles/loops, and human approval.",
-      "They work great together in production systems."
-    ]
-  },
-  {
-    "id": 24,
-    "partId": "part1",
-    "partTitle": "Part 1: Workflow Engineering with LLM Frameworks",
-    "subtopic": "1.6 Orchestration Frameworks: LlamaIndex, LangChain, LangGraph",
-    "module": "mod04",
-    "type": "fill-in-blank",
-    "question": "In LangChain Expression Language (LCEL), the syntax `prompt | model | parser` uses the ________ operator to link steps together.",
-    "explanation": "Lesson 04 Slide 92: The pipe symbol '|' chains Runnables in LCEL.",
-    "slideRef": "Lesson 04 Slide 92",
-    "accepted": [
-      "pipe",
-      "|",
-      "pipe operator"
-    ],
-    "placeholder": "Type your answer here..."
-  },
-  {
-    "id": 25,
-    "partId": "part2",
-    "partTitle": "Part 2: Module 1 — RAG Fundamentals",
-    "subtopic": "2.1 RAG Architecture Overview",
-    "module": "mod05",
-    "type": "qcm",
-    "question": "What is the main advantage of using RAG (Retrieval-Augmented Generation) instead of fine-tuning an AI model on company documents?",
-    "explanation": "Lesson 05 Slide 10-14: RAG allows real-time knowledge updates, provides source citations, and avoids costly GPU re-training.",
-    "slideRef": "Lesson 05 Slide 10-14",
-    "options": [
-      "Fine-tuning deletes the model's brain, while RAG keeps it intact.",
-      "Fine-tuning only works on Apple MacBooks.",
-      "RAG lets you add or update private documents immediately without spending thousands of dollars re-training the model.",
-      "RAG makes the model answer questions using only 1 single letter."
-    ],
-    "correct": 2
-  },
-  {
-    "id": 26,
-    "partId": "part2",
-    "partTitle": "Part 2: Module 1 — RAG Fundamentals",
-    "subtopic": "2.1 RAG Architecture Overview",
-    "module": "mod05",
-    "type": "true-false",
-    "question": "Basic (Naive) RAG is guaranteed to always answer correctly even when an answer is spread across 5 completely different pages.",
-    "explanation": "False. Naive RAG only looks for single top-k chunk similarities and often misses connections spread across multiple distant pages.",
-    "slideRef": "Lesson 05 Slide 18",
-    "options": [
-      "True",
-      "False"
-    ],
-    "correct": 1
-  },
-  {
-    "id": 27,
-    "partId": "part2",
-    "partTitle": "Part 2: Module 1 — RAG Fundamentals",
-    "subtopic": "2.1 RAG Architecture Overview",
-    "module": "mod05",
-    "type": "open-question",
-    "question": "In simple words, explain how RAG answers a question like: 'What is our company refund policy?'",
-    "explanation": "Lesson 05 Slide 14-17: RAG query lifecycle: Query -> Search -> Prompt Augmentation -> Generation.",
-    "slideRef": "Lesson 05 Slide 14-17",
-    "modelAnswer": "1. The user asks: 'What is our refund policy?'\n2. The system converts this question into a search vector (numbers).\n3. It searches the vector database and finds the top 2-3 document chunks about refunds.\n4. It pastes those chunks into a prompt: 'Here are the refund rules: [chunks]. Now answer the user's question.'\n5. The AI reads the rules and writes a truthful answer with citations.",
-    "keyPoints": [
-      "Converts user question to search vector.",
-      "Finds matching chunks in vector database.",
-      "Pastes chunks into the prompt for the AI to read.",
-      "AI writes an answer based strictly on the retrieved facts."
-    ]
-  },
-  {
-    "id": 28,
-    "partId": "part2",
-    "partTitle": "Part 2: Module 1 — RAG Fundamentals",
-    "subtopic": "2.1 RAG Architecture Overview",
+    "partId": "mod1",
+    "partTitle": "Module 1: RAG Fundamentals",
+    "subtopic": "1.3 Text Splitting Strategies & Local Embedding Models",
     "module": "mod05",
     "type": "fill-in-blank",
-    "question": "In RAG, putting retrieved document chunks into the prompt so the AI can read them before answering is called prompt ________.",
-    "explanation": "Lesson 05 Slide 16: Prompt Augmentation adds retrieved context to the prompt.",
-    "slideRef": "Lesson 05 Slide 16",
-    "accepted": [
-      "augmentation",
-      "Augmentation",
-      "synthesis"
-    ],
-    "placeholder": "Type your answer here..."
-  },
-  {
-    "id": 29,
-    "partId": "part2",
-    "partTitle": "Part 2: Module 1 — RAG Fundamentals",
-    "subtopic": "2.2 Ingestion, Chunking, Embeddings, Retrieval, Generation",
-    "module": "mod05",
-    "type": "qcm",
-    "question": "What problem happens if your text chunks are made too small (for example, only 15 words per chunk)?",
-    "explanation": "Lesson 05 Slide 28-31: Tiny chunks chop sentences into fragments and lose surrounding context, making retrieval useless.",
-    "slideRef": "Lesson 05 Slide 28-31",
-    "options": [
-      "Your computer screen will run out of colors.",
-      "The AI will start typing in Latin.",
-      "The vector database will instantly delete itself.",
-      "The chunks lose their full meaning and context, so the AI cannot understand the whole explanation."
-    ],
-    "correct": 3
-  },
-  {
-    "id": 30,
-    "partId": "part2",
-    "partTitle": "Part 2: Module 1 — RAG Fundamentals",
-    "subtopic": "2.2 Ingestion, Chunking, Embeddings, Retrieval, Generation",
-    "module": "mod05",
-    "type": "true-false",
-    "question": "In RAG chunking, is it a bad mistake to have any overlap between chunks?",
-    "explanation": "False. Overlap (typically 10% to 20%) is recommended because it stops sentences or ideas from being cut right down the middle.",
-    "slideRef": "Lesson 05 Slide 32",
-    "options": [
-      "True",
-      "False"
-    ],
-    "correct": 1
-  },
-  {
-    "id": 31,
-    "partId": "part2",
-    "partTitle": "Part 2: Module 1 — RAG Fundamentals",
-    "subtopic": "2.2 Ingestion, Chunking, Embeddings, Retrieval, Generation",
-    "module": "mod05",
-    "type": "open-question",
-    "question": "What is 'chunk overlap' in RAG, and why is it important when splitting a document?",
-    "explanation": "Lesson 05 Slide 32: Chunk overlap preserves continuity across split boundaries.",
-    "slideRef": "Lesson 05 Slide 32",
-    "modelAnswer": "Chunk overlap means the end of one chunk shares some text (like 50 words) with the start of the next chunk.\nThis is important because if a key sentence or definition happens to land right at the split point, overlap prevents it from being chopped in half. At least one chunk will have the complete thought.",
-    "keyPoints": [
-      "Shares consecutive text across boundary points.",
-      "Prevents sentences and ideas from being cut in half.",
-      "Ensures complete semantic context in at least one chunk.",
-      "Usually set to 10% - 20% of chunk size."
-    ]
-  },
-  {
-    "id": 32,
-    "partId": "part2",
-    "partTitle": "Part 2: Module 1 — RAG Fundamentals",
-    "subtopic": "2.2 Ingestion, Chunking, Embeddings, Retrieval, Generation",
-    "module": "mod05",
-    "type": "fill-in-blank",
-    "question": "When embedding vectors are normalized to length 1.0, Cosine Similarity gives the exact same result as the ________ Product.",
-    "explanation": "Lesson 05 Slide 42: When vectors are unit-length, cosine similarity equals dot product.",
-    "slideRef": "Lesson 05 Slide 42",
-    "accepted": [
-      "Dot",
-      "dot",
-      "inner",
-      "Dot Product"
-    ],
-    "placeholder": "Type your answer here..."
-  },
-  {
-    "id": 33,
-    "partId": "part2",
-    "partTitle": "Part 2: Module 1 — RAG Fundamentals",
-    "subtopic": "2.3 Text Splitting Strategies & Local Embedding Models",
-    "module": "mod05",
-    "type": "qcm",
-    "question": "Why is `RecursiveCharacterTextSplitter` better than simply cutting text every 500 characters?",
-    "explanation": "Lesson 05 Slide 34-36: RecursiveCharacterTextSplitter checks double newlines first, then single newlines, then spaces to keep paragraphs intact.",
-    "slideRef": "Lesson 05 Slide 34-36",
-    "options": [
-      "It tries to split at paragraph breaks first, then line breaks, then spaces, keeping whole sentences and thoughts together.",
-      "It translates the text into Spanish first.",
-      "It deletes all vowels to make the text smaller.",
-      "It turns text into MP3 audio files."
-    ],
-    "correct": 0
-  },
-  {
-    "id": 34,
-    "partId": "part2",
-    "partTitle": "Part 2: Module 1 — RAG Fundamentals",
-    "subtopic": "2.3 Text Splitting Strategies & Local Embedding Models",
-    "module": "mod05",
-    "type": "true-false",
-    "question": "Do local embedding models like `bge-small-en-v1.5` require paying API fees to cloud companies?",
-    "explanation": "False. Local embedding models run 100% locally on your computer with zero API costs and full privacy.",
-    "slideRef": "Lesson 05 Slide 46",
-    "options": [
-      "True",
-      "False"
-    ],
-    "correct": 1
-  },
-  {
-    "id": 35,
-    "partId": "part2",
-    "partTitle": "Part 2: Module 1 — RAG Fundamentals",
-    "subtopic": "2.3 Text Splitting Strategies & Local Embedding Models",
-    "module": "mod05",
-    "type": "open-question",
-    "question": "Why is it bad to split Python code or Markdown files by a fixed character count (like every 300 characters)?",
-    "explanation": "Lesson 05 Slide 37-39: Syntax-aware splitters preserve code and markdown structure.",
-    "slideRef": "Lesson 05 Slide 37-39",
-    "modelAnswer": "Fixed character splitting cuts text blindly. It can cut a Python function right in half, separate a class name from its code, or split a Markdown table so it cannot be read.\nUsing a syntax-aware splitter (like MarkdownHeaderTextSplitter or CodeSplitter) respects the code structure so every chunk is a valid, readable piece of code.",
-    "keyPoints": [
-      "Fixed-length chunking cuts functions and classes in half.",
-      "Breaks Markdown tables and headings.",
-      "Syntax-aware splitters keep complete code blocks intact.",
-      "Allows the AI to read valid code and understand it."
-    ]
-  },
-  {
-    "id": 36,
-    "partId": "part2",
-    "partTitle": "Part 2: Module 1 — RAG Fundamentals",
-    "subtopic": "2.3 Text Splitting Strategies & Local Embedding Models",
-    "module": "mod05",
-    "type": "fill-in-blank",
-    "question": "In LangChain, the smart text splitter that tries to split paragraphs, then lines, then words is called ________CharacterTextSplitter.",
-    "explanation": "Lesson 05 Slide 34: RecursiveCharacterTextSplitter is the recommended default splitter.",
-    "slideRef": "Lesson 05 Slide 34",
+    "question": "In LangChain, the recommended text splitter that splits at paragraphs, then lines, then words is called ________CharacterTextSplitter.",
+    "explanation": "Teacher Highlight: Recursive character splitting.",
+    "slideRef": "Teacher Review Doc: Module 1 Item 3",
     "accepted": [
       "Recursive",
       "recursive",
@@ -1776,67 +1359,67 @@ echo $LD_LIBRARY_PATH | tr ':' '\n' | grep cuda</code></pre>
     "placeholder": "Type your answer here..."
   },
   {
-    "id": 37,
-    "partId": "part2",
-    "partTitle": "Part 2: Module 1 — RAG Fundamentals",
-    "subtopic": "2.4 Vector Database Setup (ChromaDB, Qdrant, Pgvector)",
+    "id": 13,
+    "partId": "mod1",
+    "partTitle": "Module 1: RAG Fundamentals",
+    "subtopic": "1.4 Vector Database Setup (ChromaDB, Qdrant, Pgvector)",
     "module": "mod05",
     "type": "qcm",
-    "question": "What are the default network ports used by Qdrant for REST API and gRPC API?",
-    "explanation": "Lesson 05 Slide 58-60: Qdrant uses port 6333 for HTTP REST and port 6334 for high-speed gRPC.",
-    "slideRef": "Lesson 05 Slide 58-60",
+    "question": "What are the default network ports used by Qdrant for its REST API and gRPC API?",
+    "explanation": "Teacher Highlight: Qdrant setup, collections, filtering with payloads (ports 6333 and 6334).",
+    "slideRef": "Teacher Review Doc: Module 1 Item 4",
     "options": [
       "REST: 80, gRPC: 443",
-      "REST: 6333, gRPC: 6334",
       "REST: 3000, gRPC: 8080",
-      "REST: 5432, gRPC: 11434"
+      "REST: 5432, gRPC: 11434",
+      "REST: 6333, gRPC: 6334"
     ],
-    "correct": 1
+    "correct": 3
   },
   {
-    "id": 38,
-    "partId": "part2",
-    "partTitle": "Part 2: Module 1 — RAG Fundamentals",
-    "subtopic": "2.4 Vector Database Setup (ChromaDB, Qdrant, Pgvector)",
+    "id": 14,
+    "partId": "mod1",
+    "partTitle": "Module 1: RAG Fundamentals",
+    "subtopic": "1.4 Vector Database Setup (ChromaDB, Qdrant, Pgvector)",
     "module": "mod05",
     "type": "true-false",
-    "question": "In PostgreSQL, to turn on vector search capabilities, you run the SQL command: `CREATE EXTENSION vector;`.",
-    "explanation": "True. `CREATE EXTENSION vector;` enables pgvector data types and similarity search in PostgreSQL.",
-    "slideRef": "Lesson 05 Slide 62",
+    "question": "In PostgreSQL, vector search works out-of-the-box on text columns without installing the pgvector extension.",
+    "explanation": "False. PostgreSQL requires running `CREATE EXTENSION vector;` to enable vector data types and similarity indexes.",
+    "slideRef": "Teacher Review Doc: Module 1 Item 4",
     "options": [
       "True",
       "False"
     ],
-    "correct": 0
+    "correct": 1
   },
   {
-    "id": 39,
-    "partId": "part2",
-    "partTitle": "Part 2: Module 1 — RAG Fundamentals",
-    "subtopic": "2.4 Vector Database Setup (ChromaDB, Qdrant, Pgvector)",
+    "id": 15,
+    "partId": "mod1",
+    "partTitle": "Module 1: RAG Fundamentals",
+    "subtopic": "1.4 Vector Database Setup (ChromaDB, Qdrant, Pgvector)",
     "module": "mod05",
     "type": "open-question",
-    "question": "In simple terms, when should you choose ChromaDB, and when should you choose Pgvector?",
-    "explanation": "Lesson 05 Slide 55-65 compares ChromaDB, Qdrant, and Pgvector use cases.",
-    "slideRef": "Lesson 05 Slide 55-65",
-    "modelAnswer": "Choose ChromaDB for simple local projects, quick prototypes, or desktop apps because it is lightweight, runs in Python, and needs zero complex setup.\nChoose Pgvector if your company already uses PostgreSQL for regular business data (like users, orders, and products) and you want to keep your vectors and regular tables in the same database with standard SQL.",
+    "question": "In simple words, compare ChromaDB and Pgvector. When should you pick each one?",
+    "explanation": "Teacher Highlight: Choosing a vector DB: embedded/local vs client-server vs managed cloud.",
+    "slideRef": "Teacher Review Doc: Module 1 Item 4",
+    "modelAnswer": "Pick ChromaDB when you need a simple, lightweight local database for fast prototypes or Python desktop apps with zero complicated setup.\nPick Pgvector when your project already uses PostgreSQL for regular tables (users, orders) and you want to store vectors directly in the same database using standard SQL.",
     "keyPoints": [
-      "ChromaDB: Simple, lightweight, zero-setup, great for quick local apps.",
-      "Pgvector: PostgreSQL extension, combines regular SQL tables with vector search.",
-      "No need to manage a separate standalone database if using Postgres.",
-      "Qdrant: Dedicated high-speed Rust database for large-scale production."
+      "ChromaDB: Simple, lightweight, zero configuration, great for local prototypes.",
+      "Pgvector: Extends PostgreSQL with vector search, ACID compliance.",
+      "Unifies regular relational data with vector embeddings in one place.",
+      "Qdrant: Dedicated high-speed Rust vector database for large scale."
     ]
   },
   {
-    "id": 40,
-    "partId": "part2",
-    "partTitle": "Part 2: Module 1 — RAG Fundamentals",
-    "subtopic": "2.4 Vector Database Setup (ChromaDB, Qdrant, Pgvector)",
+    "id": 16,
+    "partId": "mod1",
+    "partTitle": "Module 1: RAG Fundamentals",
+    "subtopic": "1.4 Vector Database Setup (ChromaDB, Qdrant, Pgvector)",
     "module": "mod05",
     "type": "fill-in-blank",
-    "question": "In ChromaDB Python, to make sure your data is saved to a folder on disk so you don't lose it on exit, you use chromadb.________(path='...').",
-    "explanation": "Lesson 05 Slide 56: PersistentClient saves ChromaDB collections permanently to disk.",
-    "slideRef": "Lesson 05 Slide 56",
+    "question": "In ChromaDB Python client, to save collections permanently to a folder on disk instead of losing them on exit, you use chromadb.________(path='...').",
+    "explanation": "Teacher Highlight: ChromaDB setup, collections, basic CRUD operations.",
+    "slideRef": "Teacher Review Doc: Module 1 Item 4",
     "accepted": [
       "PersistentClient",
       "persistent_client",
@@ -1845,33 +1428,33 @@ echo $LD_LIBRARY_PATH | tr ':' '\n' | grep cuda</code></pre>
     "placeholder": "Type your answer here..."
   },
   {
-    "id": 41,
-    "partId": "part3",
-    "partTitle": "Part 3: Module 2 — Advanced RAG Architecture & Evaluation",
-    "subtopic": "3.1 Hybrid Retrieval: Keyword + Vector Search",
-    "module": "mod06",
+    "id": 17,
+    "partId": "mod1",
+    "partTitle": "Module 1: RAG Fundamentals",
+    "subtopic": "1.5 Baseline 'Chat with Documents' Application",
+    "module": "mod05",
     "type": "qcm",
-    "question": "Why is Hybrid Search (Keyword BM25 + Vector Search) better than Vector Search alone?",
-    "explanation": "Lesson 06 Slide 12-15: Vector search struggles with exact IDs, product codes, and rare names. BM25 handles exact terms, giving the best of both worlds.",
-    "slideRef": "Lesson 06 Slide 12-15",
+    "question": "What are the two core phases of a baseline 'Chat with Documents' RAG app?",
+    "explanation": "Teacher Highlight: End-to-end architecture of a minimal RAG app: Loading & indexing + retrieval & augmentation loop.",
+    "slideRef": "Teacher Review Doc: Module 1 Item 5",
     "options": [
-      "Because Vector search cannot read the English alphabet.",
-      "Because Keyword search only works on Saturdays.",
-      "Because Keyword search finds exact part numbers and codes, while Vector search finds general concepts and synonyms.",
-      "Because Hybrid Search makes the database run on battery power."
+      "Phase 1: Ingestion (Load, Chunk, Embed, Store). Phase 2: Query (Retrieve top chunks, Augment prompt, Generate answer).",
+      "Phase 1: Buy more RAM. Phase 2: Turn off the screen.",
+      "Phase 1: Format hard drive. Phase 2: Install Windows.",
+      "Phase 1: Encrypt the files. Phase 2: Send spam emails."
     ],
-    "correct": 2
+    "correct": 0
   },
   {
-    "id": 42,
-    "partId": "part3",
-    "partTitle": "Part 3: Module 2 — Advanced RAG Architecture & Evaluation",
-    "subtopic": "3.1 Hybrid Retrieval: Keyword + Vector Search",
-    "module": "mod06",
+    "id": 18,
+    "partId": "mod1",
+    "partTitle": "Module 1: RAG Fundamentals",
+    "subtopic": "1.5 Baseline 'Chat with Documents' Application",
+    "module": "mod05",
     "type": "true-false",
-    "question": "In Reciprocal Rank Fusion (RRF), the formula for combining search rankings uses a constant `k` that is usually set to 60.",
-    "explanation": "True. Cormack et al. and Lesson 06 Slide 16 set k=60 to prevent top-ranked outliers from unfairly dominating the score.",
-    "slideRef": "Lesson 06 Slide 16",
+    "question": "In a baseline RAG application, you can connect either a local model (via Ollama) or a cloud model API for the generation step.",
+    "explanation": "True. RAG is model-agnostic: you can use local Ollama models (like Qwen) or cloud APIs (like Gemini).",
+    "slideRef": "Teacher Review Doc: Module 1 Item 5",
     "options": [
       "True",
       "False"
@@ -1879,33 +1462,101 @@ echo $LD_LIBRARY_PATH | tr ':' '\n' | grep cuda</code></pre>
     "correct": 0
   },
   {
-    "id": 43,
-    "partId": "part3",
-    "partTitle": "Part 3: Module 2 — Advanced RAG Architecture & Evaluation",
-    "subtopic": "3.1 Hybrid Retrieval: Keyword + Vector Search",
-    "module": "mod06",
+    "id": 19,
+    "partId": "mod1",
+    "partTitle": "Module 1: RAG Fundamentals",
+    "subtopic": "1.5 Baseline 'Chat with Documents' Application",
+    "module": "mod05",
     "type": "open-question",
-    "question": "Why does Vector Search sometimes fail to find an exact product code like 'MODEL-X99-PRO', and how does Hybrid Search solve this?",
-    "explanation": "Lesson 06 Slide 12-16 explains why BM25 + Vector search covers each other's weaknesses.",
-    "slideRef": "Lesson 06 Slide 12-16",
-    "modelAnswer": "Vector models look for general meaning and concepts. Rare product codes or error numbers (like 'MODEL-X99-PRO') look like random letters to an embedding model, so it ranks other general text higher.\nHybrid Search adds keyword matching (BM25). BM25 checks for the exact word 'MODEL-X99-PRO' and immediately brings the exact right document to the top.",
+    "question": "Walk through the steps of testing a newly built RAG app with a sample question to verify its quality.",
+    "explanation": "Teacher Highlight: Testing the app with sample questions and evaluating basic quality.",
+    "slideRef": "Teacher Review Doc: Module 1 Item 5",
+    "modelAnswer": "1. Pick a specific test question where you already know the exact ground truth fact.\n2. Check the retrieval step: Did the vector search successfully retrieve the exact chunk containing the answer?\n3. Check the prompt augmentation: Is the retrieved chunk cleanly formatted inside the system prompt?\n4. Check the generation: Did the LLM answer truthfully based only on the chunk, or did it invent outside information (hallucinate)?",
     "keyPoints": [
-      "Embedding models struggle with rare codes, acronyms, and product IDs.",
-      "BM25 looks for exact character matches regardless of meaning.",
-      "Hybrid search combines both lists using RRF.",
-      "Gives high accuracy for both exact codes and conceptual questions."
+      "Test with questions that have known factual answers.",
+      "Inspect retrieved chunks to verify search accuracy.",
+      "Check prompt assembly to ensure context is included.",
+      "Verify LLM answer faithfulness to ensure no hallucinations."
     ]
   },
   {
-    "id": 44,
-    "partId": "part3",
-    "partTitle": "Part 3: Module 2 — Advanced RAG Architecture & Evaluation",
-    "subtopic": "3.1 Hybrid Retrieval: Keyword + Vector Search",
+    "id": 20,
+    "partId": "mod1",
+    "partTitle": "Module 1: RAG Fundamentals",
+    "subtopic": "1.5 Baseline 'Chat with Documents' Application",
+    "module": "mod05",
+    "type": "fill-in-blank",
+    "question": "In a minimal RAG app, the loop that takes a user query, finds matching chunks, and builds the LLM prompt is called the retrieval + prompt-________ loop.",
+    "explanation": "Teacher Highlight: Building the retrieval + prompt-augmentation loop.",
+    "slideRef": "Teacher Review Doc: Module 1 Item 5",
+    "accepted": [
+      "augmentation",
+      "Augmentation"
+    ],
+    "placeholder": "Type your answer here..."
+  },
+  {
+    "id": 21,
+    "partId": "mod2",
+    "partTitle": "Module 2: Advanced RAG Architecture & Evaluation",
+    "subtopic": "2.1 Hybrid Retrieval: Keyword + Vector Search",
+    "module": "mod06",
+    "type": "qcm",
+    "question": "Why does Hybrid Retrieval combine Keyword search (BM25) with Vector search?",
+    "explanation": "Teacher Highlight: Limitations of dense search (misses exact terms) + limitations of BM25 (misses semantic meaning).",
+    "slideRef": "Teacher Review Doc: Module 2 Item 1",
+    "options": [
+      "Because Vector search cannot be used on laptops.",
+      "Because BM25 catches exact words, IDs, and error codes, while Vector search catches semantic meaning and concepts.",
+      "Because BM25 deletes all punctuation marks.",
+      "Because combining them doubles your computer monitor size."
+    ],
+    "correct": 1
+  },
+  {
+    "id": 22,
+    "partId": "mod2",
+    "partTitle": "Module 2: Advanced RAG Architecture & Evaluation",
+    "subtopic": "2.1 Hybrid Retrieval: Keyword + Vector Search",
+    "module": "mod06",
+    "type": "true-false",
+    "question": "Reciprocal Rank Fusion (RRF) requires both BM25 and vector search to output identical normalized probability scores between 0.0 and 1.0.",
+    "explanation": "False. RRF relies strictly on rank order positions (1st, 2nd, 3rd), completely avoiding the need to normalize raw score scales.",
+    "slideRef": "Teacher Review Doc: Module 2 Item 1",
+    "options": [
+      "True",
+      "False"
+    ],
+    "correct": 1
+  },
+  {
+    "id": 23,
+    "partId": "mod2",
+    "partTitle": "Module 2: Advanced RAG Architecture & Evaluation",
+    "subtopic": "2.1 Hybrid Retrieval: Keyword + Vector Search",
+    "module": "mod06",
+    "type": "open-question",
+    "question": "How does Reciprocal Rank Fusion (RRF) combine results from BM25 and Vector search without needing to normalize scores?",
+    "explanation": "Teacher Highlight: Combining scores: Reciprocal Rank Fusion (RRF).",
+    "slideRef": "Teacher Review Doc: Module 2 Item 1",
+    "modelAnswer": "RRF doesn't care about the raw score numbers (which can be very different between BM25 and vector cosine similarity). Instead, it looks only at the position rank of each document:\nFormula: `Score = sum( 1 / (60 + rank) )`.\nDocuments that rank near the top in both search lists get the highest combined score, ensuring fair and balanced ranking.",
+    "keyPoints": [
+      "RRF uses document rank positions instead of raw scores.",
+      "Uses formula 1 / (k + rank) with k = 60.",
+      "Avoids score calibration issues between different search engines.",
+      "Documents appearing in the top of both lists receive top priority."
+    ]
+  },
+  {
+    "id": 24,
+    "partId": "mod2",
+    "partTitle": "Module 2: Advanced RAG Architecture & Evaluation",
+    "subtopic": "2.1 Hybrid Retrieval: Keyword + Vector Search",
     "module": "mod06",
     "type": "fill-in-blank",
-    "question": "In the Reciprocal Rank Fusion (RRF) formula `score = 1 / (k + rank)`, the standard number used for `k` is ________.",
-    "explanation": "Lesson 06 Slide 16: The smoothing constant k is standardly set to 60.",
-    "slideRef": "Lesson 06 Slide 16",
+    "question": "In the Reciprocal Rank Fusion (RRF) formula `1 / (k + rank)`, the standard number for `k` is ________.",
+    "explanation": "Teacher Highlight: Reciprocal Rank Fusion (RRF) formula.",
+    "slideRef": "Teacher Review Doc: Module 2 Item 1",
     "accepted": [
       "60",
       "k=60",
@@ -1914,67 +1565,67 @@ echo $LD_LIBRARY_PATH | tr ':' '\n' | grep cuda</code></pre>
     "placeholder": "Type your answer here..."
   },
   {
-    "id": 45,
-    "partId": "part3",
-    "partTitle": "Part 3: Module 2 — Advanced RAG Architecture & Evaluation",
-    "subtopic": "3.2 Graph RAG",
+    "id": 25,
+    "partId": "mod2",
+    "partTitle": "Module 2: Advanced RAG Architecture & Evaluation",
+    "subtopic": "2.2 Graph RAG",
     "module": "mod06",
     "type": "qcm",
-    "question": "In Neo4j graph database queries, why should you use `MERGE` instead of `CREATE` when loading data?",
-    "explanation": "Lesson 06 Slide 29: 'Always MERGE, never CREATE.' MERGE is idempotent and prevents creating duplicate nodes and relationships.",
-    "slideRef": "Lesson 06 Slide 29",
+    "question": "In Neo4j Cypher, why should you use `MERGE` instead of `CREATE` when importing graph data?",
+    "explanation": "Teacher Highlight: Graph databases: Neo4j basics — MERGE is idempotent, CREATE duplicates nodes.",
+    "slideRef": "Teacher Review Doc: Module 2 Item 2",
     "options": [
-      "`CREATE` deletes the computer hard drive.",
-      "`CREATE` requires an internet connection to Google.",
-      "`MERGE` only works on numbers, not names.",
-      "`MERGE` checks if the node already exists so it doesn't create duplicate copies, while `CREATE` creates duplicates every time."
+      "`CREATE` deletes the graph database.",
+      "`MERGE` only works on numbers, not text.",
+      "`MERGE` matches existing nodes and only creates them if missing, stopping duplicate entities from exploding.",
+      "`CREATE` requires 100GB of GPU VRAM."
     ],
-    "correct": 3
+    "correct": 2
   },
   {
-    "id": 46,
-    "partId": "part3",
-    "partTitle": "Part 3: Module 2 — Advanced RAG Architecture & Evaluation",
-    "subtopic": "3.2 Graph RAG",
+    "id": 26,
+    "partId": "mod2",
+    "partTitle": "Module 2: Advanced RAG Architecture & Evaluation",
+    "subtopic": "2.2 Graph RAG",
     "module": "mod06",
     "type": "true-false",
-    "question": "In Microsoft GraphRAG, Local Search looks at specific entities and their neighbors, while Global Search uses community summaries to answer big-picture questions.",
-    "explanation": "True. Local Search inspects specific entities; Global Search aggregates community summaries across the whole corpus.",
-    "slideRef": "Lesson 06 Slide 27",
+    "question": "Running the Cypher clause `CREATE` repeatedly on the same data is safe because Neo4j automatically merges duplicate entities.",
+    "explanation": "False. `CREATE` blindly creates duplicate nodes and relationships every time it runs. You must use `MERGE` for idempotent loading.",
+    "slideRef": "Teacher Review Doc: Module 2 Item 2",
     "options": [
       "True",
       "False"
     ],
-    "correct": 0
+    "correct": 1
   },
   {
-    "id": 47,
-    "partId": "part3",
-    "partTitle": "Part 3: Module 2 — Advanced RAG Architecture & Evaluation",
-    "subtopic": "3.2 Graph RAG",
+    "id": 27,
+    "partId": "mod2",
+    "partTitle": "Module 2: Advanced RAG Architecture & Evaluation",
+    "subtopic": "2.2 Graph RAG",
     "module": "mod06",
     "type": "open-question",
-    "question": "Why is Graph RAG better than simple chunk search for a question like: 'Who is the manager of the person who built the Billing System?'",
-    "explanation": "Lesson 06 Slide 18-22 contrasts chunk retrieval with multi-hop graph traversals.",
-    "slideRef": "Lesson 06 Slide 18-22",
-    "modelAnswer": "In normal chunk search, the fact 'Alice built Billing' is in Chunk 10, but the fact 'Bob manages Alice' is in Chunk 500. A vector search for 'manager of Billing creator' will find Chunk 10 (because it mentions Billing), but miss Chunk 500 completely!\nGraph RAG connects them with arrows: (Bob)-[:MANAGES]->(Alice)-[:BUILT]->(Billing). A single 2-step hop on the graph easily finds Bob, connecting the facts even if they were written pages apart.",
+    "question": "Why does standard chunk-based retrieval fail on multi-hop questions, and how does Graph RAG fix this?",
+    "explanation": "Teacher Highlight: Limitations of chunk-based retrieval for multi-hop or relational questions.",
+    "slideRef": "Teacher Review Doc: Module 2 Item 2",
+    "modelAnswer": "Multi-hop questions need two facts connected together. For example: 'Who is the manager of the person who created the Payment Service?'\nFact 1 ('Sokha created Payment Service') is in Chunk 12. Fact 2 ('Dara is Sokha's manager') is in Chunk 400.\nA vector search for 'manager of Payment Service' will find Chunk 12, but miss Chunk 400 completely.\nGraph RAG connects them as nodes and edges: `(Dara)-[:MANAGES]->(Sokha)-[:CREATED]->(Payment)`. Traversing the graph easily finds Dara.",
     "keyPoints": [
-      "Facts are separated across distant, unconnected chunks.",
-      "Vector search retrieves only chunks with similar words, missing the second step.",
-      "Knowledge graphs connect entities with relationship edges.",
-      "Can easily follow multi-hop connections to answer complex questions."
+      "Facts are separated across distant, disconnected chunks.",
+      "Vector search only retrieves chunks with similar surface words.",
+      "Graph RAG extracts entities and relationships into a connected graph.",
+      "Can traverse relationship edges across multiple hops to find the complete answer."
     ]
   },
   {
-    "id": 48,
-    "partId": "part3",
-    "partTitle": "Part 3: Module 2 — Advanced RAG Architecture & Evaluation",
-    "subtopic": "3.2 Graph RAG",
+    "id": 28,
+    "partId": "mod2",
+    "partTitle": "Module 2: Advanced RAG Architecture & Evaluation",
+    "subtopic": "2.2 Graph RAG",
     "module": "mod06",
     "type": "fill-in-blank",
-    "question": "In Neo4j Cypher, to safely delete a node and all of its attached relationship lines in one command, you write ________ DELETE.",
-    "explanation": "Lesson 06 Slide 29: 'DETACH DELETE n' removes the node and its attached relationships.",
-    "slideRef": "Lesson 06 Slide 29",
+    "question": "In Neo4j Cypher, to safely delete a node and all of its connected relationship lines in one command, you use ________ DELETE.",
+    "explanation": "Teacher Highlight: Neo4j basics (DETACH DELETE).",
+    "slideRef": "Teacher Review Doc: Module 2 Item 2",
     "accepted": [
       "DETACH",
       "detach",
@@ -1983,33 +1634,33 @@ echo $LD_LIBRARY_PATH | tr ':' '\n' | grep cuda</code></pre>
     "placeholder": "Type your answer here..."
   },
   {
-    "id": 49,
-    "partId": "part3",
-    "partTitle": "Part 3: Module 2 — Advanced RAG Architecture & Evaluation",
-    "subtopic": "3.3 Agentic RAG",
+    "id": 29,
+    "partId": "mod2",
+    "partTitle": "Module 2: Advanced RAG Architecture & Evaluation",
+    "subtopic": "2.3 Agentic RAG",
     "module": "mod06",
     "type": "qcm",
-    "question": "In Corrective RAG (CRAG), what does the system do if it checks the retrieved documents and finds they are completely useless or wrong?",
-    "explanation": "Lesson 06 Slide 35-37: If retrieved internal documents are evaluated as 'Incorrect', CRAG triggers an external web search fallback.",
-    "slideRef": "Lesson 06 Slide 35-37",
+    "question": "In Corrective RAG (CRAG), what action happens if the retrieved internal documents are graded as 'Incorrect'?",
+    "explanation": "Teacher Highlight: Agentic RAG — Corrective RAG (CRAG) fallback to web search when retrieval is incorrect.",
+    "slideRef": "Teacher Review Doc: Module 2 Item 3",
     "options": [
-      "It automatically does a web search to find real information online before answering.",
-      "It invents fake facts and guesses.",
-      "It crashes the server and stops.",
-      "It deletes all user accounts."
+      "The system crashes.",
+      "The system makes up a random answer.",
+      "The system turns off the database.",
+      "The system falls back to an external web search to find real information online."
     ],
-    "correct": 0
+    "correct": 3
   },
   {
-    "id": 50,
-    "partId": "part3",
-    "partTitle": "Part 3: Module 2 — Advanced RAG Architecture & Evaluation",
-    "subtopic": "3.3 Agentic RAG",
+    "id": 30,
+    "partId": "mod2",
+    "partTitle": "Module 2: Advanced RAG Architecture & Evaluation",
+    "subtopic": "2.3 Agentic RAG",
     "module": "mod06",
     "type": "true-false",
-    "question": "In Self-RAG, the AI model generates special tokens (like `[Retrieve]`) to decide for itself whether it actually needs to search or if it already knows the answer.",
-    "explanation": "True. Self-RAG uses reflection tokens to dynamically decide when to retrieve and to check if its answer is supported by evidence.",
-    "slideRef": "Lesson 06 Slide 32-34",
+    "question": "In Self-Reflective RAG, the model can critique its own retrieved context and rewrite the query if the first search was poor.",
+    "explanation": "True. Self-reflective RAG uses evaluation tokens/checks to critique retrieved context and trigger query rewrites.",
+    "slideRef": "Teacher Review Doc: Module 2 Item 3",
     "options": [
       "True",
       "False"
@@ -2017,33 +1668,33 @@ echo $LD_LIBRARY_PATH | tr ':' '\n' | grep cuda</code></pre>
     "correct": 0
   },
   {
-    "id": 51,
-    "partId": "part3",
-    "partTitle": "Part 3: Module 2 — Advanced RAG Architecture & Evaluation",
-    "subtopic": "3.3 Agentic RAG",
+    "id": 31,
+    "partId": "mod2",
+    "partTitle": "Module 2: Advanced RAG Architecture & Evaluation",
+    "subtopic": "2.3 Agentic RAG",
     "module": "mod06",
     "type": "open-question",
-    "question": "In simple words, what is the difference between simple Static RAG and smart Agentic RAG?",
-    "explanation": "Lesson 06 Slide 30-38 explores Agentic RAG decision loops vs static pipelines.",
-    "slideRef": "Lesson 06 Slide 30-38",
-    "modelAnswer": "Static RAG is a rigid 1-way street: it takes your question, searches once, and forces the AI to answer—even if the search results are useless.\nAgentic RAG is smart: it can rewrite bad questions, check if the search results actually answer the question, search again with better keywords if needed, or search the web if internal files don't have the answer.",
+    "question": "What is 'Query Decomposition' in Agentic RAG, and why is it useful?",
+    "explanation": "Teacher Highlight: Query planning and decomposition (breaking complex questions into sub-queries).",
+    "slideRef": "Teacher Review Doc: Module 2 Item 3",
+    "modelAnswer": "Query Decomposition means taking one big, complicated question and breaking it down into smaller, simpler sub-questions.\nFor example, if the user asks: 'Compare the battery life and price of iPhone 16 and Galaxy S25', the agent breaks this into:\n1. 'What is the battery life and price of iPhone 16?'\n2. 'What is the battery life and price of Galaxy S25?'\nIt searches for each sub-question cleanly, then combines both answers into a clear comparison.",
     "keyPoints": [
-      "Static RAG searches once blindly without checking quality.",
-      "Agentic RAG evaluates search quality before answering.",
-      "Can rewrite confusing questions to find better results.",
-      "Can fallback to web search or retry if results are poor."
+      "Breaks complex questions into focused sub-queries.",
+      "Performs targeted search for each sub-question independently.",
+      "Prevents confusing the vector search with too many mixed concepts.",
+      "Synthesizes the individual answers into one coherent final response."
     ]
   },
   {
-    "id": 52,
-    "partId": "part3",
-    "partTitle": "Part 3: Module 2 — Advanced RAG Architecture & Evaluation",
-    "subtopic": "3.3 Agentic RAG",
+    "id": 32,
+    "partId": "mod2",
+    "partTitle": "Module 2: Advanced RAG Architecture & Evaluation",
+    "subtopic": "2.3 Agentic RAG",
     "module": "mod06",
     "type": "fill-in-blank",
-    "question": "In Corrective RAG (CRAG), the evaluator grades search results into 3 categories: Correct, Ambiguous, or ________.",
-    "explanation": "Lesson 06 Slide 35: CRAG grades retrieval into Correct, Ambiguous, or Incorrect.",
-    "slideRef": "Lesson 06 Slide 35",
+    "question": "In Corrective RAG (CRAG), the evaluator classifies retrieved documents into three grades: Correct, Ambiguous, or ________.",
+    "explanation": "Teacher Highlight: CRAG grading: Correct, Ambiguous, or Incorrect.",
+    "slideRef": "Teacher Review Doc: Module 2 Item 3",
     "accepted": [
       "Incorrect",
       "incorrect"
@@ -2051,33 +1702,33 @@ echo $LD_LIBRARY_PATH | tr ':' '\n' | grep cuda</code></pre>
     "placeholder": "Type your answer here..."
   },
   {
-    "id": 53,
-    "partId": "part3",
-    "partTitle": "Part 3: Module 2 — Advanced RAG Architecture & Evaluation",
-    "subtopic": "3.4 Reranking with Cross-Encoders",
+    "id": 33,
+    "partId": "mod2",
+    "partTitle": "Module 2: Advanced RAG Architecture & Evaluation",
+    "subtopic": "2.4 Reranking with Cross-Encoders",
     "module": "mod06",
     "type": "qcm",
-    "question": "Why do we use a Bi-Encoder first and a Cross-Encoder second in a 2-stage search pipeline?",
-    "explanation": "Lesson 06 Slide 40-44: Bi-encoder provides fast speed ($O(1)$ vector lookup); Cross-encoder provides maximum accuracy on top candidates.",
-    "slideRef": "Lesson 06 Slide 40-44",
+    "question": "Why do we use a Bi-Encoder first and a Cross-Encoder second in a 2-stage retrieval pipeline?",
+    "explanation": "Teacher Highlight: Two-stage retrieval pipeline: retrieve broad (top-50) -> rerank to top-5.",
+    "slideRef": "Teacher Review Doc: Module 2 Item 4",
     "options": [
-      "Because Cross-Encoders can only run on Windows 95.",
-      "Because Bi-Encoder is super fast to find the top 50 candidates from 1 million files, and Cross-Encoder is super accurate to pick the best 3.",
-      "Because Bi-Encoders only work with numbers less than 10.",
+      "Because Bi-Encoders are super fast to grab the top 50 matches from 1 million files, and Cross-Encoders are super accurate to pick the best 5.",
+      "Because Cross-Encoders cannot read English.",
+      "Because Bi-Encoders only work with numbers under 10.",
       "Because doing two steps makes the search completely random."
     ],
-    "correct": 1
+    "correct": 0
   },
   {
-    "id": 54,
-    "partId": "part3",
-    "partTitle": "Part 3: Module 2 — Advanced RAG Architecture & Evaluation",
-    "subtopic": "3.4 Reranking with Cross-Encoders",
+    "id": 34,
+    "partId": "mod2",
+    "partTitle": "Module 2: Advanced RAG Architecture & Evaluation",
+    "subtopic": "2.4 Reranking with Cross-Encoders",
     "module": "mod06",
     "type": "true-false",
-    "question": "A Cross-Encoder is fast enough to search through 10 million documents in 1 millisecond.",
-    "explanation": "False. Cross-encoders compare every word of the question with every word of the document together, which is slow and can only be used on a few dozen candidates.",
-    "slideRef": "Lesson 06 Slide 41",
+    "question": "A Bi-Encoder computes full cross-attention between every query word and every document word simultaneously.",
+    "explanation": "False. Bi-encoders encode queries and documents into separate vectors. Cross-encoders are the ones that compute joint cross-attention.",
+    "slideRef": "Teacher Review Doc: Module 2 Item 4",
     "options": [
       "True",
       "False"
@@ -2085,33 +1736,33 @@ echo $LD_LIBRARY_PATH | tr ':' '\n' | grep cuda</code></pre>
     "correct": 1
   },
   {
-    "id": 55,
-    "partId": "part3",
-    "partTitle": "Part 3: Module 2 — Advanced RAG Architecture & Evaluation",
-    "subtopic": "3.4 Reranking with Cross-Encoders",
+    "id": 35,
+    "partId": "mod2",
+    "partTitle": "Module 2: Advanced RAG Architecture & Evaluation",
+    "subtopic": "2.4 Reranking with Cross-Encoders",
     "module": "mod06",
     "type": "open-question",
-    "question": "Why is a Cross-Encoder more accurate than a simple vector search (Bi-Encoder)?",
-    "explanation": "Lesson 06 Slide 40-45 explains the cross-attention difference between Bi-Encoders and Cross-Encoders.",
-    "slideRef": "Lesson 06 Slide 40-45",
-    "modelAnswer": "A Bi-Encoder turns the question into a vector and the document into a vector separately without them seeing each other. Then it just checks the angle between them.\nA Cross-Encoder puts the question and the document together into the model at the same time. Every single word in the question can directly pay attention to every word in the document, catching exact context, negation, and fine details.",
+    "question": "What is the main latency/cost trade-off of using a Cross-Encoder reranker?",
+    "explanation": "Teacher Highlight: Latency/cost trade-offs of reranking.",
+    "slideRef": "Teacher Review Doc: Module 2 Item 4",
+    "modelAnswer": "Cross-Encoders are much slower and more computationally heavy than Bi-Encoders because they must run full neural network self-attention on every combined (query + document) candidate.\nThat is why you cannot run a Cross-Encoder across 1 million documents directly. You must first use a fast Bi-Encoder to filter down to 50 candidates, then let the Cross-Encoder score those 50.",
     "keyPoints": [
-      "Bi-encoder embeds query and document separately (fast but misses subtle nuance).",
-      "Cross-encoder feeds (query + document) together into the transformer.",
-      "Full attention between all words gives much higher semantic accuracy.",
-      "Eliminates false matches before sending to the LLM."
+      "Cross-encoders compute full cross-attention for every pair (slow, O(N) model passes).",
+      "Bi-encoders use pre-computed vector indexes (fast, sub-10ms lookup).",
+      "Two-stage pipeline balances speed and accuracy.",
+      "Bi-encoder gets top 50; Cross-encoder reranks down to top 3-5."
     ]
   },
   {
-    "id": 56,
-    "partId": "part3",
-    "partTitle": "Part 3: Module 2 — Advanced RAG Architecture & Evaluation",
-    "subtopic": "3.4 Reranking with Cross-Encoders",
+    "id": 36,
+    "partId": "mod2",
+    "partTitle": "Module 2: Advanced RAG Architecture & Evaluation",
+    "subtopic": "2.4 Reranking with Cross-Encoders",
     "module": "mod06",
     "type": "fill-in-blank",
-    "question": "In a 2-stage search system, the fast initial model that converts text into independent vector representations is called a ________-Encoder.",
-    "explanation": "Lesson 06 Slide 40: Bi-Encoders encode texts into separate vectors.",
-    "slideRef": "Lesson 06 Slide 40",
+    "question": "In a 2-stage retrieval pipeline, the fast initial model that turns text into separate vector points is called a ________-Encoder.",
+    "explanation": "Teacher Highlight: Bi-encoders vs cross-encoders — architectural difference.",
+    "slideRef": "Teacher Review Doc: Module 2 Item 4",
     "accepted": [
       "Bi",
       "bi",
@@ -2121,66 +1772,67 @@ echo $LD_LIBRARY_PATH | tr ':' '\n' | grep cuda</code></pre>
     "placeholder": "Type your answer here..."
   },
   {
-    "id": 57,
-    "partId": "part3",
-    "partTitle": "Part 3: Module 2 — Advanced RAG Architecture & Evaluation",
-    "subtopic": "3.5 Context Management",
+    "id": 37,
+    "partId": "mod2",
+    "partTitle": "Module 2: Advanced RAG Architecture & Evaluation",
+    "subtopic": "2.5 Context Management",
     "module": "mod06",
     "type": "qcm",
     "question": "What is the 'Lost in the Middle' problem in LLM context windows?",
-    "explanation": "Lesson 06 Slide 50-52: Research (Liu et al.) proves models remember facts at the start and end best, but struggle to notice facts in the middle.",
-    "slideRef": "Lesson 06 Slide 50-52",
+    "explanation": "Teacher Highlight: Ordering/placement effects ('lost in the middle' phenomenon).",
+    "slideRef": "Teacher Review Doc: Module 2 Item 5",
     "options": [
-      "The AI loses its internet connection in the middle of a sentence.",
-      "The computer screen goes dark halfway through generation.",
-      "The AI pays the most attention to facts at the very beginning and very end of a prompt, often missing or forgetting facts placed in the middle.",
-      "The vector database deletes the middle 10 rows."
+      "The computer loses internet in the middle of a search.",
+      "The AI pays the most attention to text placed at the very start and very end of a prompt, often overlooking facts in the middle.",
+      "The vector database deletes the middle 10 rows.",
+      "The monitor turns off after 5 minutes."
     ],
-    "correct": 2
+    "correct": 1
   },
   {
-    "id": 58,
-    "partId": "part3",
-    "partTitle": "Part 3: Module 2 — Advanced RAG Architecture & Evaluation",
-    "subtopic": "3.5 Context Management",
+    "id": 38,
+    "partId": "mod2",
+    "partTitle": "Module 2: Advanced RAG Architecture & Evaluation",
+    "subtopic": "2.5 Context Management",
     "module": "mod06",
     "type": "true-false",
-    "question": "To help an AI find the most important facts, you should place the highest-ranked documents at the beginning and end of your prompt.",
-    "explanation": "True. Position-aware reordering puts the best chunks at the start and end to overcome the 'Lost in the Middle' effect.",
-    "slideRef": "Lesson 06 Slide 53",
+    "question": "Research proves that LLMs have uniform 100% recall across long contexts, completely disproving the 'Lost in the Middle' phenomenon.",
+    "explanation": "False. The 'Lost in the Middle' phenomenon proves that model attention degrades significantly for information located in the center of long prompts.",
+    "slideRef": "Teacher Review Doc: Module 2 Item 5",
     "options": [
       "True",
       "False"
     ],
-    "correct": 0
+    "correct": 1
   },
   {
-    "id": 59,
-    "partId": "part3",
-    "partTitle": "Part 3: Module 2 — Advanced RAG Architecture & Evaluation",
-    "subtopic": "3.5 Context Management",
+    "id": 39,
+    "partId": "mod2",
+    "partTitle": "Module 2: Advanced RAG Architecture & Evaluation",
+    "subtopic": "2.5 Context Management",
     "module": "mod06",
     "type": "open-question",
-    "question": "If you give an AI 20 document chunks and it misses the answer hidden in the middle, what are 2 simple ways to solve this?",
-    "explanation": "Lesson 06 Slide 50-55 covers position-aware chunk placement and context compression.",
-    "slideRef": "Lesson 06 Slide 50-55",
-    "modelAnswer": "1. Re-order the chunks: Put the most important chunks at the very top and very bottom of the prompt instead of leaving them in the middle.\n2. Cut down to top 3-5 chunks: Instead of dumping 20 chunks, filter out the weak ones so only the most relevant, concise information is passed to the AI.",
+    "question": "Why is chunk deduplication important before passing retrieved context into an LLM prompt?",
+    "explanation": "Teacher Highlight: Deduplication of overlapping or redundant chunks.",
+    "slideRef": "Teacher Review Doc: Module 2 Item 5",
+    "modelAnswer": "Often, multiple retrieved chunks say almost the exact same thing (for example, from overlapping chunks or repeated sections in documentation).\nPassing duplicate text wastes precious context window tokens, increases API costs and latency, and dilutes the AI's attention. Deduplicating ensures every chunk provides unique, valuable information.",
     "keyPoints": [
-      "Position re-ordering: Place best chunks at the beginning and end.",
-      "Reduce chunk count: Only pass top 3-5 chunks to reduce noise.",
-      "Context compression: Remove useless sentences before feeding to LLM."
+      "Overlapping or repeated chunks waste context window token budgets.",
+      "Increases generation latency and API cost without adding new facts.",
+      "Deduplication ensures each chunk provides distinct information.",
+      "Reduces attention dilution and improves answer clarity."
     ]
   },
   {
-    "id": 60,
-    "partId": "part3",
-    "partTitle": "Part 3: Module 2 — Advanced RAG Architecture & Evaluation",
-    "subtopic": "3.5 Context Management",
+    "id": 40,
+    "partId": "mod2",
+    "partTitle": "Module 2: Advanced RAG Architecture & Evaluation",
+    "subtopic": "2.5 Context Management",
     "module": "mod06",
     "type": "fill-in-blank",
-    "question": "The phenomenon where an AI fails to notice information placed in the center of a long prompt is called 'Lost in the ________'.",
-    "explanation": "Lesson 06 Slide 50: The 'Lost in the Middle' paper highlights attention drop-off in the middle of prompts.",
-    "slideRef": "Lesson 06 Slide 50",
+    "question": "The phenomenon where an AI fails to recall facts placed in the center of a long prompt is called 'Lost in the ________'.",
+    "explanation": "Teacher Highlight: 'lost in the middle' phenomenon.",
+    "slideRef": "Teacher Review Doc: Module 2 Item 5",
     "accepted": [
       "Middle",
       "middle",
@@ -2189,33 +1841,375 @@ echo $LD_LIBRARY_PATH | tr ':' '\n' | grep cuda</code></pre>
     "placeholder": "Type your answer here..."
   },
   {
+    "id": 41,
+    "partId": "mod2",
+    "partTitle": "Module 2: Advanced RAG Architecture & Evaluation",
+    "subtopic": "2.6 Prompt Compression",
+    "module": "mod06",
+    "type": "qcm",
+    "question": "What is the main difference between Extractive Compression and Abstractive Compression?",
+    "explanation": "Teacher Highlight: Extractive compression (keeping only key sentences) vs Abstractive compression (LLM-generated summaries).",
+    "slideRef": "Teacher Review Doc: Module 2 Item 6",
+    "options": [
+      "Extractive only works on paper; Abstractive works on computers.",
+      "Extractive deletes all nouns; Abstractive deletes all verbs.",
+      "Extractive keeps only the most important original sentences; Abstractive uses an LLM to write a new summary.",
+      "There is no difference between them."
+    ],
+    "correct": 2
+  },
+  {
+    "id": 42,
+    "partId": "mod2",
+    "partTitle": "Module 2: Advanced RAG Architecture & Evaluation",
+    "subtopic": "2.6 Prompt Compression",
+    "module": "mod06",
+    "type": "true-false",
+    "question": "Prompt compression tools like LLMLingua can remove unnecessary words and sentences to save tokens while keeping key information.",
+    "explanation": "True. LLMLingua prunes non-essential tokens to compress prompts without losing core meaning.",
+    "slideRef": "Teacher Review Doc: Module 2 Item 6",
+    "options": [
+      "True",
+      "False"
+    ],
+    "correct": 0
+  },
+  {
+    "id": 43,
+    "partId": "mod2",
+    "partTitle": "Module 2: Advanced RAG Architecture & Evaluation",
+    "subtopic": "2.6 Prompt Compression",
+    "module": "mod06",
+    "type": "open-question",
+    "question": "What is the main trade-off when compressing prompts in a RAG pipeline?",
+    "explanation": "Teacher Highlight: Trade-offs: compression ratio vs information loss.",
+    "slideRef": "Teacher Review Doc: Module 2 Item 6",
+    "modelAnswer": "The trade-off is Compression Ratio vs Information Loss.\nIf you compress too aggressively (e.g. cutting 80% of tokens), you save money and speed up latency, but you risk deleting subtle details, numbers, or conditions needed to answer the question accurately.",
+    "keyPoints": [
+      "Trade-off between compression ratio and information loss.",
+      "Higher compression saves tokens, cost, and latency.",
+      "Over-compression can drop crucial numbers, conditions, or facts.",
+      "Must find the balance where core context remains intact."
+    ]
+  },
+  {
+    "id": 44,
+    "partId": "mod2",
+    "partTitle": "Module 2: Advanced RAG Architecture & Evaluation",
+    "subtopic": "2.6 Prompt Compression",
+    "module": "mod06",
+    "type": "fill-in-blank",
+    "question": "The popular prompt compression library that prunes redundant tokens using small language models is called ________.",
+    "explanation": "Teacher Highlight: Tools: LLMLingua and similar approaches.",
+    "slideRef": "Teacher Review Doc: Module 2 Item 6",
+    "accepted": [
+      "LLMLingua",
+      "llmlingua"
+    ],
+    "placeholder": "Type your answer here..."
+  },
+  {
+    "id": 45,
+    "partId": "mod2",
+    "partTitle": "Module 2: Advanced RAG Architecture & Evaluation",
+    "subtopic": "2.7 Debugging Common RAG Failure Modes",
+    "module": "mod06",
+    "type": "qcm",
+    "question": "If the correct answer to a user's question was NEVER retrieved from the database, what kind of failure happened?",
+    "explanation": "Teacher Highlight: Missing context (relevant chunk not retrieved — recall failure).",
+    "slideRef": "Teacher Review Doc: Module 2 Item 7",
+    "options": [
+      "A sound card error.",
+      "A computer monitor failure.",
+      "A keyboard driver failure.",
+      "A Retrieval / Recall failure (Missing Context)."
+    ],
+    "correct": 3
+  },
+  {
+    "id": 46,
+    "partId": "mod2",
+    "partTitle": "Module 2: Advanced RAG Architecture & Evaluation",
+    "subtopic": "2.7 Debugging Common RAG Failure Modes",
+    "module": "mod06",
+    "type": "true-false",
+    "question": "If an AI hallucinates a completely made-up answer while the exact correct fact was present in the prompt, this is classified as a database network timeout.",
+    "explanation": "False. This is classified as 'Hallucination despite retrieval' (the model ignored or contradicted the provided context).",
+    "slideRef": "Teacher Review Doc: Module 2 Item 7",
+    "options": [
+      "True",
+      "False"
+    ],
+    "correct": 1
+  },
+  {
+    "id": 47,
+    "partId": "mod2",
+    "partTitle": "Module 2: Advanced RAG Architecture & Evaluation",
+    "subtopic": "2.7 Debugging Common RAG Failure Modes",
+    "module": "mod06",
+    "type": "open-question",
+    "question": "Name 3 common RAG failure modes and give a simple fix for each.",
+    "explanation": "Teacher Highlight: Hallucination despite retrieval, missing context, chunking failures, query rewriting.",
+    "slideRef": "Teacher Review Doc: Module 2 Item 7",
+    "modelAnswer": "1. Missing Context (Recall failure): The right chunk wasn't retrieved. -> Fix: Use hybrid search (BM25 + vector) and increase top-k.\n2. Chunking Boundary Failure: A sentence was cut in half. -> Fix: Add 10-20% chunk overlap.\n3. Model Hallucination: The model ignores the context. -> Fix: Strengthen the system prompt: 'Answer ONLY using the provided text. If unsure, say you do not know.'",
+    "keyPoints": [
+      "Missing context / recall failure (fix: hybrid search, increase top-k).",
+      "Chunking boundary failure (fix: add chunk overlap).",
+      "Hallucination despite retrieval (fix: strict grounding prompt, lower temperature).",
+      "Query ambiguity (fix: query rewriting / expansion)."
+    ]
+  },
+  {
+    "id": 48,
+    "partId": "mod2",
+    "partTitle": "Module 2: Advanced RAG Architecture & Evaluation",
+    "subtopic": "2.7 Debugging Common RAG Failure Modes",
+    "module": "mod06",
+    "type": "fill-in-blank",
+    "question": "When a user asks a vague query, an agent can fix the search by applying query ________ to clarify and rephrase the search words.",
+    "explanation": "Teacher Highlight: Query ambiguity and query rewriting/expansion as a fix.",
+    "slideRef": "Teacher Review Doc: Module 2 Item 7",
+    "accepted": [
+      "rewriting",
+      "expansion",
+      "Rewriting"
+    ],
+    "placeholder": "Type your answer here..."
+  },
+  {
+    "id": 49,
+    "partId": "mod2",
+    "partTitle": "Module 2: Advanced RAG Architecture & Evaluation",
+    "subtopic": "2.8 Guardrails for RAG Systems",
+    "module": "mod06",
+    "type": "qcm",
+    "question": "What is the job of an Output Guardrail in a RAG system?",
+    "explanation": "Teacher Highlight: Output guardrails: fact-checking generated answers against retrieved context.",
+    "slideRef": "Teacher Review Doc: Module 2 Item 8",
+    "options": [
+      "To check the AI's answer and make sure it is factually grounded in the retrieved text before showing it to the user.",
+      "To delete the user's internet browser history.",
+      "To change the font color to green.",
+      "To print the answer on physical paper."
+    ],
+    "correct": 0
+  },
+  {
+    "id": 50,
+    "partId": "mod2",
+    "partTitle": "Module 2: Advanced RAG Architecture & Evaluation",
+    "subtopic": "2.8 Guardrails for RAG Systems",
+    "module": "mod06",
+    "type": "true-false",
+    "question": "Output guardrails run before the user query reaches the database to detect SQL injection.",
+    "explanation": "False. That describes an Input guardrail. Output guardrails inspect the generated answer after the LLM responds.",
+    "slideRef": "Teacher Review Doc: Module 2 Item 8",
+    "options": [
+      "True",
+      "False"
+    ],
+    "correct": 1
+  },
+  {
+    "id": 51,
+    "partId": "mod2",
+    "partTitle": "Module 2: Advanced RAG Architecture & Evaluation",
+    "subtopic": "2.8 Guardrails for RAG Systems",
+    "module": "mod06",
+    "type": "open-question",
+    "question": "What is the difference between Input Guardrails and Output Guardrails in a RAG system?",
+    "explanation": "Teacher Highlight: Input guardrails vs output guardrails, citation enforcement, refusal handling.",
+    "slideRef": "Teacher Review Doc: Module 2 Item 8",
+    "modelAnswer": "Input Guardrails check the user's question BEFORE it reaches the database or AI. They detect prompt injection attacks, block harmful questions, and filter sensitive words.\nOutput Guardrails check the AI's answer AFTER generation. They verify that every claim is supported by the retrieved documents (fact-checking), enforce source citations, and ensure no private data is leaked.",
+    "keyPoints": [
+      "Input guardrails inspect incoming user queries (detect prompt injection, jailbreaks).",
+      "Output guardrails inspect generated answers before delivery to the user.",
+      "Output guardrails verify faithfulness against context and enforce source citations.",
+      "Refusal handling safely handles queries with zero relevant context."
+    ]
+  },
+  {
+    "id": 52,
+    "partId": "mod2",
+    "partTitle": "Module 2: Advanced RAG Architecture & Evaluation",
+    "subtopic": "2.8 Guardrails for RAG Systems",
+    "module": "mod06",
+    "type": "fill-in-blank",
+    "question": "NVIDIA's open-source guardrail framework used to control LLM inputs and outputs using Colang rules is called ________ Guardrails.",
+    "explanation": "Teacher Highlight: Tools: Guardrails AI, NeMo Guardrails.",
+    "slideRef": "Teacher Review Doc: Module 2 Item 8",
+    "accepted": [
+      "NeMo",
+      "nemo",
+      "NeMo Guardrails"
+    ],
+    "placeholder": "Type your answer here..."
+  },
+  {
+    "id": 53,
+    "partId": "mod2",
+    "partTitle": "Module 2: Advanced RAG Architecture & Evaluation",
+    "subtopic": "2.9 RAG Evaluation: Retrieval Metrics",
+    "module": "mod06",
+    "type": "qcm",
+    "question": "In RAG search evaluation, what does 'Recall@K' measure?",
+    "explanation": "Teacher Highlight: Retrieval metrics: precision@k, recall@k, MRR (Mean Reciprocal Rank).",
+    "slideRef": "Teacher Review Doc: Module 2 Item 9",
+    "options": [
+      "The computer's remaining battery percentage.",
+      "What fraction of all relevant documents were successfully retrieved inside the top K results.",
+      "How many words per second the AI types.",
+      "How many users logged into the website today."
+    ],
+    "correct": 1
+  },
+  {
+    "id": 54,
+    "partId": "mod2",
+    "partTitle": "Module 2: Advanced RAG Architecture & Evaluation",
+    "subtopic": "2.9 RAG Evaluation: Retrieval Metrics",
+    "module": "mod06",
+    "type": "true-false",
+    "question": "In RAG search evaluation, Recall@K measures how many milliseconds the database took to answer.",
+    "explanation": "False. Recall@K measures what proportion of all relevant documents were successfully captured in the top K retrieved results.",
+    "slideRef": "Teacher Review Doc: Module 2 Item 9",
+    "options": [
+      "True",
+      "False"
+    ],
+    "correct": 1
+  },
+  {
+    "id": 55,
+    "partId": "mod2",
+    "partTitle": "Module 2: Advanced RAG Architecture & Evaluation",
+    "subtopic": "2.9 RAG Evaluation: Retrieval Metrics",
+    "module": "mod06",
+    "type": "open-question",
+    "question": "What is the difference between Precision@K and Recall@K in RAG evaluation?",
+    "explanation": "Teacher Highlight: Retrieval metrics: precision@k, recall@k, MRR.",
+    "slideRef": "Teacher Review Doc: Module 2 Item 9",
+    "modelAnswer": "Precision@K measures quality: Of the K documents you retrieved, what percentage are actually relevant? (High precision means less junk/noise in the prompt).\nRecall@K measures completeness: Of all the relevant documents that exist in your database, what percentage did you successfully retrieve in top K? (High recall means you didn't miss important facts).",
+    "keyPoints": [
+      "Precision@K: Proportion of retrieved documents that are relevant (quality).",
+      "Recall@K: Proportion of all relevant documents that were retrieved (completeness).",
+      "High precision reduces irrelevant prompt noise.",
+      "High recall ensures no critical facts are missed."
+    ]
+  },
+  {
+    "id": 56,
+    "partId": "mod2",
+    "partTitle": "Module 2: Advanced RAG Architecture & Evaluation",
+    "subtopic": "2.9 RAG Evaluation: Retrieval Metrics",
+    "module": "mod06",
+    "type": "fill-in-blank",
+    "question": "The retrieval metric that calculates `1 / rank` for the first correct document found is called MRR, which stands for Mean ________ Rank.",
+    "explanation": "Teacher Highlight: MRR (Mean Reciprocal Rank).",
+    "slideRef": "Teacher Review Doc: Module 2 Item 9",
+    "accepted": [
+      "Reciprocal",
+      "reciprocal"
+    ],
+    "placeholder": "Type your answer here..."
+  },
+  {
+    "id": 57,
+    "partId": "mod2",
+    "partTitle": "Module 2: Advanced RAG Architecture & Evaluation",
+    "subtopic": "2.10 RAG Evaluation: Generation & Frameworks",
+    "module": "mod06",
+    "type": "qcm",
+    "question": "In RAG evaluation frameworks (like RAGAS), what does the 'Faithfulness' metric check?",
+    "explanation": "Teacher Highlight: Generation metrics: faithfulness/groundedness, answer relevance.",
+    "slideRef": "Teacher Review Doc: Module 2 Item 9",
+    "options": [
+      "Whether the user paid their monthly subscription.",
+      "Whether the AI used proper punctuation in every sentence.",
+      "Whether the AI's generated claims can be proven directly from the retrieved context without hallucinating.",
+      "How fast the internet connection is."
+    ],
+    "correct": 2
+  },
+  {
+    "id": 58,
+    "partId": "mod2",
+    "partTitle": "Module 2: Advanced RAG Architecture & Evaluation",
+    "subtopic": "2.10 RAG Evaluation: Generation & Frameworks",
+    "module": "mod06",
+    "type": "true-false",
+    "question": "In automated RAG evaluation, 'LLM-as-a-Judge' means using an advanced model (like GPT-4 or Gemini Pro) to grade answers against ground-truth datasets.",
+    "explanation": "True. LLM-as-a-judge uses a capable model to evaluate groundedness and relevance at scale.",
+    "slideRef": "Teacher Review Doc: Module 2 Item 9",
+    "options": [
+      "True",
+      "False"
+    ],
+    "correct": 0
+  },
+  {
+    "id": 59,
+    "partId": "mod2",
+    "partTitle": "Module 2: Advanced RAG Architecture & Evaluation",
+    "subtopic": "2.10 RAG Evaluation: Generation & Frameworks",
+    "module": "mod06",
+    "type": "open-question",
+    "question": "What is a 'Golden Dataset' in RAG evaluation, and why is it essential?",
+    "explanation": "Teacher Highlight: Building a golden dataset (Q&A pairs with known correct answers/sources).",
+    "slideRef": "Teacher Review Doc: Module 2 Item 9",
+    "modelAnswer": "A Golden Dataset is a verified collection of realistic test questions, their correct ground-truth answers, and the exact source documents that support them.\nIt is essential because it gives you an objective benchmark: whenever you change your embedding model, chunk size, or prompt, you can run the Golden Dataset to see if your accuracy improved or got worse.",
+    "keyPoints": [
+      "A benchmark dataset with curated questions, ground-truth answers, and source citations.",
+      "Enables automated, reproducible regression testing.",
+      "Allows comparing different chunk sizes, embedding models, and prompts objectively.",
+      "Used by frameworks like RAGAS and TruLens."
+    ]
+  },
+  {
+    "id": 60,
+    "partId": "mod2",
+    "partTitle": "Module 2: Advanced RAG Architecture & Evaluation",
+    "subtopic": "2.10 RAG Evaluation: Generation & Frameworks",
+    "module": "mod06",
+    "type": "fill-in-blank",
+    "question": "The popular open-source automated RAG evaluation framework that measures faithfulness, answer relevance, and context recall is called ________.",
+    "explanation": "Teacher Highlight: Frameworks: RAGAS, TruLens, DeepEval.",
+    "slideRef": "Teacher Review Doc: Module 2 Item 9",
+    "accepted": [
+      "RAGAS",
+      "ragas"
+    ],
+    "placeholder": "Type your answer here..."
+  },
+  {
     "id": 61,
-    "partId": "part4",
-    "partTitle": "Part 4: Autonomous Agents & Tool Integration",
-    "subtopic": "4.1 Tool Calling with Local Models",
+    "partId": "mod3",
+    "partTitle": "Module 3: Autonomous Agents & Tool Integration",
+    "subtopic": "3.1 Tool Calling with Local Models",
     "module": "mod07",
     "type": "qcm",
-    "question": "How does an AI model tell your program that it wants to run a tool (function)?",
-    "explanation": "Lesson 07 Slide 14-18: The LLM emits structured JSON with the function name and parameters in the `tool_calls` field.",
-    "slideRef": "Lesson 07 Slide 14-18",
+    "question": "In tool calling, what is the crucial difference between the AI model and your application code?",
+    "explanation": "Teacher Highlight: Difference between the model requesting an action and the application actually executing it.",
+    "slideRef": "Teacher Review Doc: Agents Item 1",
     "options": [
-      "It beeps through the computer speakers.",
-      "It prints a screenshot on paper.",
-      "It restarts the computer automatically.",
-      "It outputs a structured JSON block specifying the function name and arguments to use."
+      "The model turns off your computer when using tools.",
+      "The model executes Python code directly in its neural weights without an operating system.",
+      "There is no difference; the model and application are the same thing.",
+      "The model only REQUESTS an action by outputting JSON; your application is what ACTUALLY executes the real function."
     ],
     "correct": 3
   },
   {
     "id": 62,
-    "partId": "part4",
-    "partTitle": "Part 4: Autonomous Agents & Tool Integration",
-    "subtopic": "4.1 Tool Calling with Local Models",
+    "partId": "mod3",
+    "partTitle": "Module 3: Autonomous Agents & Tool Integration",
+    "subtopic": "3.1 Tool Calling with Local Models",
     "module": "mod07",
     "type": "true-false",
-    "question": "Can local open-source models like Qwen 2.5 and Llama 3.1 run tool calls and output structured JSON?",
-    "explanation": "True. Qwen 2.5 and Llama 3.1 are trained specifically on tool calling and output standard OpenAI-compatible tool_calls.",
-    "slideRef": "Lesson 07 Slide 16",
+    "question": "Local open models (like Qwen 2.5 and Llama 3.1) can emit structured `tool_calls` in an OpenAI-compatible format.",
+    "explanation": "True. Modern open models are fine-tuned for tool calling and emit standard tool_calls JSON.",
+    "slideRef": "Teacher Review Doc: Agents Item 1",
     "options": [
       "True",
       "False"
@@ -2224,32 +2218,32 @@ echo $LD_LIBRARY_PATH | tr ':' '\n' | grep cuda</code></pre>
   },
   {
     "id": 63,
-    "partId": "part4",
-    "partTitle": "Part 4: Autonomous Agents & Tool Integration",
-    "subtopic": "4.1 Tool Calling with Local Models",
+    "partId": "mod3",
+    "partTitle": "Module 3: Autonomous Agents & Tool Integration",
+    "subtopic": "3.1 Tool Calling with Local Models",
     "module": "mod07",
     "type": "open-question",
-    "question": "In simple steps, what happens when a user asks an AI: 'What is the weather in Tokyo?' and the AI has a `get_weather(city)` tool?",
-    "explanation": "Lesson 07 Slide 14-22: Tool call lifecycle: Schema -> Call -> Execution -> Tool Message -> Final Answer.",
-    "slideRef": "Lesson 07 Slide 14-22",
-    "modelAnswer": "1. The user asks the question.\n2. The AI realizes it doesn't know live weather, so it outputs a tool request: `get_weather(city='Tokyo')`.\n3. Your Python code runs the real `get_weather` function and gets the result: '22°C, Sunny'.\n4. Your code feeds that result back to the AI.\n5. The AI reads the result and tells the user: 'The weather in Tokyo is 22°C and sunny.'",
+    "question": "Walk through the complete lifecycle of a tool call in simple steps.",
+    "explanation": "Teacher Highlight: Tool lifecycle: user request -> model decision -> tool call -> execution -> tool result -> next decision.",
+    "slideRef": "Teacher Review Doc: Agents Item 1",
+    "modelAnswer": "1. User asks a question (e.g. 'What is the price of Bitcoin?').\n2. Model decides it needs live data, so it outputs a structured tool call: `get_price(ticker='BTC')`.\n3. Application intercepts the tool call and executes the real API function.\n4. Tool returns the result (e.g. '$65,000').\n5. Application sends the tool result back to the model.\n6. Model reads the result and writes the final answer to the user.",
     "keyPoints": [
-      "User asks question needing live data.",
-      "AI outputs tool call with parameters (city='Tokyo').",
-      "Application runs the real function.",
-      "Result sent back to AI to write final human answer."
+      "User request -> Model decision to call a tool.",
+      "Structured tool call output (JSON schema).",
+      "Application executes the actual function.",
+      "Tool result returned to model -> Model generates final response."
     ]
   },
   {
     "id": 64,
-    "partId": "part4",
-    "partTitle": "Part 4: Autonomous Agents & Tool Integration",
-    "subtopic": "4.1 Tool Calling with Local Models",
+    "partId": "mod3",
+    "partTitle": "Module 3: Autonomous Agents & Tool Integration",
+    "subtopic": "3.1 Tool Calling with Local Models",
     "module": "mod07",
     "type": "fill-in-blank",
-    "question": "When an AI finishes its response by requesting a tool execution, its API response sets finish_reason = '________'.",
-    "explanation": "Lesson 07 Slide 18: finish_reason='tool_calls' signals that the AI wants to run a tool.",
-    "slideRef": "Lesson 07 Slide 18",
+    "question": "When an LLM finishes generating a tool invocation instead of plain text, the API response sets finish_reason = '________'.",
+    "explanation": "Teacher Highlight: Structured tool call format and finish reasons.",
+    "slideRef": "Teacher Review Doc: Agents Item 1",
     "accepted": [
       "tool_calls",
       "tool_call",
@@ -2259,32 +2253,101 @@ echo $LD_LIBRARY_PATH | tr ':' '\n' | grep cuda</code></pre>
   },
   {
     "id": 65,
-    "partId": "part4",
-    "partTitle": "Part 4: Autonomous Agents & Tool Integration",
-    "subtopic": "4.2 Structured Function Invocation",
+    "partId": "mod3",
+    "partTitle": "Module 3: Autonomous Agents & Tool Integration",
+    "subtopic": "3.2 Structured Function Invocation",
     "module": "mod07",
     "type": "qcm",
-    "question": "Why do we use Pydantic models when receiving function arguments from an AI?",
-    "explanation": "Lesson 07 Slide 24-28: Pydantic validates types, ranges, and required fields, preventing corrupt data from running in your functions.",
-    "slideRef": "Lesson 07 Slide 24-28",
+    "question": "Why are structured arguments (using JSON schemas and Pydantic) better than asking an AI for free-form text commands?",
+    "explanation": "Teacher Highlight: Why structured arguments are better than asking a model to produce free-form text commands.",
+    "slideRef": "Teacher Review Doc: Agents Item 2",
     "options": [
-      "To check that the AI provided the right data types (like numbers, strings, positive values) and catch invalid inputs.",
-      "To translate Python code into HTML.",
-      "To delete unused variables from computer RAM.",
-      "To speed up the internet speed by 2x."
+      "Because structured arguments enforce exact parameter types, required fields, and rules, preventing code crashes.",
+      "Because free-form text makes computer CPUs run too hot.",
+      "Because JSON schemas make the internet connection faster.",
+      "Because structured arguments only use the letter A."
     ],
     "correct": 0
   },
   {
     "id": 66,
-    "partId": "part4",
-    "partTitle": "Part 4: Autonomous Agents & Tool Integration",
-    "subtopic": "4.2 Structured Function Invocation",
+    "partId": "mod3",
+    "partTitle": "Module 3: Autonomous Agents & Tool Integration",
+    "subtopic": "3.2 Structured Function Invocation",
     "module": "mod07",
     "type": "true-false",
-    "question": "If an AI generates an invalid age like -10, Pydantic will raise a `ValidationError` so your program can tell the AI to fix its mistake.",
-    "explanation": "True. Pydantic catches invalid values and allows the harness to prompt the AI to correct its arguments.",
-    "slideRef": "Lesson 07 Slide 26",
+    "question": "When an agent calls a function, asking the model for unstructured free-form text is safer than enforcing a strict JSON schema.",
+    "explanation": "False. Free-form text leads to missing parameters, typos, and syntax errors. Strict schemas with Pydantic validation ensure type safety.",
+    "slideRef": "Teacher Review Doc: Agents Item 2",
+    "options": [
+      "True",
+      "False"
+    ],
+    "correct": 1
+  },
+  {
+    "id": 67,
+    "partId": "mod3",
+    "partTitle": "Module 3: Autonomous Agents & Tool Integration",
+    "subtopic": "3.2 Structured Function Invocation",
+    "module": "mod07",
+    "type": "open-question",
+    "question": "What is the difference between Schema Validation and Business Validation in tool calling?",
+    "explanation": "Teacher Highlight: Schema validation vs business validation.",
+    "slideRef": "Teacher Review Doc: Agents Item 2",
+    "modelAnswer": "Schema Validation checks data formats and types (e.g. Is `age` an integer? Is `email` a valid string? Is `amount` present?). Pydantic handles this automatically.\nBusiness Validation checks real-world business logic (e.g. Does the user have enough money in their bank account? Is the product currently in stock? Does this user have permission to delete this project?). Your database and application logic handle this.",
+    "keyPoints": [
+      "Schema validation verifies data types, presence, and formats (Pydantic).",
+      "Business validation checks real-world rules, account balances, and permissions.",
+      "Schema validation runs first; business validation runs inside the tool logic.",
+      "Both are needed to keep agent actions safe."
+    ]
+  },
+  {
+    "id": 68,
+    "partId": "mod3",
+    "partTitle": "Module 3: Autonomous Agents & Tool Integration",
+    "subtopic": "3.2 Structured Function Invocation",
+    "module": "mod07",
+    "type": "fill-in-blank",
+    "question": "In Pydantic schemas, to specify that a parameter is required and must be an integer greater than or equal to 0, we write `Field(ge=________)`.",
+    "explanation": "Teacher Highlight: Schema parameters, types, and required fields.",
+    "slideRef": "Teacher Review Doc: Agents Item 2",
+    "accepted": [
+      "0",
+      "0.0",
+      "zero"
+    ],
+    "placeholder": "Type your answer here..."
+  },
+  {
+    "id": 69,
+    "partId": "mod3",
+    "partTitle": "Module 3: Autonomous Agents & Tool Integration",
+    "subtopic": "3.3 Executing Bounded Actions",
+    "module": "mod07",
+    "type": "qcm",
+    "question": "What does a 'Bounded Action' mean in an autonomous agent system?",
+    "explanation": "Teacher Highlight: What 'bounded action' means in an agent system.",
+    "slideRef": "Teacher Review Doc: Agents Item 3",
+    "options": [
+      "Giving the agent unlimited root access to the entire operating system.",
+      "Restricting the agent's actions with strict boundaries: safe environments (sandboxes), read-only limits, and timeouts.",
+      "Allowing the agent to delete any file it wants.",
+      "Making the agent run without any computer memory."
+    ],
+    "correct": 1
+  },
+  {
+    "id": 70,
+    "partId": "mod3",
+    "partTitle": "Module 3: Autonomous Agents & Tool Integration",
+    "subtopic": "3.3 Executing Bounded Actions",
+    "module": "mod07",
+    "type": "true-false",
+    "question": "Under the Principle of Least Privilege, an agent should only be given the minimal capabilities and permissions it strictly needs.",
+    "explanation": "True. Never grant admin or write access when read-only access is sufficient.",
+    "slideRef": "Teacher Review Doc: Agents Item 3",
     "options": [
       "True",
       "False"
@@ -2292,102 +2355,33 @@ echo $LD_LIBRARY_PATH | tr ':' '\n' | grep cuda</code></pre>
     "correct": 0
   },
   {
-    "id": 67,
-    "partId": "part4",
-    "partTitle": "Part 4: Autonomous Agents & Tool Integration",
-    "subtopic": "4.2 Structured Function Invocation",
-    "module": "mod07",
-    "type": "open-question",
-    "question": "Why is structured output validation (like Pydantic or Instructor) important when an AI talks to a real database?",
-    "explanation": "Lesson 07 Slide 24-28: Schema enforcement ensures contract safety between AI output and backend systems.",
-    "slideRef": "Lesson 07 Slide 24-28",
-    "modelAnswer": "Without validation, an AI might generate bad data—like typing words where a number is needed, missing a required field, or sending a negative price. If that bad data is sent to a database, the database will crash or save corrupt data.\nPydantic checks every field first. If anything is wrong, it blocks the action and asks the AI to fix the mistake before anything touches the real database.",
-    "keyPoints": [
-      "AI output can have formatting mistakes or wrong data types.",
-      "Pydantic validates fields, types, and value limits.",
-      "Blocks invalid data before it executes in the database.",
-      "Can automatically ask the AI to correct invalid fields."
-    ]
-  },
-  {
-    "id": 68,
-    "partId": "part4",
-    "partTitle": "Part 4: Autonomous Agents & Tool Integration",
-    "subtopic": "4.2 Structured Function Invocation",
-    "module": "mod07",
-    "type": "fill-in-blank",
-    "question": "In Pydantic field validation, the argument used to say a number must be 'greater than or equal to 18' is Field(________=18).",
-    "explanation": "Lesson 07 Slide 26: 'ge' stands for Greater than or Equal to.",
-    "slideRef": "Lesson 07 Slide 26",
-    "accepted": [
-      "ge",
-      "ge=18",
-      "ge = 18"
-    ],
-    "placeholder": "Type your answer here..."
-  },
-  {
-    "id": 69,
-    "partId": "part4",
-    "partTitle": "Part 4: Autonomous Agents & Tool Integration",
-    "subtopic": "4.3 Executing Bounded Actions",
-    "module": "mod07",
-    "type": "qcm",
-    "question": "Why must an AI agent run shell commands or code inside an isolated sandbox (like a Docker container)?",
-    "explanation": "Lesson 07 Slide 34-38: Sandboxes prevent unintended harm, file deletion, and security breaches by isolating the AI execution environment.",
-    "slideRef": "Lesson 07 Slide 34-38",
-    "options": [
-      "Because Python cannot run directly on Windows or Mac.",
-      "To stop the AI from accidentally deleting files, stealing private data, or damaging your main computer.",
-      "Because Docker makes computer graphics look sharper.",
-      "To make the code execute 10 times faster."
-    ],
-    "correct": 1
-  },
-  {
-    "id": 70,
-    "partId": "part4",
-    "partTitle": "Part 4: Autonomous Agents & Tool Integration",
-    "subtopic": "4.3 Executing Bounded Actions",
-    "module": "mod07",
-    "type": "true-false",
-    "question": "It is safe to give an autonomous AI agent full administrator (root) access to your production database as long as its temperature is set to 0.",
-    "explanation": "False. Temperature 0 does not prevent errors, hallucinations, or prompt injection. Never give root access; always use least privilege.",
-    "slideRef": "Lesson 07 Slide 36",
-    "options": [
-      "True",
-      "False"
-    ],
-    "correct": 1
-  },
-  {
     "id": 71,
-    "partId": "part4",
-    "partTitle": "Part 4: Autonomous Agents & Tool Integration",
-    "subtopic": "4.3 Executing Bounded Actions",
+    "partId": "mod3",
+    "partTitle": "Module 3: Autonomous Agents & Tool Integration",
+    "subtopic": "3.3 Executing Bounded Actions",
     "module": "mod07",
     "type": "open-question",
-    "question": "Name 3 simple safety rules to protect your system when an AI is allowed to run tools.",
-    "explanation": "Lesson 07 Slide 35-40 outlines security boundaries and isolation techniques for agent tools.",
-    "slideRef": "Lesson 07 Slide 35-40",
-    "modelAnswer": "1. Read-only permissions: Give the AI only read access (SELECT), not permission to delete or drop tables.\n2. Isolated sandbox: Run code in a Docker container with no access to your personal files.\n3. Timeouts and limits: Set a timer (e.g. max 5 seconds) so a stuck command cannot hang your system forever.",
+    "question": "Why is letting an AI execute raw SQL or arbitrary shell code directly on your production server dangerous? How do you make it safe?",
+    "explanation": "Teacher Highlight: Controlled tools vs powerful tools such as raw SQL or arbitrary code execution.",
+    "slideRef": "Teacher Review Doc: Agents Item 3",
+    "modelAnswer": "It is dangerous because an AI hallucination, error, or prompt injection could run `DROP TABLE users;` or `rm -rf /`, wiping out your entire company database or leaking private customer data.\nTo make it safe:\n1. Use read-only database credentials (`SELECT` only, no `DROP`/`DELETE`).\n2. Run commands inside an ephemeral, isolated Docker sandbox with no host file access.\n3. Add strict timeouts and query row limits (LIMIT 100).",
     "keyPoints": [
-      "Least privilege (read-only, restrict DROP/DELETE).",
-      "Isolated sandbox or container execution.",
-      "Strict timeouts and resource limits (memory/CPU).",
-      "Mandatory query LIMITs to prevent memory overflow."
+      "Unrestricted execution can wipe data, crash servers, or leak customer records.",
+      "Restrict database tools to read-only SELECT permissions.",
+      "Execute code only inside isolated containers (Docker/sandboxes).",
+      "Enforce strict timeouts and resource limits."
     ]
   },
   {
     "id": 72,
-    "partId": "part4",
-    "partTitle": "Part 4: Autonomous Agents & Tool Integration",
-    "subtopic": "4.3 Executing Bounded Actions",
+    "partId": "mod3",
+    "partTitle": "Module 3: Autonomous Agents & Tool Integration",
+    "subtopic": "3.3 Executing Bounded Actions",
     "module": "mod07",
     "type": "fill-in-blank",
-    "question": "The golden security rule that says an AI should only be given the minimum permissions needed to do its job is the Principle of Least ________.",
-    "explanation": "Lesson 07 Slide 37: Principle of Least Privilege restricts agent capabilities to only what is necessary.",
-    "slideRef": "Lesson 07 Slide 37",
+    "question": "The core security principle stating that an agent should only receive the minimum permissions needed to do its job is the Principle of Least ________.",
+    "explanation": "Teacher Highlight: Why least privilege matters.",
+    "slideRef": "Teacher Review Doc: Agents Item 3",
     "accepted": [
       "Privilege",
       "privilege",
@@ -2397,32 +2391,32 @@ echo $LD_LIBRARY_PATH | tr ':' '\n' | grep cuda</code></pre>
   },
   {
     "id": 73,
-    "partId": "part4",
-    "partTitle": "Part 4: Autonomous Agents & Tool Integration",
-    "subtopic": "4.4 Workflow Safety & Failure Boundaries",
+    "partId": "mod3",
+    "partTitle": "Module 3: Autonomous Agents & Tool Integration",
+    "subtopic": "3.4 Workflow Safety & Failure Boundaries",
     "module": "mod07",
     "type": "qcm",
-    "question": "What stops an autonomous AI agent from running in an endless loop forever if a tool keeps returning errors?",
-    "explanation": "Lesson 07 Slide 44-46: Hard step limits act as circuit breakers, stopping runaway execution and notifying the user.",
-    "slideRef": "Lesson 07 Slide 44-46",
+    "question": "What is a 'Failure Boundary' in an agent system?",
+    "explanation": "Teacher Highlight: What a failure boundary is and how it prevents one tool failure from crashing the whole system.",
+    "slideRef": "Teacher Review Doc: Agents Item 4",
     "options": [
-      "Changing the font size to 12.",
-      "Turning off the computer monitor.",
-      "Setting a maximum step limit (such as `recursion_limit` or max 10 steps).",
-      "Saving the file as a PDF."
+      "A line on the computer screen that you cannot cross.",
+      "A rule that deletes the database if any error happens.",
+      "A safety barrier that stops an error in one tool from crashing the entire application.",
+      "A cable connecting two servers together."
     ],
     "correct": 2
   },
   {
     "id": 74,
-    "partId": "part4",
-    "partTitle": "Part 4: Autonomous Agents & Tool Integration",
-    "subtopic": "4.4 Workflow Safety & Failure Boundaries",
+    "partId": "mod3",
+    "partTitle": "Module 3: Autonomous Agents & Tool Integration",
+    "subtopic": "3.4 Workflow Safety & Failure Boundaries",
     "module": "mod07",
     "type": "true-false",
-    "question": "An 'Indirect Prompt Injection' happens when an AI reads an untrusted website or email that contains secret hidden instructions telling the AI to disobey its original job.",
-    "explanation": "True. Indirect prompt injection is a serious risk where external untrusted content hijacks the agent's instructions.",
-    "slideRef": "Lesson 07 Slide 48",
+    "question": "Setting an execution limit (like a maximum of 10 steps) acts as a circuit breaker to stop an agent from looping forever.",
+    "explanation": "True. Maximum iterations or recursion limits prevent infinite runaway loops and API budget exhaustion.",
+    "slideRef": "Teacher Review Doc: Agents Item 4",
     "options": [
       "True",
       "False"
@@ -2431,32 +2425,32 @@ echo $LD_LIBRARY_PATH | tr ':' '\n' | grep cuda</code></pre>
   },
   {
     "id": 75,
-    "partId": "part4",
-    "partTitle": "Part 4: Autonomous Agents & Tool Integration",
-    "subtopic": "4.4 Workflow Safety & Failure Boundaries",
+    "partId": "mod3",
+    "partTitle": "Module 3: Autonomous Agents & Tool Integration",
+    "subtopic": "3.4 Workflow Safety & Failure Boundaries",
     "module": "mod07",
     "type": "open-question",
-    "question": "What is an 'Idempotency Key', and why is it important when an AI calls a payment or order tool?",
-    "explanation": "Lesson 07 Slide 45-47 covers idempotency keys and safe retry boundaries.",
-    "slideRef": "Lesson 07 Slide 45-47",
-    "modelAnswer": "An Idempotency Key is a unique ticket number (like `order-101`) sent with a transaction.\nIf the AI tries to charge a credit card, but the internet hiccups for 1 second, the AI might try calling the tool again. With an idempotency key, the payment system sees the same key and says: 'I already charged this! Here is the receipt' instead of charging the customer twice!",
+    "question": "How does an agent recover when a tool returns an error instead of crashing the system?",
+    "explanation": "Teacher Highlight: Recovery: how an agent can observe an error and choose a next action.",
+    "slideRef": "Teacher Review Doc: Agents Item 4",
+    "modelAnswer": "When a tool fails (e.g. 'City not found' or 'Database connection timeout'), the failure boundary catches the error and returns it as a clean text message to the agent: `Tool error: Unable to find city 'PhnomPehn'. Check spelling.`\nThe agent reads this observation in its next thought step and self-corrects: 'I misspelled Phnom Penh. Let me try again with the correct spelling: `get_weather(city='Phnom Penh')`.'",
     "keyPoints": [
-      "A unique ID attached to an action or request.",
-      "Ensures the action only happens once, even if called multiple times.",
-      "Protects against duplicate charges during network retries.",
-      "Critical safety boundary for real-world mutations."
+      "Application catches tool exceptions gracefully.",
+      "Returns controlled, informative error message to the agent as an observation.",
+      "Agent observes the error and reasons about how to recover.",
+      "Tries an alternative tool, corrects parameters, or asks the user for help."
     ]
   },
   {
     "id": 76,
-    "partId": "part4",
-    "partTitle": "Part 4: Autonomous Agents & Tool Integration",
-    "subtopic": "4.4 Workflow Safety & Failure Boundaries",
+    "partId": "mod3",
+    "partTitle": "Module 3: Autonomous Agents & Tool Integration",
+    "subtopic": "3.4 Workflow Safety & Failure Boundaries",
     "module": "mod07",
     "type": "fill-in-blank",
-    "question": "In LangGraph and agent loops, the setting that sets a maximum ceiling on the number of steps to prevent infinite loops is called the ________ limit.",
-    "explanation": "Lesson 07 Slide 44: recursion_limit terminates graphs if they exceed a maximum step count.",
-    "slideRef": "Lesson 07 Slide 44",
+    "question": "In LangGraph, the setting that places a maximum limit on graph step transitions to stop infinite loops is called the ________ limit.",
+    "explanation": "Teacher Highlight: Execution limits: maximum iterations, tool-call limits, timeouts.",
+    "slideRef": "Teacher Review Doc: Agents Item 4",
     "accepted": [
       "recursion",
       "recursion_limit",
@@ -2466,100 +2460,100 @@ echo $LD_LIBRARY_PATH | tr ':' '\n' | grep cuda</code></pre>
   },
   {
     "id": 77,
-    "partId": "part4",
-    "partTitle": "Part 4: Autonomous Agents & Tool Integration",
-    "subtopic": "4.5 Agent Patterns: ReAct",
+    "partId": "mod3",
+    "partTitle": "Module 3: Autonomous Agents & Tool Integration",
+    "subtopic": "3.5 Introduction to Agent Patterns",
     "module": "mod07",
     "type": "qcm",
-    "question": "What are the 3 simple steps of the ReAct pattern that repeat in a loop?",
-    "explanation": "Lesson 07 Slide 52-56: ReAct loops through: Thought (reasoning), Action (calling tool), Observation (getting result) until done.",
-    "slideRef": "Lesson 07 Slide 52-56",
+    "question": "What are the 3 repeating steps in the ReAct agent design pattern?",
+    "explanation": "Teacher Highlight: ReAct / reasoning-and-action style loops: think/act/observe conceptually.",
+    "slideRef": "Teacher Review Doc: Agents Item 5",
     "options": [
       "Download -> Compile -> Install",
+      "Open -> Edit -> Close",
       "Select -> Copy -> Paste",
-      "Click -> Drag -> Drop",
-      "Thought (Think) -> Action (Use tool) -> Observation (Read tool result)"
+      "Thought (Think) -> Action (Call tool) -> Observation (Read tool result)"
     ],
     "correct": 3
   },
   {
     "id": 78,
-    "partId": "part4",
-    "partTitle": "Part 4: Autonomous Agents & Tool Integration",
-    "subtopic": "4.5 Agent Patterns: ReAct",
+    "partId": "mod3",
+    "partTitle": "Module 3: Autonomous Agents & Tool Integration",
+    "subtopic": "3.5 Introduction to Agent Patterns",
     "module": "mod07",
     "type": "true-false",
-    "question": "Does the ReAct pattern eliminate all thinking (Thought) and force the AI to use tools without any reasoning?",
-    "explanation": "False. ReAct explicitly combines Reasoning and Acting: it thinks first (Thought), then acts (Action), then reads the result (Observation).",
-    "slideRef": "Lesson 07 Slide 52",
+    "question": "In the Planner-Executor pattern, the agent plans out all steps first before executing them one by one.",
+    "explanation": "True. Planner-Executor separates high-level planning from individual tool execution steps.",
+    "slideRef": "Teacher Review Doc: Agents Item 5",
     "options": [
       "True",
       "False"
     ],
-    "correct": 1
+    "correct": 0
   },
   {
     "id": 79,
-    "partId": "part4",
-    "partTitle": "Part 4: Autonomous Agents & Tool Integration",
-    "subtopic": "4.5 Agent Patterns: ReAct",
+    "partId": "mod3",
+    "partTitle": "Module 3: Autonomous Agents & Tool Integration",
+    "subtopic": "3.5 Introduction to Agent Patterns",
     "module": "mod07",
     "type": "open-question",
-    "question": "Explain how a ReAct agent answers: 'Who won the latest soccer World Cup?' using Thought, Action, and Observation.",
-    "explanation": "Lesson 07 Slide 52-58 outlines the ReAct prompt format and trace steps.",
-    "slideRef": "Lesson 07 Slide 52-58",
-    "modelAnswer": "Step 1:\n- Thought: I need to find who won the most recent World Cup. I will use the search tool.\n- Action: search('2022 World Cup winner')\n- Observation: 'Argentina won the 2022 FIFA World Cup.'\n\nStep 2:\n- Thought: I now have the answer from the observation.\n- Final Answer: 'Argentina won the latest FIFA World Cup.'",
+    "question": "Briefly explain the difference between the Router Pattern and the Multi-Agent System pattern.",
+    "explanation": "Teacher Highlight: Router pattern vs Planner-Executor vs Multi-Agent Systems.",
+    "slideRef": "Teacher Review Doc: Agents Item 5",
+    "modelAnswer": "Router Pattern: A single classifier node that looks at a request and directs it to the right tool or specialized chain (e.g. sending billing questions to billing, technical questions to tech support).\nMulti-Agent System: Multiple independent AI agents (each with their own role, prompt, and tools) collaborating together—for example, a Researcher agent finds data, a Coder agent writes code, and a Reviewer agent tests it.",
     "keyPoints": [
-      "Thought: Plans what information is missing.",
-      "Action: Invokes search tool with query.",
-      "Observation: Receives tool result.",
-      "Final Thought/Answer: Formulates final response based on observation."
+      "Router pattern: Single decision point routing traffic to specialized paths.",
+      "Multi-agent system: Multiple distinct autonomous agents collaborating.",
+      "Each agent has specialized roles, system prompts, and toolsets.",
+      "Multi-agent handles complex workflows but adds orchestration overhead."
     ]
   },
   {
     "id": 80,
-    "partId": "part4",
-    "partTitle": "Part 4: Autonomous Agents & Tool Integration",
-    "subtopic": "4.5 Agent Patterns: ReAct",
+    "partId": "mod3",
+    "partTitle": "Module 3: Autonomous Agents & Tool Integration",
+    "subtopic": "3.5 Introduction to Agent Patterns",
     "module": "mod07",
     "type": "fill-in-blank",
-    "question": "The ReAct agent pattern gets its name by combining two words: ________ and Acting.",
-    "explanation": "Lesson 07 Slide 52: ReAct = Reasoning + Acting (Yao et al., 2022).",
-    "slideRef": "Lesson 07 Slide 52",
+    "question": "The agent pattern where an AI generates content, reviews its own output for mistakes, and refines it is called the ________ pattern.",
+    "explanation": "Teacher Highlight: Reflection pattern.",
+    "slideRef": "Teacher Review Doc: Agents Item 5",
     "accepted": [
-      "Reasoning",
-      "reasoning"
+      "Reflection",
+      "reflection"
     ],
     "placeholder": "Type your answer here..."
   },
   {
     "id": 81,
-    "partId": "part4",
-    "partTitle": "Part 4: Autonomous Agents & Tool Integration",
-    "subtopic": "4.6 Harness Design",
+    "partId": "mod3",
+    "partTitle": "Module 3: Autonomous Agents & Tool Integration",
+    "subtopic": "3.6 Harness Design for Agents",
     "module": "mod07",
     "type": "qcm",
-    "question": "What is an AI Evaluation Test Harness used for?",
-    "explanation": "Lesson 07 Slide 62-66: A test harness provides reproducible environments, mocked tools, and telemetry to measure agent accuracy.",
-    "slideRef": "Lesson 07 Slide 62-66",
+    "question": "What is an 'Agent Harness' in AI engineering?",
+    "explanation": "Teacher Highlight: What an agent harness is: the surrounding application/control layer that manages the agent.",
+    "slideRef": "Teacher Review Doc: Agents Item 6",
     "options": [
-      "To test the AI automatically in a safe, repeatable sandbox and score whether it solved tasks correctly.",
-      "To format USB drives.",
-      "To turn Python code into an MP4 video.",
-      "To change computer desktop wallpaper."
+      "The surrounding application and control layer that manages the agent's tools, state, safety limits, and logging.",
+      "A physical strap used to carry computers.",
+      "A graphics card designed for video games.",
+      "A replacement for the Python interpreter."
     ],
     "correct": 0
   },
   {
     "id": 82,
-    "partId": "part4",
-    "partTitle": "Part 4: Autonomous Agents & Tool Integration",
-    "subtopic": "4.6 Harness Design",
+    "partId": "mod3",
+    "partTitle": "Module 3: Autonomous Agents & Tool Integration",
+    "subtopic": "3.6 Harness Design for Agents",
     "module": "mod07",
     "type": "true-false",
-    "question": "Keeping trajectory logs of an AI's tool calls and reasoning steps is completely useless in production.",
-    "explanation": "False. Trajectory logs are essential for debugging mistakes, monitoring latency, and auditing safety.",
-    "slideRef": "Lesson 07 Slide 64",
+    "question": "Critical production systems should be controlled directly by raw LLM outputs with zero harness safety checks.",
+    "explanation": "False. LLMs must never directly control critical systems without a harness enforcing validation, limits, and human approval.",
+    "slideRef": "Teacher Review Doc: Agents Item 6",
     "options": [
       "True",
       "False"
@@ -2568,68 +2562,67 @@ echo $LD_LIBRARY_PATH | tr ':' '\n' | grep cuda</code></pre>
   },
   {
     "id": 83,
-    "partId": "part4",
-    "partTitle": "Part 4: Autonomous Agents & Tool Integration",
-    "subtopic": "4.6 Harness Design",
+    "partId": "mod3",
+    "partTitle": "Module 3: Autonomous Agents & Tool Integration",
+    "subtopic": "3.6 Harness Design for Agents",
     "module": "mod07",
     "type": "open-question",
-    "question": "Why do developers test AI agents with fake (mock) tools instead of real external APIs during automated testing?",
-    "explanation": "Lesson 07 Slide 62-68 covers mock environments and deterministic agent evaluation.",
-    "slideRef": "Lesson 07 Slide 62-68",
-    "modelAnswer": "1. Reliability: Real APIs might go down or have network lag, making tests fail randomly.\n2. Cost and limits: Calling real APIs (like credit card payments or email servers) costs money and burns API rate limits.\n3. Safety: Testing with mock tools prevents the AI from accidentally sending real emails or making real purchases while testing.",
+    "question": "Name 4 core responsibilities of an Agent Harness application.",
+    "explanation": "Teacher Highlight: Responsibilities such as tool management, state/context handling, execution control, logging, safety, and monitoring.",
+    "slideRef": "Teacher Review Doc: Agents Item 6",
+    "modelAnswer": "1. Tool Management: Declares tool schemas and executes real Python functions.\n2. State & Context Handling: Manages message history and passes relevant context to the model.\n3. Safety Controls: Enforces timeouts, step limits, and sandbox isolation.\n4. Logging & Telemetry: Records the agent's trajectory (thoughts, tools, errors) for debugging and auditing.",
     "keyPoints": [
-      "Real APIs can fail or have network lag, causing unreliable test results.",
-      "Avoids burning API costs and rate limits during testing.",
-      "Prevents real-world accidental mutations (sending real emails/charges).",
-      "Guarantees reproducible, fast automated test runs."
+      "Tool management and argument validation.",
+      "State and context persistence across turns.",
+      "Safety guardrails, limits, and timeouts.",
+      "Telemetry and trajectory logging for auditing and debugging."
     ]
   },
   {
     "id": 84,
-    "partId": "part4",
-    "partTitle": "Part 4: Autonomous Agents & Tool Integration",
-    "subtopic": "4.6 Harness Design",
+    "partId": "mod3",
+    "partTitle": "Module 3: Autonomous Agents & Tool Integration",
+    "subtopic": "3.6 Harness Design for Agents",
     "module": "mod07",
     "type": "fill-in-blank",
-    "question": "The complete recorded step-by-step history of an AI's thoughts, tool calls, and observations during a task is called its ________.",
-    "explanation": "Lesson 07 Slide 64: An agent's trajectory records its decision steps from start to finish.",
-    "slideRef": "Lesson 07 Slide 64",
+    "question": "The step-by-step record of an agent's thoughts, tools called, inputs, and observations stored by the harness is called the agent's ________.",
+    "explanation": "Teacher Highlight: Logging, monitoring, and agent trajectory tracking.",
+    "slideRef": "Teacher Review Doc: Agents Item 6",
     "accepted": [
       "trajectory",
       "Trajectory",
-      "trace",
-      "run trace"
+      "trace"
     ],
     "placeholder": "Type your answer here..."
   },
   {
     "id": 85,
-    "partId": "part4",
-    "partTitle": "Part 4: Autonomous Agents & Tool Integration",
-    "subtopic": "4.7 MCP Server",
+    "partId": "mod3",
+    "partTitle": "Module 3: Autonomous Agents & Tool Integration",
+    "subtopic": "3.7 MCP Server",
     "module": "mod07",
     "type": "qcm",
-    "question": "In simple terms, what is the Model Context Protocol (MCP)?",
-    "explanation": "Lesson 07 Slide 72-76: Anthropic's Model Context Protocol (MCP) provides a standard open protocol for connecting AI clients to tools and resources.",
-    "slideRef": "Lesson 07 Slide 72-76",
+    "question": "What are the 3 things an MCP (Model Context Protocol) server can expose to an AI client?",
+    "explanation": "Teacher Highlight: What an MCP server can expose: Tools, Resources, and Prompts.",
+    "slideRef": "Teacher Review Doc: Agents Item 7",
     "options": [
-      "A video game for programmers.",
-      "A standard protocol that lets AI apps (like Claude, Cursor, or custom agents) easily connect to external tools and files without custom code.",
-      "A special brand of computer monitor.",
-      "A replacement for the Python programming language."
+      "Photos, Videos, and Music.",
+      "Tools (actions), Resources (read-only data/files), and Prompts (reusable templates).",
+      "RAM, CPU, and Hard drives.",
+      "Keyboards, Mice, and Monitors."
     ],
     "correct": 1
   },
   {
     "id": 86,
-    "partId": "part4",
-    "partTitle": "Part 4: Autonomous Agents & Tool Integration",
-    "subtopic": "4.7 MCP Server",
+    "partId": "mod3",
+    "partTitle": "Module 3: Autonomous Agents & Tool Integration",
+    "subtopic": "3.7 MCP Server",
     "module": "mod07",
     "type": "true-false",
-    "question": "In Python FastMCP, you turn a function into an AI tool simply by putting the `@mcp.tool()` decorator above it.",
-    "explanation": "True. FastMCP uses `@mcp.tool()` for tools, `@mcp.resource()` for data files, and `@mcp.prompt()` for prompt templates.",
-    "slideRef": "Lesson 07 Slide 78",
+    "question": "In Python FastMCP, you turn a function into an AI tool by adding the `@mcp.tool()` decorator above it.",
+    "explanation": "True. FastMCP uses `@mcp.tool()` to expose callable tools.",
+    "slideRef": "Teacher Review Doc: Agents Item 7",
     "options": [
       "True",
       "False"
@@ -2638,32 +2631,32 @@ echo $LD_LIBRARY_PATH | tr ':' '\n' | grep cuda</code></pre>
   },
   {
     "id": 87,
-    "partId": "part4",
-    "partTitle": "Part 4: Autonomous Agents & Tool Integration",
-    "subtopic": "4.7 MCP Server",
+    "partId": "mod3",
+    "partTitle": "Module 3: Autonomous Agents & Tool Integration",
+    "subtopic": "3.7 MCP Server",
     "module": "mod07",
     "type": "open-question",
-    "question": "In MCP (Model Context Protocol), what is the difference between a Tool and a Resource?",
-    "explanation": "Lesson 07 Slide 75-80 contrasts MCP Tools with MCP Resources.",
-    "slideRef": "Lesson 07 Slide 75-80",
-    "modelAnswer": "A Tool is an action that does something or changes data (like restarting a server, sending a message, or calculating a number).\nA Resource is read-only data that gives information to the AI (like reading a log file, reading documentation, or viewing a database record) without changing anything.",
+    "question": "In simple terms, what problem does Anthropic's Model Context Protocol (MCP) solve?",
+    "explanation": "Teacher Highlight: What Model Context Protocol (MCP) is and the problem it tries to solve.",
+    "slideRef": "Teacher Review Doc: Agents Item 7",
+    "modelAnswer": "Before MCP, every AI app (Claude Desktop, Cursor, LangChain) used different custom ways to call tools. If you built a tool for PostgreSQL, you had to rewrite it for every app.\nMCP creates one standard open protocol (like USB for AI). You write an MCP server once, and it instantly works with Claude Desktop, Cursor, or any custom Python agent without rewriting tool code.",
     "keyPoints": [
-      "Tool: An executable function that performs actions with side-effects.",
-      "Resource: A read-only data source (like files or logs) for context.",
-      "Tools change state; Resources provide static/read-only context.",
-      "Standardized in the MCP specification."
+      "Solves the fragmented, proprietary tool-integration problem.",
+      "Acts like a universal standard (USB for AI).",
+      "Build a tool server once and connect it to any MCP client (Claude, Cursor, IDEs).",
+      "Standardizes discovery of Tools, Resources, and Prompts."
     ]
   },
   {
     "id": 88,
-    "partId": "part4",
-    "partTitle": "Part 4: Autonomous Agents & Tool Integration",
-    "subtopic": "4.7 MCP Server",
+    "partId": "mod3",
+    "partTitle": "Module 3: Autonomous Agents & Tool Integration",
+    "subtopic": "3.7 MCP Server",
     "module": "mod07",
     "type": "fill-in-blank",
-    "question": "In Python FastMCP, the decorator written above a function to expose it as an AI tool is @mcp.________().",
-    "explanation": "Lesson 07 Slide 78: '@mcp.tool()' registers a function as an MCP tool.",
-    "slideRef": "Lesson 07 Slide 78",
+    "question": "In Python FastMCP, the decorator used to expose an executable action to the AI client is @mcp.________().",
+    "explanation": "Teacher Highlight: FastMCP tool declaration (@mcp.tool()).",
+    "slideRef": "Teacher Review Doc: Agents Item 7",
     "accepted": [
       "tool",
       "tool()",
@@ -2673,32 +2666,32 @@ echo $LD_LIBRARY_PATH | tr ':' '\n' | grep cuda</code></pre>
   },
   {
     "id": 89,
-    "partId": "part4",
-    "partTitle": "Part 4: Autonomous Agents & Tool Integration",
-    "subtopic": "4.8 Local Tools vs MCP Server",
+    "partId": "mod3",
+    "partTitle": "Module 3: Autonomous Agents & Tool Integration",
+    "subtopic": "3.8 Local Tools vs MCP Server",
     "module": "mod07",
     "type": "qcm",
-    "question": "What is the main advantage of building an MCP Server instead of hardcoding Python functions directly inside your bot script?",
-    "explanation": "Lesson 07 Slide 82-86: MCP decouples tools from client apps, allowing the same tool server to work in Claude Desktop, Cursor, or any agent.",
-    "slideRef": "Lesson 07 Slide 82-86",
+    "question": "When is building an MCP Server better than hardcoding local Python functions in your bot script?",
+    "explanation": "Teacher Highlight: When MCP becomes useful for reusable/shared integrations.",
+    "slideRef": "Teacher Review Doc: Agents Item 8",
     "options": [
-      "Hardcoded functions use more battery power.",
-      "MCP servers do not require a computer processor.",
-      "One MCP server can be reused across different apps (like Claude Desktop, Cursor IDE, and custom Python agents) without rewriting the tool code.",
-      "Hardcoded functions cannot print text."
+      "When you want code to run without electricity.",
+      "When your computer doesn't have an operating system.",
+      "When you want your tools to be reusable across multiple different apps (like Claude Desktop, Cursor, and web apps) without rewriting code.",
+      "When you only want to add two numbers together once."
     ],
     "correct": 2
   },
   {
     "id": 90,
-    "partId": "part4",
-    "partTitle": "Part 4: Autonomous Agents & Tool Integration",
-    "subtopic": "4.8 Local Tools vs MCP Server",
+    "partId": "mod3",
+    "partTitle": "Module 3: Autonomous Agents & Tool Integration",
+    "subtopic": "3.8 Local Tools vs MCP Server",
     "module": "mod07",
     "type": "true-false",
-    "question": "Calling an in-memory local Python function is usually faster than calling a remote server over HTTP.",
-    "explanation": "True. In-process local function calls have virtually zero network delay, while remote HTTP calls take more time.",
-    "slideRef": "Lesson 07 Slide 84",
+    "question": "In-memory local Python tools have lower communication latency than calling an MCP server over a network connection.",
+    "explanation": "True. Local tools run in the same process with zero network serialization overhead.",
+    "slideRef": "Teacher Review Doc: Agents Item 8",
     "options": [
       "True",
       "False"
@@ -2707,32 +2700,32 @@ echo $LD_LIBRARY_PATH | tr ':' '\n' | grep cuda</code></pre>
   },
   {
     "id": 91,
-    "partId": "part4",
-    "partTitle": "Part 4: Autonomous Agents & Tool Integration",
-    "subtopic": "4.8 Local Tools vs MCP Server",
+    "partId": "mod3",
+    "partTitle": "Module 3: Autonomous Agents & Tool Integration",
+    "subtopic": "3.8 Local Tools vs MCP Server",
     "module": "mod07",
     "type": "open-question",
-    "question": "When should you write a simple local Python function, and when should you build an MCP Server?",
-    "explanation": "Lesson 07 Slide 82-88 compares in-process functions vs decoupled MCP servers.",
-    "slideRef": "Lesson 07 Slide 82-88",
-    "modelAnswer": "Use a simple local Python function when you are building a small prototype, need maximum speed with zero network delay, and the tool is only used in this one Python file.\nBuild an MCP Server when you want to share the same tools across multiple tools (like Cursor, Claude Desktop, and web agents), or when you want tools to run in a safe, separate container.",
+    "question": "What are the main trade-offs between Local Python Tools and MCP Servers?",
+    "explanation": "Teacher Highlight: Advantages and limitations of each approach. When local tools are simpler; when MCP is useful.",
+    "slideRef": "Teacher Review Doc: Agents Item 8",
+    "modelAnswer": "Local Python Tools:\n- Pros: Fastest speed (zero network delay), simplest code, easy for quick prototypes.\n- Cons: Hardcoded to one script; cannot be shared with Claude Desktop or Cursor.\n\nMCP Servers:\n- Pros: Highly reusable across different clients (Claude, Cursor, web), runs in a safe separate process, language agnostic.\n- Cons: Incurs slight JSON-RPC network latency and requires running a separate server process.",
     "keyPoints": [
-      "Local Python function: Best for single apps, fast in-memory speed, simple code.",
-      "MCP Server: Best for sharing tools across multiple clients (Cursor, Claude, web).",
-      "MCP provides process isolation and multi-language support.",
-      "Choice depends on reuse needs vs ultra-low latency."
+      "Local tools: Low latency, simple setup, in-process, but tightly coupled.",
+      "MCP servers: Cross-client reuse (Claude Desktop, Cursor, LangGraph), language agnostic.",
+      "MCP provides process isolation boundaries.",
+      "Trade-off between sub-millisecond local speed vs cross-app reusability."
     ]
   },
   {
     "id": 92,
-    "partId": "part4",
-    "partTitle": "Part 4: Autonomous Agents & Tool Integration",
-    "subtopic": "4.8 Local Tools vs MCP Server",
+    "partId": "mod3",
+    "partTitle": "Module 3: Autonomous Agents & Tool Integration",
+    "subtopic": "3.8 Local Tools vs MCP Server",
     "module": "mod07",
     "type": "fill-in-blank",
-    "question": "The Model Context Protocol (MCP) sends messages between client and server using the JSON-________ standard.",
-    "explanation": "Lesson 07 Slide 74: MCP uses JSON-RPC 2.0 as its wire messaging protocol.",
-    "slideRef": "Lesson 07 Slide 74",
+    "question": "The Model Context Protocol (MCP) exchanges messages using the standardized JSON-________ protocol.",
+    "explanation": "Teacher Highlight: MCP communication architecture.",
+    "slideRef": "Teacher Review Doc: Agents Item 8",
     "accepted": [
       "RPC",
       "rpc",
@@ -2743,66 +2736,66 @@ echo $LD_LIBRARY_PATH | tr ':' '\n' | grep cuda</code></pre>
   },
   {
     "id": 93,
-    "partId": "part4",
-    "partTitle": "Part 4: Autonomous Agents & Tool Integration",
-    "subtopic": "4.9 Human-in-the-Loop Design",
+    "partId": "mod3",
+    "partTitle": "Module 3: Autonomous Agents & Tool Integration",
+    "subtopic": "3.9 Human-in-the-Loop Design",
     "module": "mod07",
     "type": "qcm",
-    "question": "In LangGraph, how do you pause the workflow before a dangerous step (like deleting data or charging a card) so a human can inspect and approve it?",
-    "explanation": "Lesson 07 Slide 92-96: `interrupt_before` pauses the graph, saves state to the checkpointer, and waits for human review.",
-    "slideRef": "Lesson 07 Slide 92-96",
+    "question": "Why are some agent actions required to have Human-in-the-Loop approval?",
+    "explanation": "Teacher Highlight: Why some agent actions need human approval: destructive changes, financial actions, sensitive operations.",
+    "slideRef": "Teacher Review Doc: Agents Item 9",
     "options": [
-      "By turning off the WiFi router.",
-      "By closing the terminal window.",
-      "By writing a 100-page user manual.",
-      "By setting an `interrupt_before=['execute_action']` breakpoint when compiling the graph."
+      "Because computer monitors turn off without human clicks.",
+      "Because AI models do not know what the color blue is.",
+      "Because human approval makes the internet run faster.",
+      "Because high-stakes actions (like charging credit cards, deleting databases, or sending emails) cannot be undone if the AI makes a mistake."
     ],
     "correct": 3
   },
   {
     "id": 94,
-    "partId": "part4",
-    "partTitle": "Part 4: Autonomous Agents & Tool Integration",
-    "subtopic": "4.9 Human-in-the-Loop Design",
+    "partId": "mod3",
+    "partTitle": "Module 3: Autonomous Agents & Tool Integration",
+    "subtopic": "3.9 Human-in-the-Loop Design",
     "module": "mod07",
     "type": "true-false",
-    "question": "In Human-in-the-Loop workflows, after a human reviews and approves the step, does the AI have to start all the way back from step 1?",
-    "explanation": "False. Checkpointers save the exact state at the breakpoint, so execution resumes immediately from the paused step without re-running earlier steps.",
-    "slideRef": "Lesson 07 Slide 94",
+    "question": "In LangGraph, you can pause execution right before a sensitive step using the `interrupt_before` setting.",
+    "explanation": "True. `interrupt_before=['step_name']` pauses graph execution and saves state to checkpointer until a human approves.",
+    "slideRef": "Teacher Review Doc: Agents Item 9",
     "options": [
       "True",
       "False"
     ],
-    "correct": 1
+    "correct": 0
   },
   {
     "id": 95,
-    "partId": "part4",
-    "partTitle": "Part 4: Autonomous Agents & Tool Integration",
-    "subtopic": "4.9 Human-in-the-Loop Design",
+    "partId": "mod3",
+    "partTitle": "Module 3: Autonomous Agents & Tool Integration",
+    "subtopic": "3.9 Human-in-the-Loop Design",
     "module": "mod07",
     "type": "open-question",
-    "question": "Why is Human-in-the-Loop important for high-stakes actions like sending an invoice or deleting customer records?",
-    "explanation": "Lesson 07 Slide 92-98 outlines Human-in-the-Loop safety patterns and resume flows.",
-    "slideRef": "Lesson 07 Slide 92-98",
-    "modelAnswer": "AI models can make mistakes, misunderstand instructions, or hallucinate.\nIf an AI has unrestricted power to send invoices or delete customer records, a single mistake could cost thousands of dollars or lose critical data.\nHuman-in-the-Loop adds a safety checkpoint: the AI drafts the action, but a human must click 'Approve' or make edits before the dangerous command actually runs.",
+    "question": "Explain the difference between Human-IN-the-loop, Human-ON-the-loop, and Human-OUT-of-the-loop.",
+    "explanation": "Teacher Highlight: Human-IN-the-loop, Human-ON-the-loop, and Human-OUT-of-the-loop.",
+    "slideRef": "Teacher Review Doc: Agents Item 9",
+    "modelAnswer": "1. Human-IN-the-loop: The AI CANNOT act until a human explicitly inspects and clicks 'Approve' (e.g. approving a $10,000 bank transfer).\n2. Human-ON-the-loop: The AI acts autonomously, but a human monitors the system and can press a pause/emergency stop button if something goes wrong.\n3. Human-OUT-of-the-loop: The AI acts completely autonomously with zero human supervision or intervention.",
     "keyPoints": [
-      "AI models can hallucinate or misunderstand complex instructions.",
-      "Dangerous actions (payments, deletions, emails) cannot be easily undone.",
-      "Human review catches errors before damage occurs.",
-      "Allows humans to approve, edit, or reject the proposed action."
+      "Human-IN-the-loop: Human approval is mandatory before the action executes.",
+      "Human-ON-the-loop: Agent acts autonomously while a human monitors with override control.",
+      "Human-OUT-of-the-loop: Fully autonomous execution without human involvement.",
+      "Trade-off between autonomy, safety, speed, and user experience."
     ]
   },
   {
     "id": 96,
-    "partId": "part4",
-    "partTitle": "Part 4: Autonomous Agents & Tool Integration",
-    "subtopic": "4.9 Human-in-the-Loop Design",
+    "partId": "mod3",
+    "partTitle": "Module 3: Autonomous Agents & Tool Integration",
+    "subtopic": "3.9 Human-in-the-Loop Design",
     "module": "mod07",
     "type": "fill-in-blank",
-    "question": "In LangGraph, the setting used to pause execution immediately before a specific step runs is interrupt_________.",
-    "explanation": "Lesson 07 Slide 92: interrupt_before=['step_name'] halts execution before the specified node.",
-    "slideRef": "Lesson 07 Slide 92",
+    "question": "In LangGraph, to pause execution immediately before a sensitive action runs, you configure interrupt_________.",
+    "explanation": "Teacher Highlight: Approval/review workflow: agent proposes -> human reviews -> execute.",
+    "slideRef": "Teacher Review Doc: Agents Item 9",
     "accepted": [
       "before",
       "Before",
