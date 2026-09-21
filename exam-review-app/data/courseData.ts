@@ -807,7 +807,7 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       "Nodes",
       "Node"
     ],
-    "placeholder": "e.g., nodes",
+    "placeholder": "Type your answer here...",
     "explanation": "Lesson 04 Slide 22: Graph workflows are built from Nodes (discrete computation functions) and Edges (transitions and routing logic).",
     "slideRef": "Lesson 04 Slide 22"
   },
@@ -876,7 +876,7 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       "evaluator",
       "Evaluator-Optimizer"
     ],
-    "placeholder": "e.g., Evaluator",
+    "placeholder": "Type your answer here...",
     "explanation": "Lesson 04 Slide 31: The Evaluator-Optimizer loop is a foundational iterative pattern for high-stakes generation tasks.",
     "slideRef": "Lesson 04 Slide 31"
   },
@@ -945,7 +945,7 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       "thread_id",
       "threadId"
     ],
-    "placeholder": "e.g., thread_id",
+    "placeholder": "Type your answer here...",
     "explanation": "Lesson 04 Slide 114: thread_id is the primary session identifier for LangGraph checkpointers.",
     "slideRef": "Lesson 04 Slide 114"
   },
@@ -1014,7 +1014,7 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       "TitleExtractor()",
       "title_extractor"
     ],
-    "placeholder": "e.g., TitleExtractor",
+    "placeholder": "Type your answer here...",
     "explanation": "Lesson 04 Slide 51: TitleExtractor extracts contextual document titles from chunks to inject into metadata.",
     "slideRef": "Lesson 04 Slide 51"
   },
@@ -1083,7 +1083,7 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       "TypedDict",
       "pydantic.BaseModel"
     ],
-    "placeholder": "e.g., BaseModel",
+    "placeholder": "Type your answer here...",
     "explanation": "Lesson 04 Slide 66: Pydantic BaseModel and typing.TypedDict are standard schemas for LangGraph State definition.",
     "slideRef": "Lesson 04 Slide 66"
   },
@@ -1153,7 +1153,7 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       "pipe operator",
       "pipe (|)"
     ],
-    "placeholder": "e.g., pipe",
+    "placeholder": "Type your answer here...",
     "explanation": "Lesson 04 Slide 92: The pipe operator '|' connects Runnables in LCEL.",
     "slideRef": "Lesson 04 Slide 92"
   },
@@ -1223,7 +1223,7 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       "construction",
       "Prompt Augmentation"
     ],
-    "placeholder": "e.g., augmentation",
+    "placeholder": "Type your answer here...",
     "explanation": "Lesson 05 Slide 16: Prompt Augmentation injects retrieved context chunks into the model's context window.",
     "slideRef": "Lesson 05 Slide 16"
   },
@@ -1294,7 +1294,7 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       "Dot Product",
       "Inner Product"
     ],
-    "placeholder": "e.g., Dot",
+    "placeholder": "Type your answer here...",
     "explanation": "Lesson 05 Slide 42: For unit-length vectors (||u||=||v||=1), dot product u · v equals cosine similarity.",
     "slideRef": "Lesson 05 Slide 42"
   },
@@ -1363,7 +1363,7 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       "recursive",
       "RecursiveCharacterTextSplitter"
     ],
-    "placeholder": "e.g., Recursive",
+    "placeholder": "Type your answer here...",
     "explanation": "Lesson 05 Slide 34: RecursiveCharacterTextSplitter is the standard text splitting strategy.",
     "slideRef": "Lesson 05 Slide 34"
   },
@@ -1432,7 +1432,7 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       "PersistentClient()",
       "persistent_client"
     ],
-    "placeholder": "e.g., PersistentClient",
+    "placeholder": "Type your answer here...",
     "explanation": "Lesson 05 Slide 56: PersistentClient(path=...) persists ChromaDB collections to disk.",
     "slideRef": "Lesson 05 Slide 56"
   },
@@ -1501,7 +1501,7 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       "k=60",
       "sixty"
     ],
-    "placeholder": "e.g., 60",
+    "placeholder": "Type your answer here...",
     "explanation": "Lesson 06 Slide 16: Constant k=60 is the empirical standard in Cormack et al. and slide 16.",
     "slideRef": "Lesson 06 Slide 16"
   },
@@ -1571,7 +1571,7 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       "DETACH DELETE",
       "detach delete"
     ],
-    "placeholder": "e.g., DETACH",
+    "placeholder": "Type your answer here...",
     "explanation": "Lesson 06 Slide 29 & Cypher Cheatsheet: 'DETACH DELETE n' removes the node and severs attached relationships.",
     "slideRef": "Lesson 06 Slide 29"
   },
@@ -1639,7 +1639,7 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       "Incorrect",
       "incorrect"
     ],
-    "placeholder": "e.g., Incorrect",
+    "placeholder": "Type your answer here...",
     "explanation": "Lesson 06 Slide 35: CRAG grades retrieval into Correct, Ambiguous, or Incorrect.",
     "slideRef": "Lesson 06 Slide 35"
   },
@@ -1709,7 +1709,7 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       "Bi-Encoder",
       "bi-encoder"
     ],
-    "placeholder": "e.g., Bi",
+    "placeholder": "Type your answer here...",
     "explanation": "Lesson 06 Slide 40: Bi-Encoders map text to separate dense vectors; Cross-Encoders compute joint attention.",
     "slideRef": "Lesson 06 Slide 40"
   },
@@ -1778,7 +1778,7 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       "middle",
       "Lost in the Middle"
     ],
-    "placeholder": "e.g., Middle",
+    "placeholder": "Type your answer here...",
     "explanation": "Lesson 06 Slide 50: The 'Lost in the Middle' paper (Liu et al.) highlights attention degradation in middle context.",
     "slideRef": "Lesson 06 Slide 50"
   },
@@ -1847,7 +1847,7 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       "tool_call",
       "tool_calls'"
     ],
-    "placeholder": "e.g., tool_calls",
+    "placeholder": "Type your answer here...",
     "explanation": "Lesson 07 Slide 18: finish_reason='tool_calls' signals the client harness to parse arguments and execute tools.",
     "slideRef": "Lesson 07 Slide 18"
   },
@@ -1916,7 +1916,7 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       "ge=18",
       "ge = 18"
     ],
-    "placeholder": "e.g., ge",
+    "placeholder": "Type your answer here...",
     "explanation": "Lesson 07 Slide 26: 'ge' stands for Greater than or Equal to in Pydantic validation fields.",
     "slideRef": "Lesson 07 Slide 26"
   },
@@ -1985,7 +1985,7 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       "privilege",
       "Least Privilege"
     ],
-    "placeholder": "e.g., Privilege",
+    "placeholder": "Type your answer here...",
     "explanation": "Lesson 07 Slide 37: Principle of Least Privilege is the bedrock of agent security.",
     "slideRef": "Lesson 07 Slide 37"
   },
@@ -2055,7 +2055,7 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       "recursion limit",
       "step"
     ],
-    "placeholder": "e.g., recursion",
+    "placeholder": "Type your answer here...",
     "explanation": "Lesson 07 Slide 44: 'recursion_limit' terminates graph execution if steps exceed the defined threshold.",
     "slideRef": "Lesson 07 Slide 44"
   },
@@ -2123,7 +2123,7 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       "Reasoning",
       "reasoning"
     ],
-    "placeholder": "e.g., Reasoning",
+    "placeholder": "Type your answer here...",
     "explanation": "Lesson 07 Slide 52: ReAct stands for Reasoning + Acting (Yao et al., 2022).",
     "slideRef": "Lesson 07 Slide 52"
   },
@@ -2193,7 +2193,7 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       "trace",
       "run trace"
     ],
-    "placeholder": "e.g., trajectory",
+    "placeholder": "Type your answer here...",
     "explanation": "Lesson 07 Slide 64: An agent's trajectory records the full history of decisions and actions taken to solve a task.",
     "slideRef": "Lesson 07 Slide 64"
   },
@@ -2263,7 +2263,7 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       "Server-Sent Events",
       "HTTP/SSE"
     ],
-    "placeholder": "e.g., SSE",
+    "placeholder": "Type your answer here...",
     "explanation": "Lesson 07 Slide 74: MCP uses stdio for local child processes and SSE (Server-Sent Events) over HTTP for remote servers.",
     "slideRef": "Lesson 07 Slide 74"
   },
@@ -2334,7 +2334,7 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       "rpc 2.0",
       "JSON-RPC"
     ],
-    "placeholder": "e.g., RPC",
+    "placeholder": "Type your answer here...",
     "explanation": "Lesson 07 Slide 74: MCP uses JSON-RPC 2.0 as its wire messaging protocol.",
     "slideRef": "Lesson 07 Slide 74"
   },
@@ -2403,7 +2403,7 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       "State",
       "update_state"
     ],
-    "placeholder": "e.g., state",
+    "placeholder": "Type your answer here...",
     "explanation": "Lesson 07 Slide 95: 'update_state' injects modifications into a checkpointed thread state before resumption.",
     "slideRef": "Lesson 07 Slide 95"
   }

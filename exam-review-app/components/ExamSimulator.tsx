@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { QUIZ_QUESTIONS, QuizQuestion } from "../data/courseData";
 import { 
   CheckCircle2, 
@@ -17,7 +17,9 @@ import {
   Square,
   Layers,
   Filter,
-  Check
+  Check,
+  RefreshCw,
+  AlertCircle
 } from "lucide-react";
 
 interface ExamSimulatorProps {
@@ -29,13 +31,26 @@ export const ExamSimulator: React.FC<ExamSimulatorProps> = ({
   selectedModule,
   onUpdateScore
 }) => {
-  const [selectedAnswers, setSelectedAnswers] = useState<Record<number, number>>({});
+  // Fill-in-the-blank state
   const [fillInInputs, setFillInInputs] = useState<Record<number, string>>({});
-  const [submittedFillIns, setSubmittedFillIns] = useState<Record<number, string>>({});
+  const [fillInStatus, setFillInStatus] = useState<Record<number, "correct" | "incorrect">>({});
+  const [fillInAttempts, setFillInAttempts] = useState<Record<number, number>>({});
+  const [revealedFillInAnswers, setRevealedFillInAnswers] = useState<Record<number, boolean>>({});
+
+  // Multiple Choice / True-False state (allows retrying wrong choices!)
+  const [wrongChoices, setWrongChoices] = useState<Record<number, number[]>>({});
+  const [correctChoices, setCorrectChoices] = useState<Record<number, number>>({});
+  const [revealedChoiceAnswers, setRevealedChoiceAnswers] = useState<Record<number, boolean>>({});
+
+  // Open Question state
   const [revealedOpenAnswers, setRevealedOpenAnswers] = useState<Record<number, boolean>>({});
   const [openStudentNotes, setOpenStudentNotes] = useState<Record<number, string>>({});
   const [masteredOpenQuestions, setMasteredOpenQuestions] = useState<Record<number, boolean>>({});
   
+  // Explanation visibility toggles
+  const [showExplanation, setShowExplanation] = useState<Record<number, boolean>>({});
+
+  // Filter state
   const [filterType, setFilterType] = useState<string>("all");
   const [filterPart, setFilterPart] = useState<string>("all");
 
@@ -46,53 +61,102 @@ export const ExamSimulator: React.FC<ExamSimulatorProps> = ({
     return true;
   });
 
+  // Calculate score based on questions answered
   const calculateScore = (
-    updatedSelected = selectedAnswers,
-    updatedFillIns = submittedFillIns
+    currentCorrectChoices = correctChoices,
+    currentFillInStatus = fillInStatus,
+    currentRevealedChoice = revealedChoiceAnswers,
+    currentRevealedFillIn = revealedFillInAnswers
   ) => {
     let correct = 0;
     let total = 0;
 
     // Multiple Choice & True/False
-    Object.entries(updatedSelected).forEach(([qid, ansIdx]) => {
-      total++;
-      const q = QUIZ_QUESTIONS.find((item) => item.id === parseInt(qid));
-      if (q && q.correctIndex === ansIdx) correct++;
-    });
-
-    // Fill in the blank
-    Object.entries(updatedFillIns).forEach(([qid, userText]) => {
-      total++;
-      const q = QUIZ_QUESTIONS.find((item) => item.id === parseInt(qid));
-      if (q && q.acceptedAnswers) {
-        const cleaned = userText.trim().toLowerCase();
-        const isMatch = q.acceptedAnswers.some(
-          (ans) => ans.trim().toLowerCase() === cleaned
-        );
-        if (isMatch) correct++;
+    QUIZ_QUESTIONS.forEach((q) => {
+      if (q.type === "qcm" || q.type === "true-false") {
+        if (currentCorrectChoices[q.id] !== undefined) {
+          correct++;
+          total++;
+        } else if (currentRevealedChoice[q.id]) {
+          total++; // User gave up and revealed
+        }
+      } else if (q.type === "fill-in-blank") {
+        if (currentFillInStatus[q.id] === "correct") {
+          correct++;
+          total++;
+        } else if (currentRevealedFillIn[q.id]) {
+          total++; // User gave up and revealed
+        }
       }
     });
 
     return { correct, total };
   };
 
-  const handleSelectOption = (questionId: number, optionIdx: number) => {
-    const updated = { ...selectedAnswers, [questionId]: optionIdx };
-    setSelectedAnswers(updated);
-    const score = calculateScore(updated, submittedFillIns);
-    onUpdateScore(score);
+  // Handle QCM / True-False choice
+  const handleSelectOption = (q: QuizQuestion, optIdx: number) => {
+    // If already correctly solved or revealed, do nothing
+    if (correctChoices[q.id] !== undefined || revealedChoiceAnswers[q.id]) return;
+
+    if (optIdx === q.correctIndex) {
+      // Correct answer!
+      const updatedCorrect = { ...correctChoices, [q.id]: optIdx };
+      setCorrectChoices(updatedCorrect);
+      setShowExplanation(prev => ({ ...prev, [q.id]: true }));
+      const score = calculateScore(updatedCorrect, fillInStatus, revealedChoiceAnswers, revealedFillInAnswers);
+      onUpdateScore(score);
+    } else {
+      // Wrong choice -> record it and allow user to try other options!
+      const existingWrongs = wrongChoices[q.id] || [];
+      if (!existingWrongs.includes(optIdx)) {
+        setWrongChoices({ ...wrongChoices, [q.id]: [...existingWrongs, optIdx] });
+      }
+    }
   };
 
-  const handleSubmitFillIn = (questionId: number) => {
-    const raw = (fillInInputs[questionId] || "").trim();
+  // Handle Fill-in-the-blank submit
+  const handleSubmitFillIn = (q: QuizQuestion) => {
+    const raw = (fillInInputs[q.id] || "").trim();
     if (!raw) return;
-    const updated = { ...submittedFillIns, [questionId]: raw };
-    setSubmittedFillIns(updated);
-    const score = calculateScore(selectedAnswers, updated);
+
+    const attempts = (fillInAttempts[q.id] || 0) + 1;
+    setFillInAttempts({ ...fillInAttempts, [q.id]: attempts });
+
+    const cleaned = raw.toLowerCase();
+    const isMatch = Boolean(
+      q.acceptedAnswers?.some((ans) => ans.trim().toLowerCase() === cleaned)
+    );
+
+    if (isMatch) {
+      const updatedStatus = { ...fillInStatus, [q.id]: "correct" as const };
+      setFillInStatus(updatedStatus);
+      setShowExplanation(prev => ({ ...prev, [q.id]: true }));
+      const score = calculateScore(correctChoices, updatedStatus, revealedChoiceAnswers, revealedFillInAnswers);
+      onUpdateScore(score);
+    } else {
+      setFillInStatus({ ...fillInStatus, [q.id]: "incorrect" });
+    }
+  };
+
+  // Give up and reveal for QCM / True-False
+  const handleRevealChoice = (questionId: number) => {
+    const updated = { ...revealedChoiceAnswers, [questionId]: true };
+    setRevealedChoiceAnswers(updated);
+    setShowExplanation(prev => ({ ...prev, [questionId]: true }));
+    const score = calculateScore(correctChoices, fillInStatus, updated, revealedFillInAnswers);
     onUpdateScore(score);
   };
 
-  const handleToggleReveal = (questionId: number) => {
+  // Give up and reveal for Fill-in-the-blank
+  const handleRevealFillIn = (questionId: number) => {
+    const updated = { ...revealedFillInAnswers, [questionId]: true };
+    setRevealedFillInAnswers(updated);
+    setShowExplanation(prev => ({ ...prev, [questionId]: true }));
+    const score = calculateScore(correctChoices, fillInStatus, revealedChoiceAnswers, updated);
+    onUpdateScore(score);
+  };
+
+  const handleToggleRevealOpen = (questionId: number) => {
     setRevealedOpenAnswers(prev => ({
       ...prev,
       [questionId]: !prev[questionId]
@@ -107,12 +171,17 @@ export const ExamSimulator: React.FC<ExamSimulatorProps> = ({
   };
 
   const handleReset = () => {
-    setSelectedAnswers({});
     setFillInInputs({});
-    setSubmittedFillIns({});
+    setFillInStatus({});
+    setFillInAttempts({});
+    setRevealedFillInAnswers({});
+    setWrongChoices({});
+    setCorrectChoices({});
+    setRevealedChoiceAnswers({});
     setRevealedOpenAnswers({});
     setOpenStudentNotes({});
     setMasteredOpenQuestions({});
+    setShowExplanation({});
     onUpdateScore({ correct: 0, total: 0 });
   };
 
@@ -132,18 +201,18 @@ export const ExamSimulator: React.FC<ExamSimulatorProps> = ({
         <div>
           <div className="flex items-center space-x-2 text-blue-400 text-xs font-bold uppercase tracking-wider mb-1">
             <Trophy className="w-4 h-4" />
-            <span>Comprehensive Exam Simulator ({QUIZ_QUESTIONS.length} Questions)</span>
+            <span>Interactive Exam Simulator ({QUIZ_QUESTIONS.length} Questions)</span>
           </div>
-          <h2 className="text-xl font-bold text-white">Full Course Monthly Exam Practice</h2>
+          <h2 className="text-xl font-bold text-white">Try By Yourself Practice Test</h2>
           <p className="text-xs text-slate-400 mt-1 max-w-2xl">
-            Covers all 24 subtopics across Workflow Engineering, RAG Fundamentals, Advanced RAG & Evaluation, and Autonomous Agents across 4 formats: QCM, True/False, Fill-in-the-Blank, and Open Questions.
+            Test your knowledge independently! If you get a question wrong, try again until you master the concept. Answers and explanations are never spoiled in advance.
           </p>
         </div>
 
         {/* Score & Mastery Display */}
         <div className="flex items-center space-x-3 bg-slate-950 p-3 rounded-xl border border-slate-800 shrink-0">
           <div className="text-center px-2">
-            <span className="text-[10px] text-slate-400 uppercase font-semibold">Auto Score</span>
+            <span className="text-[10px] text-slate-400 uppercase font-semibold">Solved</span>
             <p className="text-lg font-bold text-blue-400">{scoreStats.correct} / {scoreStats.total}</p>
           </div>
           <div className="w-px h-8 bg-slate-800"></div>
@@ -252,7 +321,7 @@ export const ExamSimulator: React.FC<ExamSimulatorProps> = ({
                 : "bg-slate-800/80 text-blue-300 hover:text-blue-200 border border-blue-500/30"
             }`}
           >
-            QCM (A/B/C/D) ({qcmCount})
+            QCM (24)
           </button>
           <button
             onClick={() => setFilterType("true-false")}
@@ -262,7 +331,7 @@ export const ExamSimulator: React.FC<ExamSimulatorProps> = ({
                 : "bg-slate-800/80 text-emerald-300 hover:text-emerald-200 border border-emerald-500/30"
             }`}
           >
-            TRUE / FALSE ({tfCount})
+            TRUE / FALSE (24)
           </button>
           <button
             onClick={() => setFilterType("fill-in-blank")}
@@ -297,24 +366,21 @@ export const ExamSimulator: React.FC<ExamSimulatorProps> = ({
           const isTrueFalse = q.type === "true-false";
           const isQCM = q.type === "qcm";
 
-          const isAnswered = isFillIn
-            ? submittedFillIns[q.id] !== undefined
-            : !isOpen && selectedAnswers[q.id] !== undefined;
+          // Choice question state
+          const isChoiceCorrect = correctChoices[q.id] !== undefined;
+          const isChoiceRevealed = revealedChoiceAnswers[q.id] || false;
+          const currentWrongOpts = wrongChoices[q.id] || [];
+          const isChoiceFinished = isChoiceCorrect || isChoiceRevealed;
 
-          let isCorrect = false;
-          if (isAnswered) {
-            if (isFillIn) {
-              const userVal = (submittedFillIns[q.id] || "").trim().toLowerCase();
-              isCorrect = Boolean(
-                q.acceptedAnswers?.some((ans) => ans.trim().toLowerCase() === userVal)
-              );
-            } else {
-              isCorrect = selectedAnswers[q.id] === q.correctIndex;
-            }
-          }
+          // Fill-in state
+          const fillStatus = fillInStatus[q.id];
+          const isFillInCorrect = fillStatus === "correct";
+          const isFillInRevealed = revealedFillInAnswers[q.id] || false;
+          const isFillInFinished = isFillInCorrect || isFillInRevealed;
+          const fillAttempts = fillInAttempts[q.id] || 0;
 
-          const userChoice = selectedAnswers[q.id];
-          const isRevealed = revealedOpenAnswers[q.id] || false;
+          // Open question state
+          const isOpenRevealed = revealedOpenAnswers[q.id] || false;
           const isMastered = masteredOpenQuestions[q.id] || false;
 
           return (
@@ -325,11 +391,11 @@ export const ExamSimulator: React.FC<ExamSimulatorProps> = ({
                   ? isMastered
                     ? "border-purple-600/80 bg-slate-900/95 ring-1 ring-purple-500/20"
                     : "border-slate-800 bg-slate-900"
-                  : isAnswered
-                    ? isCorrect
-                      ? "border-emerald-800/80 bg-slate-900/90"
-                      : "border-rose-800/80 bg-slate-900/90"
-                    : "border-slate-800"
+                  : (isChoiceCorrect || isFillInCorrect)
+                    ? "border-emerald-800/80 bg-slate-900/90"
+                    : (isChoiceRevealed || isFillInRevealed)
+                      ? "border-amber-800/80 bg-slate-900/90"
+                      : "border-slate-800"
               }`}
             >
               {/* Question Top Info */}
@@ -355,16 +421,17 @@ export const ExamSimulator: React.FC<ExamSimulatorProps> = ({
                 </div>
 
                 {/* Status Badges */}
-                {!isOpen && isAnswered && (
-                  <span
-                    className={`inline-flex items-center space-x-1 px-2.5 py-0.5 rounded-full text-xs font-bold ${
-                      isCorrect
-                        ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30"
-                        : "bg-rose-500/20 text-rose-300 border border-rose-500/30"
-                    }`}
-                  >
-                    {isCorrect ? <CheckCircle2 className="w-3.5 h-3.5" /> : <XCircle className="w-3.5 h-3.5" />}
-                    <span>{isCorrect ? "Correct" : "Incorrect"}</span>
+                {(isChoiceCorrect || isFillInCorrect) && (
+                  <span className="inline-flex items-center space-x-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                    <CheckCircle2 className="w-3.5 h-3.5" />
+                    <span>Correct</span>
+                  </span>
+                )}
+
+                {(isChoiceRevealed || isFillInRevealed) && !isChoiceCorrect && !isFillInCorrect && (
+                  <span className="inline-flex items-center space-x-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                    <HelpCircle className="w-3.5 h-3.5" />
+                    <span>Answer Revealed</span>
                   </span>
                 )}
 
@@ -393,130 +460,194 @@ export const ExamSimulator: React.FC<ExamSimulatorProps> = ({
                 </div>
               )}
 
-              {/* 1. FILL IN THE BLANK INTERACTION */}
+              {/* 1. FILL IN THE BLANK INTERACTION (Try by yourself first!) */}
               {isFillIn && (
                 <div className="space-y-3 pt-1">
                   <div className="flex flex-col sm:flex-row gap-2">
                     <input
                       type="text"
                       value={fillInInputs[q.id] || ""}
-                      onChange={(e) =>
-                        setFillInInputs({ ...fillInInputs, [q.id]: e.target.value })
-                      }
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter" && !isAnswered) {
-                          handleSubmitFillIn(q.id);
+                      onChange={(e) => {
+                        setFillInInputs({ ...fillInInputs, [q.id]: e.target.value });
+                        // Clear incorrect notice on typing so user can try again freely
+                        if (fillInStatus[q.id] === "incorrect") {
+                          setFillInStatus({ ...fillInStatus, [q.id]: undefined as any });
                         }
                       }}
-                      disabled={isAnswered}
-                      placeholder={q.placeholder || "Type your answer here..."}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" && !isFillInFinished) {
+                          handleSubmitFillIn(q);
+                        }
+                      }}
+                      disabled={isFillInFinished}
+                      placeholder="Type your answer here..."
                       className={`flex-1 bg-slate-950 border rounded-xl px-4 py-3 text-xs sm:text-sm font-mono focus:outline-none transition ${
-                        isAnswered
-                          ? isCorrect
-                            ? "border-emerald-500 text-emerald-300 bg-emerald-950/20"
-                            : "border-rose-500 text-rose-300 bg-rose-950/20"
-                          : "border-slate-700 text-slate-100 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                        isFillInCorrect
+                          ? "border-emerald-500 text-emerald-300 bg-emerald-950/20"
+                          : fillStatus === "incorrect"
+                            ? "border-rose-500 text-rose-300 bg-rose-950/20"
+                            : isFillInRevealed
+                              ? "border-amber-500 text-amber-300 bg-amber-950/20"
+                              : "border-slate-700 text-slate-100 focus:border-amber-500 focus:ring-1 focus:ring-amber-500"
                       }`}
                     />
-                    <button
-                      onClick={() => handleSubmitFillIn(q.id)}
-                      disabled={isAnswered || !fillInInputs[q.id]?.trim()}
-                      className="px-5 py-3 rounded-xl bg-amber-600 hover:bg-amber-500 disabled:bg-slate-800 disabled:text-slate-600 text-white font-semibold text-xs transition flex items-center justify-center space-x-2 shrink-0"
-                    >
-                      <PenTool className="w-3.5 h-3.5" />
-                      <span>Submit Answer</span>
-                    </button>
+                    {!isFillInFinished ? (
+                      <button
+                        onClick={() => handleSubmitFillIn(q)}
+                        disabled={!fillInInputs[q.id]?.trim()}
+                        className="px-5 py-3 rounded-xl bg-amber-600 hover:bg-amber-500 disabled:bg-slate-800 disabled:text-slate-600 text-white font-semibold text-xs transition flex items-center justify-center space-x-2 shrink-0"
+                      >
+                        <PenTool className="w-3.5 h-3.5" />
+                        <span>Submit Answer</span>
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => {
+                          // Allow re-trying even after finishing
+                          setFillInStatus({ ...fillInStatus, [q.id]: undefined as any });
+                          setRevealedFillInAnswers({ ...revealedFillInAnswers, [q.id]: false });
+                        }}
+                        className="px-4 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs transition flex items-center justify-center space-x-1.5 shrink-0 border border-slate-700"
+                      >
+                        <RefreshCw className="w-3.5 h-3.5" />
+                        <span>Try Again</span>
+                      </button>
+                    )}
                   </div>
 
-                  {isAnswered && (
-                    <div
-                      className={`p-3 rounded-xl border text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 ${
-                        isCorrect
-                          ? "bg-emerald-950/40 border-emerald-500/50 text-emerald-300"
-                          : "bg-rose-950/40 border-rose-500/50 text-rose-300"
-                      }`}
-                    >
+                  {/* If incorrect, encourage retry WITHOUT revealing the answer */}
+                  {fillStatus === "incorrect" && !isFillInRevealed && (
+                    <div className="p-3 rounded-xl border border-rose-500/50 bg-rose-950/40 text-rose-300 text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-2 animate-fadeIn">
                       <div className="flex items-center space-x-2">
-                        {isCorrect ? (
-                          <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                        ) : (
-                          <XCircle className="w-4 h-4 text-rose-400 shrink-0" />
-                        )}
-                        <span>
-                          {isCorrect ? "Great job! Your answer matches accepted terms." : "Your answer was incorrect."}
-                        </span>
+                        <XCircle className="w-4 h-4 text-rose-400 shrink-0" />
+                        <span>Not quite! Try another answer (Attempt {fillAttempts}). Keep thinking!</span>
                       </div>
-                      <div className="font-mono text-[11px] bg-slate-900 px-2.5 py-1 rounded-md border border-slate-700/60 text-slate-200">
-                        <span className="text-slate-400 mr-1">Accepted:</span>
-                        <strong className="text-amber-300">{q.acceptedAnswers?.join(" | ")}</strong>
+                      <button
+                        onClick={() => handleRevealFillIn(q.id)}
+                        className="text-[11px] text-slate-400 hover:text-amber-300 underline font-medium self-end sm:self-auto transition"
+                      >
+                        Give Up & Show Answer
+                      </button>
+                    </div>
+                  )}
+
+                  {/* If correct, celebrate and confirm */}
+                  {isFillInCorrect && (
+                    <div className="p-3 rounded-xl border border-emerald-500/50 bg-emerald-950/40 text-emerald-300 text-xs flex items-center space-x-2 animate-fadeIn">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                      <span>Great job! Your answer matches accepted terms.</span>
+                    </div>
+                  )}
+
+                  {/* If revealed after giving up, show accepted answers */}
+                  {isFillInRevealed && !isFillInCorrect && (
+                    <div className="p-3 rounded-xl border border-amber-500/50 bg-amber-950/40 text-amber-200 text-xs space-y-1.5 animate-fadeIn">
+                      <div className="flex items-center space-x-2">
+                        <HelpCircle className="w-4 h-4 text-amber-400 shrink-0" />
+                        <span>Accepted term(s): <strong className="text-white font-mono">{q.acceptedAnswers?.join(" | ")}</strong></span>
                       </div>
                     </div>
                   )}
                 </div>
               )}
 
-              {/* 2. MULTIPLE CHOICE (QCM) INTERACTION */}
+              {/* 2. MULTIPLE CHOICE (QCM) INTERACTION (Allow picking other choices on mistake!) */}
               {isQCM && (
                 <div className="space-y-2 pt-1">
                   {q.options?.map((opt, optIdx) => {
-                    let optStyle =
-                      "bg-slate-950/60 border-slate-800 text-slate-300 hover:border-blue-500 hover:bg-slate-800/50";
-                    if (isAnswered) {
-                      if (optIdx === q.correctIndex) {
-                        optStyle =
-                          "bg-emerald-950/40 border-emerald-500 text-emerald-200 font-semibold ring-1 ring-emerald-500/50";
-                      } else if (optIdx === userChoice) {
-                        optStyle = "bg-rose-950/40 border-rose-500 text-rose-200 ring-1 ring-rose-500/50";
-                      } else {
-                        optStyle = "opacity-40 border-slate-800/60 text-slate-500";
-                      }
+                    const isPickedWrong = currentWrongOpts.includes(optIdx);
+                    const isPickedCorrect = correctChoices[q.id] === optIdx;
+                    const isSolutionRevealed = isChoiceRevealed && optIdx === q.correctIndex;
+
+                    let optStyle = "bg-slate-950/60 border-slate-800 text-slate-300 hover:border-blue-500 hover:bg-slate-800/50";
+                    
+                    if (isPickedCorrect || isSolutionRevealed) {
+                      optStyle = "bg-emerald-950/40 border-emerald-500 text-emerald-200 font-semibold ring-1 ring-emerald-500/50";
+                    } else if (isPickedWrong) {
+                      optStyle = "bg-rose-950/40 border-rose-500 text-rose-300 ring-1 ring-rose-500/30 opacity-70";
+                    } else if (isChoiceFinished) {
+                      optStyle = "opacity-40 border-slate-800/60 text-slate-500";
                     }
 
                     return (
                       <button
                         key={optIdx}
-                        disabled={isAnswered}
-                        onClick={() => handleSelectOption(q.id, optIdx)}
+                        disabled={isChoiceFinished || isPickedWrong}
+                        onClick={() => handleSelectOption(q, optIdx)}
                         className={`w-full text-left p-3.5 rounded-xl border text-xs sm:text-sm transition flex items-start space-x-3 ${optStyle}`}
                       >
                         <span className="w-5 h-5 rounded-full border border-current flex items-center justify-center font-bold text-[10px] flex-shrink-0 mt-0.5">
-                          {String.fromCharCode(65 + optIdx)}
+                          {isPickedWrong ? "✕" : (isPickedCorrect || isSolutionRevealed) ? "✓" : String.fromCharCode(65 + optIdx)}
                         </span>
-                        <span className="leading-relaxed">{opt}</span>
+                        <span className="leading-relaxed flex-1">{opt}</span>
                       </button>
                     );
                   })}
+
+                  {/* Show gentle retry message if user picked a wrong choice, without spoiling correct choice */}
+                  {currentWrongOpts.length > 0 && !isChoiceFinished && (
+                    <div className="p-2.5 rounded-xl border border-rose-500/40 bg-rose-950/30 text-rose-300 text-xs flex items-center justify-between gap-2 animate-fadeIn">
+                      <div className="flex items-center space-x-2">
+                        <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
+                        <span>Not that one! Try another choice above.</span>
+                      </div>
+                      <button
+                        onClick={() => handleRevealChoice(q.id)}
+                        className="text-[11px] text-slate-400 hover:text-amber-300 underline font-medium transition"
+                      >
+                        Give Up & Show Answer
+                      </button>
+                    </div>
+                  )}
                 </div>
               )}
 
-              {/* 3. TRUE / FALSE INTERACTION */}
+              {/* 3. TRUE / FALSE INTERACTION (Allow picking other choice on mistake!) */}
               {isTrueFalse && (
-                <div className="grid grid-cols-2 gap-3 pt-1">
-                  {["True", "False"].map((tfLabel, optIdx) => {
-                    const isOptionSelected = userChoice === optIdx;
-                    let tfStyle = "bg-slate-950/60 border-slate-800 text-slate-300 hover:border-emerald-500 hover:bg-slate-800/50";
+                <div className="space-y-2 pt-1">
+                  <div className="grid grid-cols-2 gap-3">
+                    {["True", "False"].map((tfLabel, optIdx) => {
+                      const isPickedWrong = currentWrongOpts.includes(optIdx);
+                      const isPickedCorrect = correctChoices[q.id] === optIdx;
+                      const isSolutionRevealed = isChoiceRevealed && optIdx === q.correctIndex;
 
-                    if (isAnswered) {
-                      if (optIdx === q.correctIndex) {
+                      let tfStyle = "bg-slate-950/60 border-slate-800 text-slate-300 hover:border-emerald-500 hover:bg-slate-800/50";
+
+                      if (isPickedCorrect || isSolutionRevealed) {
                         tfStyle = "bg-emerald-950/50 border-emerald-500 text-emerald-200 font-bold ring-2 ring-emerald-500/40";
-                      } else if (isOptionSelected) {
-                        tfStyle = "bg-rose-950/50 border-rose-500 text-rose-200 ring-2 ring-rose-500/40";
-                      } else {
+                      } else if (isPickedWrong) {
+                        tfStyle = "bg-rose-950/50 border-rose-500 text-rose-200 font-bold ring-2 ring-rose-500/40 opacity-70";
+                      } else if (isChoiceFinished) {
                         tfStyle = "opacity-40 border-slate-800/60 text-slate-500";
                       }
-                    }
 
-                    return (
+                      return (
+                        <button
+                          key={optIdx}
+                          disabled={isChoiceFinished || isPickedWrong}
+                          onClick={() => handleSelectOption(q, optIdx)}
+                          className={`py-3 px-4 rounded-xl border text-center font-semibold text-xs sm:text-sm transition flex items-center justify-center space-x-2 ${tfStyle}`}
+                        >
+                          <span>{tfLabel}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  {currentWrongOpts.length > 0 && !isChoiceFinished && (
+                    <div className="p-2.5 rounded-xl border border-rose-500/40 bg-rose-950/30 text-rose-300 text-xs flex items-center justify-between gap-2 animate-fadeIn">
+                      <div className="flex items-center space-x-2">
+                        <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
+                        <span>Incorrect. You can test the other option!</span>
+                      </div>
                       <button
-                        key={optIdx}
-                        disabled={isAnswered}
-                        onClick={() => handleSelectOption(q.id, optIdx)}
-                        className={`py-3 px-4 rounded-xl border text-center font-semibold text-xs sm:text-sm transition flex items-center justify-center space-x-2 ${tfStyle}`}
+                        onClick={() => handleRevealChoice(q.id)}
+                        className="text-[11px] text-slate-400 hover:text-amber-300 underline font-medium transition"
                       >
-                        <span>{tfLabel}</span>
+                        Give Up & Show Answer
                       </button>
-                    );
-                  })}
+                    </div>
+                  )}
                 </div>
               )}
 
@@ -538,17 +669,17 @@ export const ExamSimulator: React.FC<ExamSimulatorProps> = ({
 
                   <div className="flex items-center justify-between">
                     <button
-                      onClick={() => handleToggleReveal(q.id)}
+                      onClick={() => handleToggleRevealOpen(q.id)}
                       className="inline-flex items-center space-x-2 px-4 py-2 rounded-xl bg-purple-600/20 hover:bg-purple-600/30 text-purple-300 border border-purple-500/40 text-xs font-semibold transition"
                     >
-                      {isRevealed ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                      <span>{isRevealed ? "Hide Model Answer & Rubric" : "Reveal Model Answer & Rubric"}</span>
+                      {isOpenRevealed ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      <span>{isOpenRevealed ? "Hide Model Answer & Rubric" : "Reveal Model Answer & Rubric"}</span>
                     </button>
                     <span className="text-[11px] text-slate-400 font-mono">{q.slideRef}</span>
                   </div>
 
                   {/* Revealed Model Answer & Key Points */}
-                  {isRevealed && (
+                  {isOpenRevealed && (
                     <div className="space-y-4 p-5 rounded-xl bg-slate-950/90 border border-purple-500/30 animate-fadeIn text-xs sm:text-sm">
                       <div>
                         <div className="flex items-center space-x-2 text-purple-400 font-bold mb-2">
@@ -596,8 +727,8 @@ export const ExamSimulator: React.FC<ExamSimulatorProps> = ({
                 </div>
               )}
 
-              {/* Feedback and Explanation for Auto-Graded (QCM, T/F, Fill) */}
-              {!isOpen && isAnswered && (
+              {/* Feedback and Explanation for Auto-Graded (Only shown once solved or revealed) */}
+              {!isOpen && (isChoiceFinished || isFillInFinished) && showExplanation[q.id] && (
                 <div className="p-4 rounded-xl bg-slate-950/80 border border-slate-800 text-xs space-y-1.5 animate-fadeIn">
                   <div className="flex items-center justify-between text-blue-400 font-bold">
                     <span className="flex items-center space-x-1.5">
