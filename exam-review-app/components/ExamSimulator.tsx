@@ -253,37 +253,47 @@ export const ExamSimulator: React.FC<ExamSimulatorProps> = ({
                 : "bg-slate-800/80 text-slate-400 hover:text-white border border-slate-700/60"
             }`}
           >
-            All Highlights (96)
+            All Parts (96)
           </button>
           <button
-            onClick={() => setFilterPart("mod1")}
+            onClick={() => setFilterPart("part1")}
             className={`px-3 py-1 rounded-lg font-medium transition ${
-              filterPart === "mod1"
+              filterPart === "part1"
                 ? "bg-indigo-600 text-white shadow-sm"
                 : "bg-slate-800/80 text-indigo-300 hover:text-white border border-indigo-500/30"
             }`}
           >
-            Module 1: RAG Basics (20)
+            Part 1: 04. Workflow (24)
           </button>
           <button
-            onClick={() => setFilterPart("mod2")}
+            onClick={() => setFilterPart("part2")}
             className={`px-3 py-1 rounded-lg font-medium transition ${
-              filterPart === "mod2"
+              filterPart === "part2"
                 ? "bg-cyan-600 text-white shadow-sm"
                 : "bg-slate-800/80 text-cyan-300 hover:text-white border border-cyan-500/30"
             }`}
           >
-            Module 2: Advanced RAG (40)
+            Part 2: RAG Basics (16)
           </button>
           <button
-            onClick={() => setFilterPart("mod3")}
+            onClick={() => setFilterPart("part3")}
             className={`px-3 py-1 rounded-lg font-medium transition ${
-              filterPart === "mod3"
+              filterPart === "part3"
+                ? "bg-emerald-600 text-white shadow-sm"
+                : "bg-slate-800/80 text-emerald-300 hover:text-white border border-emerald-500/30"
+            }`}
+          >
+            Part 3: Adv RAG (20)
+          </button>
+          <button
+            onClick={() => setFilterPart("part4")}
+            className={`px-3 py-1 rounded-lg font-medium transition ${
+              filterPart === "part4"
                 ? "bg-purple-600 text-white shadow-sm"
                 : "bg-slate-800/80 text-purple-300 hover:text-white border border-purple-500/30"
             }`}
           >
-            Module 3: Autonomous Agents (36)
+            Part 4: Agents (36)
           </button>
         </div>
 
