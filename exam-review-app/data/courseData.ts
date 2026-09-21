@@ -30,14 +30,19 @@ export interface CodeSnippet {
 
 export interface QuizQuestion {
   id: number;
+  partId: 'part1' | 'part2' | 'part3' | 'part4';
+  partTitle: string;
+  subtopic: string;
   moduleId: string;
-  type: 'concept' | 'code' | 'scenario' | 'fill-in-blank';
+  type: 'qcm' | 'true-false' | 'fill-in-blank' | 'open-question';
   question: string;
   codeSnippet?: string;
   options?: string[];
   correctIndex?: number;
   acceptedAnswers?: string[];
   placeholder?: string;
+  modelAnswer?: string;
+  keyPoints?: string[];
   explanation: string;
   slideRef: string;
 }
@@ -737,735 +742,1670 @@ DETACH DELETE a;
 
 export const QUIZ_QUESTIONS: QuizQuestion[] = [
   {
-    id: 1,
-    moduleId: "mod04",
-    type: "concept",
-    question: "What is the primary difference between State and Memory in an AI workflow?",
-    options: [
-      "State is long-term across all users; Memory is short-term for one function call.",
-      "State holds model weights; Memory holds document embeddings.",
-      "State is short-term execution context for the current run; Memory is long-term context retained across multiple sessions.",
-      "State is stored in a vector DB; Memory is stored in a text file."
+    "id": 1,
+    "partId": "part1",
+    "partTitle": "Part 1: Workflow Engineering with LLM Frameworks",
+    "subtopic": "1.1 Introduction to LLM Workflow",
+    "moduleId": "mod04",
+    "type": "qcm",
+    "question": "Why do complex real-world AI applications require structured LLM Workflows instead of a single massive prompt?",
+    "options": [
+      "Workflows decompose tasks into modular, debuggable steps with deterministic control flow, error handling, and specialized prompts.",
+      "Single prompts cannot be version-controlled in Git repositories.",
+      "Single prompts exceed GPU memory limits regardless of model context size.",
+      "LLMs refuse to generate text when prompt lengths exceed 500 characters."
     ],
-    correctIndex: 2,
-    explanation: "According to Lesson 04 (Slide 39), State manages the current execution context (inputs, intermediate variables, step pointer) and is temporary, whereas Memory records long-term user preferences and history across sessions.",
-    slideRef: "Lesson 04 Slide 39"
+    "correctIndex": 0,
+    "explanation": "Lesson 04 Slide 12-15: Monolithic prompts are brittle, lack predictable intermediate checkpoints, and suffer from high hallucination rates. Workflows provide modularity, inspectability, and robust branching.",
+    "slideRef": "Lesson 04 Slide 12-15"
   },
   {
-    id: 2,
-    moduleId: "mod04",
-    type: "code",
-    question: "In LangGraph, which component handles short-term memory scoped to a single ongoing conversation thread?",
-    codeSnippet: `builder = StateGraph(State)
-checkpointer = InMemorySaver()
-app = builder.compile(checkpointer=checkpointer)
-config = {"configurable": {"thread_id": "conv-1"}}`,
-    options: [
-      "InMemorySaver (Checkpointer) scoped by thread_id",
-      "InMemoryStore scoped by user namespace",
-      "TitleExtractor scoped by document id",
-      "SentenceSplitter scoped by chunk_size"
+    "id": 2,
+    "partId": "part1",
+    "partTitle": "Part 1: Workflow Engineering with LLM Frameworks",
+    "subtopic": "1.1 Introduction to LLM Workflow",
+    "moduleId": "mod04",
+    "type": "true-false",
+    "question": "In LLM workflow engineering, cyclical graphs containing loops are strictly forbidden because LLMs cannot be re-invoked within the same execution thread.",
+    "options": [
+      "True",
+      "False"
     ],
-    correctIndex: 0,
-    explanation: "Lesson 04 Slide 114 explains that Checkpointer (e.g. InMemorySaver) handles short-term memory scoped to a thread_id, ensuring two calls with the same thread_id share history.",
-    slideRef: "Lesson 04 Slide 114"
+    "correctIndex": 1,
+    "explanation": "False. Cyclical workflows (graphs with loops) are essential in modern LLM engineering for reflection, iterative evaluation, and self-correction loops (such as Evaluator-Optimizer and Agentic loops).",
+    "slideRef": "Lesson 04 Slide 22"
   },
   {
-    id: 3,
-    moduleId: "mod04",
-    type: "concept",
-    question: "In a document ingestion pipeline, why does the pipeline check a cryptographic content hash in the docstore before running transformations?",
-    options: [
-      "To encrypt the document against unauthorized user viewing.",
-      "To convert text into audio tokens.",
-      "To format Markdown headers into JSON tables.",
-      "To avoid expensive chunking and embedding generation if the file has not changed."
+    "id": 3,
+    "partId": "part1",
+    "partTitle": "Part 1: Workflow Engineering with LLM Frameworks",
+    "subtopic": "1.1 Introduction to LLM Workflow",
+    "moduleId": "mod04",
+    "type": "open-question",
+    "question": "Explain why cyclical graphs (workflows with loops) are necessary for LLM applications, whereas standard data pipelines traditionally enforce strict DAGs (Directed Acyclic Graphs).",
+    "modelAnswer": "Standard ETL data pipelines assume deterministic transformations where operations succeed or fail cleanly in one downstream pass. In contrast, LLMs are non-deterministic and can produce invalid JSON, incomplete answers, or hallucinations. Cyclical workflows enable iterative self-correction (reflection, evaluator-optimizer loops) where an evaluator inspects the output and routes back to the generator node with specific critique until quality conditions are met or maximum retry limits are reached.",
+    "keyPoints": [
+      "LLMs are probabilistic and prone to intermediate failures/hallucinations.",
+      "Cyclic workflows enable iterative reflection, evaluation, and repair loops.",
+      "Standard DAGs cannot loop back without complex unrolling or recursion.",
+      "Loops must include termination boundaries (e.g. max retries) to prevent infinite loops."
     ],
-    correctIndex: 3,
-    explanation: "Lesson 04 Slide 51 emphasizes that checking the docstore content hash prevents redundant, expensive chunking and embedding operations for unmodified documents.",
-    slideRef: "Lesson 04 Slide 51"
+    "explanation": "Lesson 04 Slide 24-26 emphasizes that agentic workflows require cycles for reflection, error recovery, and iterative refinement.",
+    "slideRef": "Lesson 04 Slide 24-26"
   },
   {
-    id: 4,
-    moduleId: "mod04",
-    type: "code",
-    question: "In LangGraph, how does the newer 'Command' primitive simplify conditional routing compared to 'add_conditional_edges'?",
-    codeSnippet: `def classify(state: State) -> Command[Literal["billing", "tech"]]:
-    if "billing" in state["ticket"]:
-        return Command(update={"status": "routed"}, goto="billing")
-    return Command(update={"status": "routed"}, goto="tech")`,
-    options: [
-      "It replaces Python functions with raw shell commands.",
-      "It combines returning state updates and selecting the next destination node in a single return statement.",
-      "It forces the graph to run synchronously without threading.",
-      "It converts LangGraph into a linear LangChain LCEL pipe."
+    "id": 4,
+    "partId": "part1",
+    "partTitle": "Part 1: Workflow Engineering with LLM Frameworks",
+    "subtopic": "1.1 Introduction to LLM Workflow",
+    "moduleId": "mod04",
+    "type": "fill-in-blank",
+    "question": "In graph-based LLM architectures, computational units that perform individual tasks (such as LLM generation or tool execution) are called ________, while transitions connecting them are called edges.",
+    "acceptedAnswers": [
+      "nodes",
+      "node",
+      "Nodes",
+      "Node"
     ],
-    correctIndex: 1,
-    explanation: "Lesson 04 Slide 107 states that Command lets a node return a state update and the next node to route to in one return value, avoiding a separate routing function.",
-    slideRef: "Lesson 04 Slide 107"
+    "placeholder": "e.g., nodes",
+    "explanation": "Lesson 04 Slide 22: Graph workflows are built from Nodes (discrete computation functions) and Edges (transitions and routing logic).",
+    "slideRef": "Lesson 04 Slide 22"
   },
   {
-    id: 5,
-    moduleId: "mod04",
-    type: "concept",
-    question: "What are the 3 core principles of Modular Workflow Design?",
-    options: [
-      "Single responsibility, standard interfaces, and composability",
-      "High coupling, complex inheritance, raw execution",
-      "All-in-one scripts, static prompts, and global variables",
-      "Multi-GPU training, fine-tuning, and long context"
+    "id": 5,
+    "partId": "part1",
+    "partTitle": "Part 1: Workflow Engineering with LLM Frameworks",
+    "subtopic": "1.2 Chaining & Execution Patterns",
+    "moduleId": "mod04",
+    "type": "qcm",
+    "question": "In the 'Evaluator-Optimizer' workflow execution pattern, what is the primary role of the Evaluator node?",
+    "options": [
+      "To tokenize raw text into integer vectors before vector database insertion.",
+      "To critique and score the optimizer's candidate output against criteria and provide actionable feedback for the next iteration.",
+      "To run PyTorch backpropagation to fine-tune the base foundation weights.",
+      "To terminate the process immediately whenever an LLM generates a refusal token."
     ],
-    correctIndex: 0,
-    explanation: "Lesson 04 Slide 60 outlines the 3 principles: Single responsibility (each piece has one job), Standard interfaces (swappable without touching adjacent code), and Composability (small pieces easily link together).",
-    slideRef: "Lesson 04 Slide 60"
+    "correctIndex": 1,
+    "explanation": "Lesson 04 Slide 31-33: The Evaluator-Optimizer loop uses an Evaluator to inspect candidate answers against rubric/criteria, providing feedback to guide the Optimizer's revision loop.",
+    "slideRef": "Lesson 04 Slide 31-33"
   },
   {
-    id: 6,
-    moduleId: "mod05",
-    type: "concept",
-    question: "When should an engineer choose RAG instead of Fine-Tuning?",
-    options: [
-      "When the goal is to alter the model’s linguistic style, tone, or dialect.",
-      "When you have no access to an embedding model or vector database.",
-      "When information changes frequently, private documents are needed, and exact citations are mandatory.",
-      "When training compute is unlimited and latency must be zero."
+    "id": 6,
+    "partId": "part1",
+    "partTitle": "Part 1: Workflow Engineering with LLM Frameworks",
+    "subtopic": "1.2 Chaining & Execution Patterns",
+    "moduleId": "mod04",
+    "type": "true-false",
+    "question": "In a Sequential Chaining workflow pattern, all downstream tasks execute simultaneously in parallel across independent threads to minimize latency.",
+    "options": [
+      "True",
+      "False"
     ],
-    correctIndex: 2,
-    explanation: "Lesson 05 Slide 4 & 5 highlight that RAG is ideal for dynamic knowledge updates, preventing staleness and hallucination, and providing exact source attribution.",
-    slideRef: "Lesson 05 Slide 4-5"
+    "correctIndex": 1,
+    "explanation": "False. Sequential chaining executes tasks strictly one after another in linear order. Simultaneous execution is characteristic of Parallel (Fan-out / Fan-in) execution patterns.",
+    "slideRef": "Lesson 04 Slide 28"
   },
   {
-    id: 7,
-    moduleId: "mod05",
-    type: "concept",
-    question: "What is the primary purpose of Chunk Overlap in document splitting?",
-    options: [
-      "To compress the document so it uses fewer total tokens.",
-      "To automatically translate English text into Khmer.",
-      "To make vector dimensions smaller for faster cosine search.",
-      "To prevent sentences or concepts from being severed at chunk boundaries."
+    "id": 7,
+    "partId": "part1",
+    "partTitle": "Part 1: Workflow Engineering with LLM Frameworks",
+    "subtopic": "1.2 Chaining & Execution Patterns",
+    "moduleId": "mod04",
+    "type": "open-question",
+    "question": "You are designing an AI customer support router. Incoming user tickets can be Technical, Billing, or Sales inquiries. Describe how you would implement a Routing Pattern and detail the fallback mechanism when classification fails.",
+    "modelAnswer": "1) Router Node: An intent classification LLM or embedding classifier receives the user query and outputs a structured category: Technical, Billing, or Sales.\n2) Conditional Edges: The graph routes execution to the appropriate specialized subgraph (e.g. TechnicalSupportChain with docs, BillingChain with invoice tool).\n3) Fallback Mechanism: If the classifier returns 'Unknown', confidence score is below threshold (< 0.7), or an exception occurs, route to a GeneralFallbackNode that provides a graceful default answer, asks the user for clarification, or creates a human agent escalation ticket.",
+    "keyPoints": [
+      "Intent classifier / Router node at entry point.",
+      "Conditional edges directing execution to domain-specific chains.",
+      "Fallback node triggered on low confidence, exceptions, or unclassified queries.",
+      "Human-in-the-loop escalation or clarification prompt."
     ],
-    correctIndex: 3,
-    explanation: "Lesson 05 Slide 24 & Lesson 06 Slide 72 explain that chunk overlap repeats 10–20% of tokens across boundaries so sentences split mid-cut remain whole in at least one chunk.",
-    slideRef: "Lesson 05 Slide 24"
+    "explanation": "Lesson 04 Slide 29-30: Router patterns direct traffic dynamically based on intent classification with explicit fallback paths.",
+    "slideRef": "Lesson 04 Slide 29-30"
   },
   {
-    id: 8,
-    moduleId: "mod05",
-    type: "concept",
-    question: "If two embedding vectors A and B are unit-normalized (length = 1.0), what is the relationship between their Dot Product and Cosine Similarity?",
-    options: [
-      "Dot Product is the square of Cosine Similarity.",
-      "Dot Product is mathematically identical to Cosine Similarity.",
-      "Dot Product is always negative, while Cosine is positive.",
-      "Dot Product requires GPU, while Cosine requires CPU."
+    "id": 8,
+    "partId": "part1",
+    "partTitle": "Part 1: Workflow Engineering with LLM Frameworks",
+    "subtopic": "1.2 Chaining & Execution Patterns",
+    "moduleId": "mod04",
+    "type": "fill-in-blank",
+    "question": "The execution pattern where an LLM repeatedly generates content, an evaluator critiques it, and the loop continues until a quality threshold is reached is called the ________-Optimizer loop.",
+    "acceptedAnswers": [
+      "Evaluator",
+      "evaluator",
+      "Evaluator-Optimizer"
     ],
-    correctIndex: 1,
-    explanation: "Because Cosine Similarity = (A · B) / (||A|| * ||B||), when ||A|| = 1 and ||B|| = 1, the denominator is 1, making Dot Product exactly equal to Cosine Similarity!",
-    slideRef: "Lesson 05 Slide 34"
+    "placeholder": "e.g., Evaluator",
+    "explanation": "Lesson 04 Slide 31: The Evaluator-Optimizer loop is a foundational iterative pattern for high-stakes generation tasks.",
+    "slideRef": "Lesson 04 Slide 31"
   },
   {
-    id: 9,
-    moduleId: "mod05",
-    type: "code",
-    question: "In ChromaDB, what does the following query call return?",
-    codeSnippet: `results = collection.query(
-    query_texts=["quarterly revenue growth"],
-    n_results=3,
-    where={"dept": "Finance"}
-)`,
-    options: [
-      "All documents in the collection formatted as CSV.",
-      "A BM25 keyword frequency count table.",
-      "A fine-tuned LoRA checkpoint for the query.",
-      "The top-3 most semantically similar chunks belonging to the Finance department."
+    "id": 9,
+    "partId": "part1",
+    "partTitle": "Part 1: Workflow Engineering with LLM Frameworks",
+    "subtopic": "1.3 Managing State, Memory, and Persistence",
+    "moduleId": "mod04",
+    "type": "qcm",
+    "question": "What is the fundamental architectural distinction between 'State' and 'Memory' in an AI workflow?",
+    "options": [
+      "State is persistent across server reboots; Memory is always wiped immediately after every token.",
+      "State is stored in a vector DB; Memory is stored exclusively in GPU VRAM registers.",
+      "State manages the transient execution context of the current run; Memory retains long-term user context and facts across multiple sessions.",
+      "State is only for single-turn chats; Memory is only for image processing models."
     ],
-    correctIndex: 3,
-    explanation: "Lesson 05 Slide 51 demonstrates that collection.query embeds query_texts and retrieves the top n_results closest chunks by similarity, filtered by payload metadata.",
-    slideRef: "Lesson 05 Slide 51"
+    "correctIndex": 2,
+    "explanation": "Lesson 04 Slide 39-42: State is the temporary, execution-scoped data container for an ongoing workflow run. Memory is cross-session persistence that stores long-term facts, preferences, and chat history.",
+    "slideRef": "Lesson 04 Slide 39-42"
   },
   {
-    id: 10,
-    moduleId: "mod05",
-    type: "concept",
-    question: "What does an Approximate Nearest Neighbor (ANN) index like HNSW do differently from a traditional SQL database B-Tree index?",
-    options: [
-      "It enables sub-linear similarity search across high-dimensional vector spaces instead of exact relational matches.",
-      "It only works with integer primary keys.",
-      "It encrypts strings into SHA-256 hashes.",
-      "It requires retraining on every select query."
+    "id": 10,
+    "partId": "part1",
+    "partTitle": "Part 1: Workflow Engineering with LLM Frameworks",
+    "subtopic": "1.3 Managing State, Memory, and Persistence",
+    "moduleId": "mod04",
+    "type": "true-false",
+    "question": "In LangGraph, using an `InMemorySaver` checkpointer guarantees that conversational state survives container restarts and server redeployments.",
+    "options": [
+      "True",
+      "False"
     ],
-    correctIndex: 0,
-    explanation: "Lesson 05 Slide 47 explains that HNSW indexes allow searching millions of high-dimensional vectors in sub-linear time, whereas B-trees only support 1D exact or range matching.",
-    slideRef: "Lesson 05 Slide 47"
+    "correctIndex": 1,
+    "explanation": "Lesson 04 Slide 114: InMemorySaver stores checkpoints in Python process RAM only. When the container restarts or crashes, all state is lost. Production requires PostgresSaver or MongoSaver.",
+    "slideRef": "Lesson 04 Slide 114"
   },
   {
-    id: 11,
-    moduleId: "mod06",
-    type: "concept",
-    question: "What is the main blind spot of pure dense (vector) retrieval that keyword search (BM25) solves?",
-    options: [
-      "Dense search cannot handle synonyms like 'car' vs 'vehicle'.",
-      "Dense search misses exact identifiers, part numbers (SKU-4471), error codes (E-1147), and rare acronyms.",
-      "Dense search is too slow on large corpora.",
-      "Dense search requires keyword stemming."
+    "id": 11,
+    "partId": "part1",
+    "partTitle": "Part 1: Workflow Engineering with LLM Frameworks",
+    "subtopic": "1.3 Managing State, Memory, and Persistence",
+    "moduleId": "mod04",
+    "type": "open-question",
+    "question": "Explain how LangGraph partitions conversational state using `thread_id` and how cross-session long-term memory can be isolated across multiple users.",
+    "modelAnswer": "1) Short-term Thread State: LangGraph uses a checkpointer (e.g. PostgresSaver) where every conversation run receives a configuration key `{'configurable': {'thread_id': '<id>'}}`. The checkpointer indexes checkpoints by `thread_id`, ensuring calls within that thread share message history and intermediate graph variables.\n2) Long-term Cross-Thread Memory: LangGraph Store (e.g. `InMemoryStore` or `AsyncPostgresStore`) manages persistent memory using hierarchical namespaces, such as `(user_id, 'profile')` or `(user_id, 'memories')`. This allows an agent to save user preferences across conversations while strictly preventing user data leaks.",
+    "keyPoints": [
+      "thread_id scopes short-term checkpoints to a specific conversation thread.",
+      "Checkpointer persists intermediate graph state snapshots per thread_id.",
+      "Long-term memory is managed via LangGraph Store using namespaced keys (e.g. user_id, profile).",
+      "Strict separation prevents cross-tenant data leaks in multi-user applications."
     ],
-    correctIndex: 1,
-    explanation: "Lesson 06 Slide 5 emphasizes that dense search compresses text into general semantic meaning, losing tokens that carry identity rather than meaning (exact error codes, SKUs, jargon).",
-    slideRef: "Lesson 06 Slide 5"
+    "explanation": "Lesson 04 Slide 114-118: Checkpointers isolate threads via thread_id; Stores manage persistent cross-session memory namespaces.",
+    "slideRef": "Lesson 04 Slide 114-118"
   },
   {
-    id: 12,
-    moduleId: "mod06",
-    type: "code",
-    question: "In Reciprocal Rank Fusion (RRF), what is the formula and standard smoothing constant k?",
-    codeSnippet: `fused[doc_id] += 1.0 / (k + rank)`,
-    options: [
-      "k = 1.5 (from BM25)",
-      "k = 0.75 (length normalization)",
-      "k = 60 (standard damping constant)",
-      "k = 512 (context limit)"
+    "id": 12,
+    "partId": "part1",
+    "partTitle": "Part 1: Workflow Engineering with LLM Frameworks",
+    "subtopic": "1.3 Managing State, Memory, and Persistence",
+    "moduleId": "mod04",
+    "type": "fill-in-blank",
+    "question": "In LangGraph, the configuration parameter passed in `config={'configurable': {'________': 'conv-101'}}` is used to partition short-term conversation checkpoints.",
+    "acceptedAnswers": [
+      "thread_id",
+      "thread_id",
+      "threadId"
     ],
-    correctIndex: 2,
-    explanation: "Lesson 06 Slide 10 states that RRF(d) = Σ 1 / (k + rank_i(d)) with k = 60 as the standard constant to damp the gap between rank 1 and rank 2.",
-    slideRef: "Lesson 06 Slide 10"
+    "placeholder": "e.g., thread_id",
+    "explanation": "Lesson 04 Slide 114: thread_id is the primary session identifier for LangGraph checkpointers.",
+    "slideRef": "Lesson 04 Slide 114"
   },
   {
-    id: 13,
-    moduleId: "mod06",
-    type: "concept",
-    question: "Why does Graph RAG succeed on multi-hop questions where standard chunk-based top-k retrieval fails?",
-    options: [
-      "Graph RAG connects facts across separate chunks using typed entity-relationship edges (A -> B -> C).",
-      "Graph RAG uses larger LLMs with 10M token context windows.",
-      "Graph RAG replaces all text with images.",
-      "Graph RAG only uses BM25 keyword matching."
+    "id": 13,
+    "partId": "part1",
+    "partTitle": "Part 1: Workflow Engineering with LLM Frameworks",
+    "subtopic": "1.4 Document Ingestion Pipelines",
+    "moduleId": "mod04",
+    "type": "qcm",
+    "question": "During document ingestion, what is the primary benefit of applying metadata extractors (e.g. TitleExtractor, KeywordExtractor)?",
+    "options": [
+      "They translate English documents into binary machine code.",
+      "They compress text so that 10,000 pages fit into 1 single token.",
+      "They automatically fine-tune the LLM weights without gradient descent.",
+      "They enrich chunks with contextual tags, enabling hybrid filtering and mitigating loss of global document context."
     ],
-    correctIndex: 0,
-    explanation: "Lesson 06 Slide 18–20 explains that multi-hop questions have half the answer in Chunk 14 and half in Chunk 902; knowledge graph edges connect them structurally.",
-    slideRef: "Lesson 06 Slide 18-20"
+    "correctIndex": 3,
+    "explanation": "Lesson 04 Slide 48-52: Chunks lose parent context when split. Metadata extractors (titles, summaries, entity tags) enrich chunks, allowing vector databases to filter by metadata and improving retrieval precision.",
+    "slideRef": "Lesson 04 Slide 48-52"
   },
   {
-    id: 14,
-    moduleId: "mod06",
-    type: "concept",
-    question: "In Microsoft GraphRAG, what is the key difference between Local Search and Global Search?",
-    options: [
-      "Local search runs on localhost; Global runs in cloud.",
-      "Local search requires GPU; Global search requires CPU.",
-      "Local search uses BM25; Global search uses ChromaDB.",
-      "Local search is entity-focused (traversing 1-2 hops); Global search is theme-focused (map-reducing over community summaries)."
+    "id": 14,
+    "partId": "part1",
+    "partTitle": "Part 1: Workflow Engineering with LLM Frameworks",
+    "subtopic": "1.4 Document Ingestion Pipelines",
+    "moduleId": "mod04",
+    "type": "true-false",
+    "question": "Running a document ingestion pipeline without document hashing or deduplication checks causes duplicate vectors to accumulate every time the pipeline is re-run.",
+    "options": [
+      "True",
+      "False"
     ],
-    correctIndex: 3,
-    explanation: "Lesson 06 Slide 27: Local search focuses on specific entities and walks outward; Global search queries community summary reports to answer corpus-wide thematic questions.",
-    slideRef: "Lesson 06 Slide 27"
+    "correctIndex": 0,
+    "explanation": "Lesson 04 Slide 54: Ingestion pipelines must maintain document hashes or use upsert/idempotent keys; otherwise, re-indexing inserts duplicate chunks, bloating the index and corrupting ranking.",
+    "slideRef": "Lesson 04 Slide 54"
   },
   {
-    id: 15,
-    moduleId: "mod06",
-    type: "concept",
-    question: "What is the architectural difference between a Bi-Encoder and a Cross-Encoder?",
-    options: [
-      "Bi-Encoder uses two GPUs; Cross-Encoder uses one GPU.",
-      "Bi-Encoder is only for images; Cross-Encoder is for text.",
-      "Bi-Encoder encodes query and doc separately (two towers); Cross-Encoder passes query and doc concatenated into one transformer with full cross-attention.",
-      "Bi-Encoder is slower than Cross-Encoder."
+    "id": 15,
+    "partId": "part1",
+    "partTitle": "Part 1: Workflow Engineering with LLM Frameworks",
+    "subtopic": "1.4 Document Ingestion Pipelines",
+    "moduleId": "mod04",
+    "type": "open-question",
+    "question": "List the 5 primary stages of a robust document ingestion pipeline and explain why preprocessing/cleaning text is critical before generating vector embeddings.",
+    "modelAnswer": "The 5 primary stages are:\n1) Load: Extract raw text and metadata from sources (PDFs, Markdown, Web, DBs).\n2) Split/Chunk: Partition continuous text into manageable, overlapping chunks.\n3) Transform/Enrich: Clean formatting artifacts and extract metadata (titles, keywords, summaries).\n4) Embed: Convert cleaned text chunks into dense mathematical vectors using an embedding model.\n5) Index/Store: Upsert vectors and metadata into the vector database.\n\nCleaning text is critical because uncleaned noise (headers, footers, whitespace, boilerplate CSS/HTML, repeated logos) pollutes embedding representations, wastes token context budgets, and causes semantic drift that lowers retrieval similarity scores.",
+    "keyPoints": [
+      "5 stages: Load, Split/Chunk, Transform/Enrich, Embed, Index/Store.",
+      "Noise and boilerplate distort semantic vector embeddings.",
+      "Reduces token waste and context dilution during prompt generation.",
+      "Enables high-fidelity similarity matching."
     ],
-    correctIndex: 2,
-    explanation: "Lesson 06 Slide 45 & 46: Bi-encoders encode independently so comparisons happen in vector space; Cross-encoders concatenate [CLS] query [SEP] doc with full token-to-token cross-attention.",
-    slideRef: "Lesson 06 Slide 45"
+    "explanation": "Lesson 04 Slide 45-56 outlines the end-to-end ingestion pipeline architecture and data sanitization guidelines.",
+    "slideRef": "Lesson 04 Slide 45-56"
   },
   {
-    id: 16,
-    moduleId: "mod06",
-    type: "code",
-    question: "How does context reordering mitigate the 'Lost in the Middle' phenomenon?",
-    codeSnippet: `head, tail = [], []
-for i, c in enumerate(picked):
-    (head if i % 2 == 0 else tail).append(c)
-ordered = head + tail[::-1]`,
-    options: [
-      "It reverses all words in the document.",
-      "It places Rank 1 at the beginning, Rank 2 at the very end, and buries weaker chunks in the middle.",
-      "It removes all punctuation.",
-      "It duplicates every chunk twice."
+    "id": 16,
+    "partId": "part1",
+    "partTitle": "Part 1: Workflow Engineering with LLM Frameworks",
+    "subtopic": "1.4 Document Ingestion Pipelines",
+    "moduleId": "mod04",
+    "type": "fill-in-blank",
+    "question": "In LlamaIndex ingestion pipelines, the transformation component used to generate semantic document title tags for chunks is called ________.",
+    "acceptedAnswers": [
+      "TitleExtractor",
+      "TitleExtractor()",
+      "title_extractor"
     ],
-    correctIndex: 1,
-    explanation: "Lesson 06 Slide 55 & 60: LLMs attend best to the start and end of prompt context; the even/odd split places strongest chunks at the extremes and buries lower-ranked chunks in the middle.",
-    slideRef: "Lesson 06 Slide 55, 60"
+    "placeholder": "e.g., TitleExtractor",
+    "explanation": "Lesson 04 Slide 51: TitleExtractor extracts contextual document titles from chunks to inject into metadata.",
+    "slideRef": "Lesson 04 Slide 51"
   },
   {
-    id: 17,
-    moduleId: "mod06",
-    type: "concept",
-    question: "What are the three verification checks performed in Self-Reflective RAG?",
-    options: [
-      "Token count, syntax check, spell check",
-      "1. Is chunk relevant? 2. Is draft answer grounded? 3. Does it answer the question?",
-      "Latency check, GPU temperature, API credit",
-      "HTML validation, CSS styling, responsive layout"
+    "id": 17,
+    "partId": "part1",
+    "partTitle": "Part 1: Workflow Engineering with LLM Frameworks",
+    "subtopic": "1.5 Modular Workflow Design",
+    "moduleId": "mod04",
+    "type": "qcm",
+    "question": "Which software engineering principle is violated when a single LLM prompt is asked to extract entities, analyze sentiment, query a database, and draft a final customer email all at once?",
+    "options": [
+      "Single Responsibility Principle (SRP)",
+      "Liskov Substitution Principle",
+      "Don't Repeat Yourself (DRY)",
+      "Open-Closed Principle"
     ],
-    correctIndex: 1,
-    explanation: "Lesson 06 Slide 39: Self-Reflective RAG checks: 1. Relevant chunks before generation, 2. Groundedness against context after draft, 3. Relevance to user question.",
-    slideRef: "Lesson 06 Slide 39"
+    "correctIndex": 0,
+    "explanation": "Lesson 04 Slide 60-63: Combining multiple disparate tasks into one mega-prompt violates the Single Responsibility Principle, dramatically increasing hallucination rates and making debugging impossible.",
+    "slideRef": "Lesson 04 Slide 60-63"
   },
   {
-    id: 18,
-    moduleId: "mod07",
-    type: "concept",
-    question: "What is the fundamental rule of Tool Calling architecture in autonomous agents?",
-    options: [
-      "The model directly opens sockets and runs SQL queries.",
-      "Local models cannot request tools.",
-      "The tool writes prompts; the model reads files.",
-      "The model requests the action; the application executes it."
+    "id": 18,
+    "partId": "part1",
+    "partTitle": "Part 1: Workflow Engineering with LLM Frameworks",
+    "subtopic": "1.5 Modular Workflow Design",
+    "moduleId": "mod04",
+    "type": "true-false",
+    "question": "Defining strongly-typed State schemas (using TypedDict or Pydantic) in modular workflows allows static type checkers and IDEs to catch runtime key errors before deployment.",
+    "options": [
+      "True",
+      "False"
     ],
-    correctIndex: 3,
-    explanation: "Lesson 07 Slide 16 & 48 emphasizes: 'The model requests the action; the application executes it.' LLMs propose structured calls; the application host validates and runs them.",
-    slideRef: "Lesson 07 Slide 16"
+    "correctIndex": 0,
+    "explanation": "Lesson 04 Slide 66: Explicit state schemas (TypedDict, Pydantic) ensure contract safety between workflow nodes, preventing runtime KeyErrors when nodes pass data.",
+    "slideRef": "Lesson 04 Slide 66"
   },
   {
-    id: 19,
-    moduleId: "mod07",
-    type: "concept",
-    question: "Which of the following is an example of Business Validation rather than Schema Validation?",
-    options: [
-      "Checking whether product ID 101 currently has sufficient stock in the inventory database.",
-      "Checking if `product_id` is present in required fields.",
-      "Checking if `order_id` is an integer.",
-      "Checking if `user_email` matches a string type."
+    "id": 19,
+    "partId": "part1",
+    "partTitle": "Part 1: Workflow Engineering with LLM Frameworks",
+    "subtopic": "1.5 Modular Workflow Design",
+    "moduleId": "mod04",
+    "type": "open-question",
+    "question": "Why is modular workflow design superior to monolithic mega-prompts when building enterprise AI systems? Provide 3 distinct technical reasons.",
+    "modelAnswer": "1) Isolated Error Handling & Granular Retries: If entity extraction fails, only the extraction node needs to be retried rather than the entire multi-step pipeline.\n2) Independent Caching & Cost Optimization: Deterministic or repetitive sub-tasks (e.g. classification or embeddings) can be cached; expensive frontier LLMs can be reserved only for complex reasoning nodes while smaller local models handle simple parsing.\n3) Unit Testability & Observability: Each node has explicit input/output contracts (e.g. Pydantic schemas) allowing automated unit tests, latency profiling, and regression tracking.",
+    "keyPoints": [
+      "Granular retries without re-running the entire workflow.",
+      "Model tiering and selective caching (small fast models for parsing, large models for reasoning).",
+      "Independent unit testing and observability per node.",
+      "Prevents prompt degradation and attention diffusion seen in monolithic prompts."
     ],
-    correctIndex: 0,
-    explanation: "Lesson 07 Slide 28 explains that Schema validation checks types and shapes, whereas Business validation checks domain rules and database reality (e.g. is item in stock? does user have permission?).",
-    slideRef: "Lesson 07 Slide 28"
+    "explanation": "Lesson 04 Slide 60-68 discusses modularity benefits: testability, cost control, caching, and resiliency.",
+    "slideRef": "Lesson 04 Slide 60-68"
   },
   {
-    id: 20,
-    moduleId: "mod07",
-    type: "concept",
-    question: "What is the principle of 'Bounded Actions' and 'Least Privilege' in agent security?",
-    options: [
-      "Giving the agent root shell access so it can fix bugs automatically.",
-      "Allowing the agent to retry failing tools infinitely.",
-      "Giving agents capabilities through narrow allowlisted tools, avoiding raw exec() or arbitrary SQL strings.",
-      "Removing all timeouts from the execution harness."
+    "id": 20,
+    "partId": "part1",
+    "partTitle": "Part 1: Workflow Engineering with LLM Frameworks",
+    "subtopic": "1.5 Modular Workflow Design",
+    "moduleId": "mod04",
+    "type": "fill-in-blank",
+    "question": "In LangGraph, state schemas are defined as Python classes inheriting from ________ (or TypedDict) to specify the state fields and reducer functions.",
+    "acceptedAnswers": [
+      "BaseModel",
+      "TypedDict",
+      "pydantic.BaseModel"
     ],
-    correctIndex: 2,
-    explanation: "Lesson 07 Slide 36–40: Give agents capabilities, not unlimited power. Use allowlists of narrow parameterized tools and never hand over raw interpreters.",
-    slideRef: "Lesson 07 Slide 36-40"
+    "placeholder": "e.g., BaseModel",
+    "explanation": "Lesson 04 Slide 66: Pydantic BaseModel and typing.TypedDict are standard schemas for LangGraph State definition.",
+    "slideRef": "Lesson 04 Slide 66"
   },
   {
-    id: 21,
-    moduleId: "mod07",
-    type: "concept",
-    question: "In the OS-Kernel analogy for Agent Harness design, what corresponds to the Kernel and the CPU?",
-    options: [
-      "The Model is the Kernel; the Database is the CPU.",
-      "The Tool is the Kernel; the Prompt is the CPU.",
-      "The Python interpreter is the CPU; Ollama is the Kernel.",
-      "The Harness is the Kernel (controls syscalls, safety, memory); the Model is an untrusted CPU (generates next tokens)."
+    "id": 21,
+    "partId": "part1",
+    "partTitle": "Part 1: Workflow Engineering with LLM Frameworks",
+    "subtopic": "1.6 Orchestration Frameworks: LlamaIndex, LangChain, LangGraph",
+    "moduleId": "mod04",
+    "type": "qcm",
+    "question": "When should an architect select LangGraph over basic LangChain Linear Chains (LCEL)?",
+    "options": [
+      "When the application only runs on mobile devices with zero internet access.",
+      "When the application requires cyclical flows, branching state machines, multi-agent collaboration, and human-in-the-loop checkpoints.",
+      "When the application does not use any LLMs and only performs SQL queries.",
+      "When the application needs to run exclusively on CUDA compute capability 3.0."
     ],
-    correctIndex: 3,
-    explanation: "Lesson 07 Slide 82: The model is an untrusted CPU (instruction generator); the harness is the operating system kernel (enforces permissions, sandbox, memory, and budgets).",
-    slideRef: "Lesson 07 Slide 82"
+    "correctIndex": 1,
+    "explanation": "Lesson 04 Slide 105-112: LangChain LCEL is designed for linear DAG pipelines; LangGraph is designed for complex cyclical graphs, multi-agent coordination, and persistent state machines with human intervention.",
+    "slideRef": "Lesson 04 Slide 105-112"
   },
   {
-    id: 22,
-    moduleId: "mod07",
-    type: "concept",
-    question: "What problem does the Model Context Protocol (MCP) solve?",
-    options: [
-      "It replaces Python with Rust for faster execution.",
-      "It solves the M x N integration problem between AI applications (hosts) and external tools/servers.",
-      "It eliminates the need for vector databases.",
-      "It increases GPU VRAM size."
+    "id": 22,
+    "partId": "part1",
+    "partTitle": "Part 1: Workflow Engineering with LLM Frameworks",
+    "subtopic": "1.6 Orchestration Frameworks: LlamaIndex, LangChain, LangGraph",
+    "moduleId": "mod04",
+    "type": "true-false",
+    "question": "In LangChain Expression Language (LCEL), the syntax `chain = prompt | model | StrOutputParser()` uses the pipe operator (`|`) to compose Runnables sequentially.",
+    "options": [
+      "True",
+      "False"
     ],
-    correctIndex: 1,
-    explanation: "Lesson 07 Slide 91 & 92 explains that MCP establishes a standard protocol so M clients connecting to N tools require only M+N integrations instead of M x N bespoke code.",
-    slideRef: "Lesson 07 Slide 91-92"
+    "correctIndex": 0,
+    "explanation": "Lesson 04 Slide 92: The pipe operator in LCEL connects Runnables, piping the dictionary or text output of the upstream component into the downstream component.",
+    "slideRef": "Lesson 04 Slide 92"
   },
   {
-    id: 23,
-    moduleId: "mod07",
-    type: "concept",
-    question: "Which of the following distinguishes Human-IN-the-loop (HITL) from Human-ON-the-loop (HOTL)?",
-    options: [
-      "HITL suspends execution and blocks until approved; HOTL executes immediately while streaming to an audit feed where humans can abort.",
-      "HITL is only for images; HOTL is for databases.",
-      "HOTL is always slower than HITL.",
-      "HITL never requires human review."
+    "id": 23,
+    "partId": "part1",
+    "partTitle": "Part 1: Workflow Engineering with LLM Frameworks",
+    "subtopic": "1.6 Orchestration Frameworks: LlamaIndex, LangChain, LangGraph",
+    "moduleId": "mod04",
+    "type": "open-question",
+    "question": "Compare LlamaIndex, LangChain, and LangGraph. In what practical architectural scenario would you integrate all three frameworks together?",
+    "modelAnswer": "1) LlamaIndex: Specialized for data-centric pipelines—document connectors, hierarchical indexing, chunking, and advanced vector/graph retrieval.\n2) LangChain: General-purpose LLM building blocks—standardized model wrappers, prompt templates, output parsers, and tool interfaces.\n3) LangGraph: State machine orchestrator—coordinates complex multi-step cycles, agents, human approvals, and persistent state.\n\nUnified Architecture Scenario:\nIn an enterprise compliance agent: LlamaIndex indexes 100,000 regulatory PDFs and retrieves relevant sections; LangChain provides prompt templates and structured Pydantic output parsers; LangGraph manages the multi-agent review graph, routing between auditor and reviewer agents, maintaining checkpoint state, and pausing for human compliance sign-off.",
+    "keyPoints": [
+      "LlamaIndex specializes in data ingestion, indexing, and advanced retrieval.",
+      "LangChain provides core model wrappers, prompt templates, and output parsers.",
+      "LangGraph manages stateful orchestration, cycles, and human-in-the-loop.",
+      "Unified scenario: LlamaIndex as retriever, LangChain for parsing/prompts, LangGraph as overarching coordinator."
     ],
-    correctIndex: 0,
-    explanation: "Lesson 07 Slide 118: In-the-loop halts execution until approved (highest safety); On-the-loop executes immediately with real-time human oversight and rollback.",
-    slideRef: "Lesson 07 Slide 118"
+    "explanation": "Lesson 04 Slide 85-118 provides comparative analysis across LlamaIndex, LangChain, and LangGraph.",
+    "slideRef": "Lesson 04 Slide 85-118"
   },
   {
-    id: 24,
-    moduleId: "mod07",
-    type: "code",
-    question: "In FastMCP, which decorator is used to expose an executable action that an AI model can invoke with arguments?",
-    codeSnippet: `@mcp.???()
-def check_inventory(sku: str) -> dict:
-    """Check stock for SKU."""
-    return {"sku": sku, "in_stock": True}`,
-    options: [
-      "@mcp.resource()",
-      "@mcp.prompt()",
-      "@mcp.tool()",
-      "@mcp.agent()"
+    "id": 24,
+    "partId": "part1",
+    "partTitle": "Part 1: Workflow Engineering with LLM Frameworks",
+    "subtopic": "1.6 Orchestration Frameworks: LlamaIndex, LangChain, LangGraph",
+    "moduleId": "mod04",
+    "type": "fill-in-blank",
+    "question": "In LangChain Expression Language (LCEL), the overloaded Python operator used to compose Runnables into a chain is the ________ operator.",
+    "acceptedAnswers": [
+      "pipe",
+      "|",
+      "pipe operator",
+      "pipe (|)"
     ],
-    correctIndex: 2,
-    explanation: "Lesson 07 Slide 101: @mcp.tool() exposes callable functions with model-constructed arguments; @mcp.resource() exposes readable data attachments.",
-    slideRef: "Lesson 07 Slide 101"
+    "placeholder": "e.g., pipe",
+    "explanation": "Lesson 04 Slide 92: The pipe operator '|' connects Runnables in LCEL.",
+    "slideRef": "Lesson 04 Slide 92"
   },
   {
-    id: 25,
-    moduleId: "mod07",
-    type: "concept",
-    question: "In the ReAct agent design pattern, what does ReAct stand for?",
-    options: [
-      "Reason + Act (Thought -> Action -> Observation loop)",
-      "Reactive Action",
-      "Recursive Activation",
-      "Real-time Authentication"
+    "id": 25,
+    "partId": "part2",
+    "partTitle": "Part 2: Module 1 — RAG Fundamentals",
+    "subtopic": "2.1 RAG Architecture Overview",
+    "moduleId": "mod05",
+    "type": "qcm",
+    "question": "What is the primary technical motivation for deploying Retrieval-Augmented Generation (RAG) instead of fine-tuning a model on private data?",
+    "options": [
+      "Fine-tuning completely eliminates hallucinations forever, whereas RAG does not.",
+      "RAG reduces model parameter count from 70B down to 1B automatically.",
+      "RAG allows models to ground responses in private, rapidly updating dynamic documents with source citations without costly GPU re-training.",
+      "RAG bypasses the need for prompt engineering and tokenizers entirely."
     ],
-    correctIndex: 0,
-    explanation: "Lesson 07 Slide 57 & 58: ReAct stands for Reason + Act, alternating between model thoughts, tool actions, and observation checks.",
-    slideRef: "Lesson 07 Slide 57"
+    "correctIndex": 2,
+    "explanation": "Lesson 05 Slide 10-14: RAG grounds LLM generation in external authoritative documents, supports real-time updates without re-training, provides document citations, and prevents parametric hallucinations.",
+    "slideRef": "Lesson 05 Slide 10-14"
   },
   {
-    id: 26,
-    moduleId: "mod02",
-    type: "concept",
-    question: "Which Ollama command displays models that are actively loaded into GPU/system memory right now?",
-    options: [
-      "ollama list",
-      "ollama show --active",
-      "ollama ps",
-      "ollama memory"
+    "id": 26,
+    "partId": "part2",
+    "partTitle": "Part 2: Module 1 — RAG Fundamentals",
+    "subtopic": "2.1 RAG Architecture Overview",
+    "moduleId": "mod05",
+    "type": "true-false",
+    "question": "Naive RAG guarantees 100% accuracy on multi-hop questions where facts are distributed across disparate document pages.",
+    "options": [
+      "True",
+      "False"
     ],
-    correctIndex: 2,
-    explanation: "Lesson 02 Slide 11: 'ollama ps' shows models currently loaded in memory, processor allocation (100% GPU / CPU), and expiry timer, whereas 'ollama list' shows downloaded models stored on disk.",
-    slideRef: "Lesson 02 Slide 11"
+    "correctIndex": 1,
+    "explanation": "Lesson 05 Slide 18 & Lesson 06 Slide 8: Naive RAG relies solely on semantic top-k similarity and frequently misses multi-hop relationships spread across non-adjacent chunks.",
+    "slideRef": "Lesson 05 Slide 18"
   },
   {
-    id: 27,
-    moduleId: "mod02",
-    type: "code",
-    question: "In an Ollama Modelfile, which directive configures the context window token budget?",
-    codeSnippet: `FROM llama3.2:1b
-PARAMETER num_ctx 8192
-SYSTEM """You are a patient CS tutor."""`,
-    options: [
-      "PARAMETER max_tokens 8192",
-      "PARAMETER num_ctx 8192",
-      "SET context_length 8192",
-      "CONTEXT_WINDOW 8192"
+    "id": 27,
+    "partId": "part2",
+    "partTitle": "Part 2: Module 1 — RAG Fundamentals",
+    "subtopic": "2.1 RAG Architecture Overview",
+    "moduleId": "mod05",
+    "type": "open-question",
+    "question": "Walk through the complete end-to-end data flow of a standard Naive RAG pipeline when a user submits the question: 'What is our return policy for damaged electronics?'",
+    "modelAnswer": "1) User Query: User submits query string.\n2) Query Embedding: The query is passed to an embedding model (e.g. BGE or text-embedding-3-small) which generates a dense numerical vector representation.\n3) Vector Database Search: The vector DB executes an approximate nearest neighbor (ANN) search (e.g. cosine similarity) comparing the query vector against pre-indexed document chunk vectors.\n4) Top-K Retrieval: The vector DB returns the top K most similar text chunks (e.g. K=3) along with metadata.\n5) Prompt Augmentation: The application synthesizes an augmented prompt containing: System instructions, the retrieved context chunks, and the user's original question.\n6) Generation: The LLM processes the augmented prompt and generates a grounded response referencing the specific return policy terms.",
+    "keyPoints": [
+      "Query embedding generation using dense encoder.",
+      "Vector database ANN search (cosine similarity) to retrieve top-k chunks.",
+      "Prompt augmentation combining retrieved chunks, system prompt, and question.",
+      "LLM generation grounded strictly on retrieved context."
     ],
-    correctIndex: 1,
-    explanation: "Lesson 02 Slide 14 & Lesson 03 Slide 24, 27: Ollama's native parameter for context window size is 'num_ctx' (whereas in vLLM CLI it is '--max-model-len' and in generation requests it is 'max_tokens').",
-    slideRef: "Lesson 02 Slide 14"
+    "explanation": "Lesson 05 Slide 14-17 illustrates the end-to-end Naive RAG query and generation lifecycle.",
+    "slideRef": "Lesson 05 Slide 14-17"
   },
   {
-    id: 28,
-    moduleId: "mod06",
-    type: "concept",
-    question: "When launching the Neo4j container with 'docker run -d -p 7474:7474 -p 7687:7687 ...', what is port 7687 specifically used for?",
-    options: [
-      "The Neo4j Web Browser visual graph explorer UI",
-      "SSH shell container administration",
-      "The Prometheus metrics scraping daemon",
-      "The Bolt binary protocol used by Python drivers and LangChain GraphCypherQAChain"
+    "id": 28,
+    "partId": "part2",
+    "partTitle": "Part 2: Module 1 — RAG Fundamentals",
+    "subtopic": "2.1 RAG Architecture Overview",
+    "moduleId": "mod05",
+    "type": "fill-in-blank",
+    "question": "The process of combining the user question with the retrieved document chunks inside the system prompt before calling the LLM is known as prompt ________.",
+    "acceptedAnswers": [
+      "augmentation",
+      "synthesis",
+      "construction",
+      "Prompt Augmentation"
     ],
-    correctIndex: 3,
-    explanation: "Lesson 06 Slide 30: Port 7474 is the HTTP Web Browser UI; port 7687 is the Bolt binary protocol used by LangChain, Neo4j Python driver, and Cypher query execution.",
-    slideRef: "Lesson 06 Slide 30"
+    "placeholder": "e.g., augmentation",
+    "explanation": "Lesson 05 Slide 16: Prompt Augmentation injects retrieved context chunks into the model's context window.",
+    "slideRef": "Lesson 05 Slide 16"
   },
   {
-    id: 29,
-    moduleId: "mod02",
-    type: "concept",
-    question: "Why is the '--ipc=host' flag essential when running high-performance vLLM inference containers in Docker?",
-    codeSnippet: `docker run -d --rm --gpus '"device=0"' \\
-  -p 9040:9040 \\
-  --ipc=host \\
-  vllm/vllm-openai:latest ...`,
-    options: [
-      "It allows the container to bypass host firewall rules.",
-      "It enables Docker to forward audio and video devices.",
-      "It shares host IPC memory so PyTorch multi-process workers can exchange tensor buffers without hitting Docker's small default shared memory limit.",
-      "It automatically downloads CUDA drivers into the container."
+    "id": 29,
+    "partId": "part2",
+    "partTitle": "Part 2: Module 1 — RAG Fundamentals",
+    "subtopic": "2.2 Ingestion, Chunking, Embeddings, Retrieval, Generation",
+    "moduleId": "mod05",
+    "type": "qcm",
+    "question": "What is the operational consequence of setting chunk size too small (e.g., 30 tokens) in a RAG pipeline?",
+    "options": [
+      "Vector search latency increases by 1000x.",
+      "Embeddings cannot be computed because models require minimum 512 tokens.",
+      "The vector database throws a dimension mismatch error.",
+      "Chunks lose crucial semantic context and sentence completeness, causing retrieval to return fragments that cannot answer the query."
     ],
-    correctIndex: 2,
-    explanation: "Lesson 02 Slide 38: PyTorch and CUDA multi-worker processes need large shared memory for tensor exchange. Docker's default 64MB IPC memory will cause crashes without '--ipc=host'.",
-    slideRef: "Lesson 02 Slide 38"
+    "correctIndex": 3,
+    "explanation": "Lesson 05 Slide 28-31: Tiny chunks strip context from surrounding ideas, resulting in fragmented snippets. Conversely, overly large chunks dilute specific facts with irrelevant noise.",
+    "slideRef": "Lesson 05 Slide 28-31"
   },
   {
-    id: 30,
-    moduleId: "mod06",
-    type: "concept",
-    question: "In Microsoft GraphRAG, which query command and method should be executed to synthesize overarching themes across the entire knowledge repository?",
-    options: [
-      "graphrag query --root ./rag-graph --method global --query \"...\"",
-      "graphrag query --root ./rag-graph --method local --query \"...\"",
-      "graphrag search --all --query \"...\"",
-      "graphrag extract --summary --query \"...\""
+    "id": 30,
+    "partId": "part2",
+    "partTitle": "Part 2: Module 1 — RAG Fundamentals",
+    "subtopic": "2.2 Ingestion, Chunking, Embeddings, Retrieval, Generation",
+    "moduleId": "mod05",
+    "type": "true-false",
+    "question": "Setting chunk overlap to 0% is the recommended best practice in RAG ingestion because overlapping tokens corrupt the mathematical calculation of cosine similarity.",
+    "options": [
+      "True",
+      "False"
     ],
-    correctIndex: 0,
-    explanation: "Lesson 06 Slide 30: Microsoft GraphRAG '--method global' performs map-reduce over pre-computed hierarchical Leiden community summaries for corpus-level themes, while '--method local' traverses specific entity subgraphs.",
-    slideRef: "Lesson 06 Slide 30"
+    "correctIndex": 1,
+    "explanation": "False. Chunk overlap (typically 10-20%) is standard practice to prevent sentences or semantic thoughts from being severed across chunk boundaries, ensuring complete contextual capture.",
+    "slideRef": "Lesson 05 Slide 32"
   },
   {
-    id: 31,
-    moduleId: "mod01",
-    type: "code",
-    question: "Which command provides end-to-end smoke test validation that the Docker daemon can successfully expose NVIDIA GPUs to containers?",
-    options: [
-      "nvidia-container-cli status",
-      "docker system info --gpu",
-      "docker run --device /dev/nvidia0 ubuntu bash",
-      "docker run --rm --gpus all nvidia/cuda:12.4.1-base-ubuntu22.04 nvidia-smi"
+    "id": 31,
+    "partId": "part2",
+    "partTitle": "Part 2: Module 1 — RAG Fundamentals",
+    "subtopic": "2.2 Ingestion, Chunking, Embeddings, Retrieval, Generation",
+    "moduleId": "mod05",
+    "type": "open-question",
+    "question": "Detail the trade-offs between Cosine Similarity, Dot Product, and Euclidean Distance (L2) when querying vector databases for RAG retrieval.",
+    "modelAnswer": "1) Cosine Similarity: Measures the cosine of the angle between two vectors, ignoring magnitude. Range is [-1, 1] (or [0, 1] for positive embeddings). Best when document length varies or embeddings are not normalized, focusing purely on orientation/semantic direction.\n2) Dot Product (Inner Product): Computes the sum of products of corresponding vector components. Sensitive to both vector length and direction. If vectors are unit-normalized (length=1.0), Dot Product is mathematically identical to Cosine Similarity but computationally faster.\n3) Euclidean Distance (L2): Measures the straight-line geometric distance between two points in n-dimensional space. Distance is 0 for identical vectors and increases with dissimilarity. Sensitive to scale and magnitude unless vectors are normalized.",
+    "keyPoints": [
+      "Cosine similarity measures angle/direction independent of magnitude.",
+      "Dot product is fast and equals cosine similarity when vectors are unit-normalized.",
+      "Euclidean (L2) measures geometric distance (0 = identical).",
+      "Normalized embeddings allow dot product for maximum computational efficiency."
     ],
-    correctIndex: 3,
-    explanation: "Lesson 01 Slide 39: Running 'nvidia-smi' inside an official NVIDIA CUDA base container with '--gpus all' is the standard end-to-end verification of GPU container passthrough.",
-    slideRef: "Lesson 01 Slide 39"
+    "explanation": "Lesson 05 Slide 40-44 explains similarity metrics and vector distance calculations in embedding space.",
+    "slideRef": "Lesson 05 Slide 40-44"
   },
   {
-    id: 32,
-    moduleId: "mod01",
-    type: "concept",
-    question: "In the nvidia-smi output breakdown, what do Performance States (Perf) P0 and P8 represent?",
-    options: [
-      "P0 means GPU is powered off; P8 means GPU is running at 100% capacity.",
-      "P0 is the highest performance state under heavy workload; P8 is the lowest power idle state.",
-      "P0 is PCIe Gen 0; P8 is PCIe Gen 8.",
-      "P0 indicates overheating; P8 indicates normal operating temperature."
+    "id": 32,
+    "partId": "part2",
+    "partTitle": "Part 2: Module 1 — RAG Fundamentals",
+    "subtopic": "2.2 Ingestion, Chunking, Embeddings, Retrieval, Generation",
+    "moduleId": "mod05",
+    "type": "fill-in-blank",
+    "question": "When all embedding vectors are unit-normalized (length = 1.0), the Cosine Similarity metric produces the exact same numerical ranking as the ________ Product metric.",
+    "acceptedAnswers": [
+      "Dot",
+      "dot",
+      "inner",
+      "Dot Product",
+      "Inner Product"
     ],
-    correctIndex: 1,
-    explanation: "Lesson 01 Slide 33: Performance states range from P0 (highest performance under compute workload) to P8 (lowest power state during idle).",
-    slideRef: "Lesson 01 Slide 33"
+    "placeholder": "e.g., Dot",
+    "explanation": "Lesson 05 Slide 42: For unit-length vectors (||u||=||v||=1), dot product u · v equals cosine similarity.",
+    "slideRef": "Lesson 05 Slide 42"
   },
   {
-    id: 33,
-    moduleId: "mod03",
-    type: "concept",
-    question: "Why should developers configure 'OLLAMA_HOST=127.0.0.1:11434 ollama serve' instead of binding to 0.0.0.0 in an office network?",
-    options: [
-      "Ollama fails to boot if bound to any address other than localhost.",
-      "Local model servers default to unauthenticated HTTP; binding to 0.0.0.0 allows any network device to send prompts and exhaust local GPU compute.",
-      "Binding to 127.0.0.1 enables GPU memory compression.",
-      "Ollama only supports encrypted HTTPS when bound to 127.0.0.1."
+    "id": 33,
+    "partId": "part2",
+    "partTitle": "Part 2: Module 1 — RAG Fundamentals",
+    "subtopic": "2.3 Text Splitting Strategies & Local Embedding Models",
+    "moduleId": "mod05",
+    "type": "qcm",
+    "question": "How does LangChain's `RecursiveCharacterTextSplitter` split text differently than a naive `CharacterTextSplitter`?",
+    "options": [
+      "It attempts splits using a hierarchy of separators (['\\n\\n', '\\n', ' ', '']) in order, preserving paragraphs and sentences as cohesive units.",
+      "It splits text based on character counts regardless of word boundaries.",
+      "It splits text strictly by sentence punctuation (.) without checking length.",
+      "It calls an external LLM to decide split points using zero-shot reasoning."
     ],
-    correctIndex: 1,
-    explanation: "Lesson 03 Slide 63-64: Local model servers commonly have no authentication by default. Binding to 0.0.0.0 exposes the server to anyone on the network. A reverse proxy (Nginx) is required if remote access is needed.",
-    slideRef: "Lesson 03 Slide 63-64"
+    "correctIndex": 0,
+    "explanation": "Lesson 05 Slide 34-36: RecursiveCharacterTextSplitter tests double newlines first, then single newlines, then spaces, keeping semantic paragraphs and sentences intact.",
+    "slideRef": "Lesson 05 Slide 34-36"
   },
   {
-    id: 34,
-    moduleId: "mod06",
-    type: "code",
-    question: "In Neo4j Cypher, what happens if you execute this script multiple times?",
-    codeSnippet: `CREATE (a:Entity {name: "Sokha"})-[r:WORKS_ON]->(b:Entity {name: "Invoicing Service"})
-RETURN a, r, b;`,
-    options: [
-      "It updates the existing Sokha node without creating duplicates.",
-      "It throws a uniqueness constraint violation error.",
-      "It creates duplicate nodes and relationships on every run. To ensure idempotency, MERGE should be used instead of CREATE.",
-      "It overwrites the graph and deletes all prior data."
+    "id": 34,
+    "partId": "part2",
+    "partTitle": "Part 2: Module 1 — RAG Fundamentals",
+    "subtopic": "2.3 Text Splitting Strategies & Local Embedding Models",
+    "moduleId": "mod05",
+    "type": "true-false",
+    "question": "Local embedding models like BAAI/bge-small-en-v1.5 require continuous internet connectivity to proprietary cloud APIs to generate vector embeddings.",
+    "options": [
+      "True",
+      "False"
     ],
-    correctIndex: 2,
-    explanation: "Lesson 06 Slide 29: CREATE is not idempotent; re-running your loader with CREATE gives you the same graph twice. Always use MERGE to find or create nodes and relationships safely.",
-    slideRef: "Lesson 06 Slide 29"
+    "correctIndex": 1,
+    "explanation": "False. Models like BAAI/bge-small-en-v1.5 and all-MiniLM-L6-v2 run completely offline locally on CPU or local GPU via HuggingFace sentence-transformers with zero internet dependency.",
+    "slideRef": "Lesson 05 Slide 46"
   },
   {
-    id: 35,
-    moduleId: "mod06",
-    type: "code",
-    question: "Why does the query 'MATCH (n:Entity {name: \"Sokha\"}) DELETE n;' fail if Sokha is connected to 'Invoicing Service'?",
-    codeSnippet: `MATCH (n:Entity {name: "Sokha"})
-DELETE n;`,
-    options: [
-      "A node cannot be deleted while relationships are still attached to it; you must use 'DETACH DELETE n' to cascade and remove connected edges.",
-      "Cypher syntax does not allow filtering by property in MATCH.",
-      "You must drop the database index before deleting any node.",
-      "Nodes named Sokha are reserved by the schema."
+    "id": 35,
+    "partId": "part2",
+    "partTitle": "Part 2: Module 1 — RAG Fundamentals",
+    "subtopic": "2.3 Text Splitting Strategies & Local Embedding Models",
+    "moduleId": "mod05",
+    "type": "open-question",
+    "question": "Explain why syntax-aware splitting (e.g., MarkdownHeaderTextSplitter or CodeSplitter) is far superior to fixed-size character chunking when indexing technical documentation or Python source code.",
+    "modelAnswer": "Fixed-size character chunking blindly cuts text at arbitrary character limits (e.g. 500 characters), splitting code in the middle of a function definition, separating a class header from its methods, or severing Markdown tables and section headers from their explanations. This produces syntactically broken snippets that confuse the retriever and hallucinate answers.\n\nIn contrast, syntax-aware splitters parse the AST or Markdown structure:\n1) MarkdownHeaderTextSplitter: Splits by headers (#, ##, ###), keeping entire sections intact and injecting header hierarchy (e.g. Header 1 > Header 2) into chunk metadata.\n2) CodeSplitter: Parses language grammar (classes, functions, decorators), ensuring each chunk contains a complete, valid code block with docstrings.",
+    "keyPoints": [
+      "Fixed-size chunking cuts through functions, classes, and Markdown tables arbitrarily.",
+      "Syntax-aware splitters preserve semantic AST structures and section boundaries.",
+      "MarkdownHeaderTextSplitter injects header hierarchy into chunk metadata.",
+      "Provides self-contained, valid context to the generator model."
     ],
-    correctIndex: 0,
-    explanation: "Lesson 06 Slide 29: Neo4j prevents deleting nodes that have active incoming or outgoing relationships to protect referential integrity. DETACH DELETE removes all connected relationships first.",
-    slideRef: "Lesson 06 Slide 29"
+    "explanation": "Lesson 05 Slide 37-39 contrasts naive splitting with structural Markdown/Code text splitting.",
+    "slideRef": "Lesson 05 Slide 37-39"
   },
   {
-    id: 36,
-    moduleId: "mod06",
-    type: "code",
-    question: "Which Cypher query correctly performs a multi-hop graph traversal to discover who owns a service that replaced 'LegacyPay'?",
-    codeSnippet: `// Multi-hop relationship traversal`,
-    options: [
-      "MATCH (p:Person)->(s:Service)->(old:Service) WHERE old = LegacyPay",
-      "SELECT Person.name, Service.name WHERE Service.replaced == 'LegacyPay'",
-      "SEARCH GRAPH FOR Person WITH Service == LegacyPay",
-      "MATCH (p:Person)-[:OWNS]->(s:Service)-[:REPLACED]->(old:Service {name: \"LegacyPay\"}) RETURN p.name, s.name"
+    "id": 36,
+    "partId": "part2",
+    "partTitle": "Part 2: Module 1 — RAG Fundamentals",
+    "subtopic": "2.3 Text Splitting Strategies & Local Embedding Models",
+    "moduleId": "mod05",
+    "type": "fill-in-blank",
+    "question": "In LangChain, the recommended text splitter that attempts splits on `['\\n\\n', '\\n', ' ', '']` in descending order is called ________CharacterTextSplitter.",
+    "acceptedAnswers": [
+      "Recursive",
+      "recursive",
+      "RecursiveCharacterTextSplitter"
     ],
-    correctIndex: 3,
-    explanation: "Lesson 06 Slide 29: Cypher queries are drawings of the pattern you want to match: (p:Person)-[:OWNS]->(s:Service)-[:REPLACED]->(old:Service {name: 'LegacyPay'}) matches the two-hop path in one line.",
-    slideRef: "Lesson 06 Slide 29"
+    "placeholder": "e.g., Recursive",
+    "explanation": "Lesson 05 Slide 34: RecursiveCharacterTextSplitter is the standard text splitting strategy.",
+    "slideRef": "Lesson 05 Slide 34"
   },
   {
-    id: 37,
-    moduleId: "mod06",
-    type: "concept",
-    question: "Why is variable-length path traversal written with bounds like '[*1..3]' instead of an unbounded '[*]'?",
-    codeSnippet: `MATCH path = (a:Entity {name: "LegacyPay"})-[*1..3]-(b)
-RETURN path
-LIMIT 25;`,
-    options: [
-      "Cypher throws a compilation error if asterisks are used alone.",
-      "`[*1..3]` disables GPU acceleration.",
-      "An unbounded '[*]' on a cyclic or dense graph can lead to exponential path explosion, exhausting memory and hanging the server.",
-      "`[*1..3]` limits the query strictly to 3 characters of text."
+    "id": 37,
+    "partId": "part2",
+    "partTitle": "Part 2: Module 1 — RAG Fundamentals",
+    "subtopic": "2.4 Vector Database Setup (ChromaDB, Qdrant, Pgvector)",
+    "moduleId": "mod05",
+    "type": "qcm",
+    "question": "Which default network ports are utilized by Qdrant for its REST API and high-performance gRPC API respectively?",
+    "options": [
+      "REST: 8080, gRPC: 8081",
+      "REST: 6333, gRPC: 6334",
+      "REST: 5432, gRPC: 5433",
+      "REST: 11434, gRPC: 11435"
     ],
-    correctIndex: 2,
-    explanation: "Lesson 06 Slide 29 explicitly warns: 'Bound your traversals. An unbounded [*] on a real graph will hang. Cap the hops, always.'",
-    slideRef: "Lesson 06 Slide 29"
+    "correctIndex": 1,
+    "explanation": "Lesson 05 Slide 58-60: Qdrant runs REST on port 6333 and gRPC on port 6334 by default.",
+    "slideRef": "Lesson 05 Slide 58-60"
   },
   {
-    id: 38,
-    moduleId: "mod04",
-    type: "fill-in-blank",
-    question: "In LangGraph, to persist execution state within a single thread across execution steps, the checkpointer (e.g., InMemorySaver) is scoped by ________.",
-    acceptedAnswers: ["thread_id", "thread id", "thread-id"],
-    placeholder: "e.g., thread_id",
-    explanation: "Lesson 04 Slide 26 & 114 explains that LangGraph Checkpointers persist short-term state scoped to a 'thread_id'. Two calls using the same thread_id share execution history.",
-    slideRef: "Lesson 04 Slide 114"
+    "id": 38,
+    "partId": "part2",
+    "partTitle": "Part 2: Module 1 — RAG Fundamentals",
+    "subtopic": "2.4 Vector Database Setup (ChromaDB, Qdrant, Pgvector)",
+    "moduleId": "mod05",
+    "type": "true-false",
+    "question": "In PostgreSQL, enabling the pgvector extension requires running the SQL command: `CREATE EXTENSION vector;`.",
+    "options": [
+      "True",
+      "False"
+    ],
+    "correctIndex": 0,
+    "explanation": "Lesson 05 Slide 62 & Exam CLI Cheatsheet: 'CREATE EXTENSION vector;' installs the vector data type and indexing operators into PostgreSQL.",
+    "slideRef": "Lesson 05 Slide 62"
   },
   {
-    id: 39,
-    moduleId: "mod04",
-    type: "fill-in-blank",
-    question: "In LangGraph, instead of defining a separate routing function with add_conditional_edges, a node can directly return state updates and specify the next destination node using the ________ primitive.",
-    codeSnippet: `def route_step(state: State) -> Command[Literal["billing", "support"]]:
-    return Command(update={"status": "routed"}, goto="billing")`,
-    acceptedAnswers: ["Command", "command", "Command()"],
-    placeholder: "e.g., Command",
-    explanation: "Lesson 04 Slide 107 explains that the 'Command' primitive combines returning state updates and selecting the next destination node in a single return statement.",
-    slideRef: "Lesson 04 Slide 107"
+    "id": 39,
+    "partId": "part2",
+    "partTitle": "Part 2: Module 1 — RAG Fundamentals",
+    "subtopic": "2.4 Vector Database Setup (ChromaDB, Qdrant, Pgvector)",
+    "moduleId": "mod05",
+    "type": "open-question",
+    "question": "Compare ChromaDB, Qdrant, and Pgvector. What criteria determine when an engineering team should pick each one?",
+    "modelAnswer": "1) ChromaDB: Lightweight, embedded or client-server Python vector store. Ideal for rapid prototyping, research, local desktop apps, and lightweight workloads where simplicity is paramount and SQLite persistence suffices.\n2) Qdrant: Production-grade, high-performance standalone vector database written in Rust. Features advanced payload filtering, HNSW indexing, distributed clustering, low-latency gRPC (port 6334), and snapshot management. Pick Qdrant for large-scale production RAG with millions of vectors and complex metadata filtering.\n3) Pgvector: PostgreSQL extension adding vector data types and indexing (HNSW, IVFFlat). Pick Pgvector when an enterprise already uses PostgreSQL for relational data and wants ACID transactions, unified joins between business data and embeddings, and zero extra database infrastructure to maintain.",
+    "keyPoints": [
+      "ChromaDB: Lightweight, embedded SQLite, rapid local prototyping.",
+      "Qdrant: Rust-based, enterprise scale, fast gRPC (6334), advanced payload filtering.",
+      "Pgvector: PostgreSQL extension, ACID transactions, unified relational + vector queries.",
+      "Decision driven by operational complexity, existing database stack, and throughput needs."
+    ],
+    "explanation": "Lesson 05 Slide 55-65 compares ChromaDB, Qdrant, and Pgvector architectures.",
+    "slideRef": "Lesson 05 Slide 55-65"
   },
   {
-    id: 40,
-    moduleId: "mod05",
-    type: "fill-in-blank",
-    question: "In the Qdrant vector database, the default port used for REST API requests is ________, whereas port 6334 is reserved for gRPC.",
-    acceptedAnswers: ["6333"],
-    placeholder: "e.g., 6333",
-    explanation: "Lesson 05 Qdrant Architecture specifies port 6333 for HTTP REST client requests and port 6334 for high-throughput gRPC connections.",
-    slideRef: "Lesson 05 Qdrant Ports"
+    "id": 40,
+    "partId": "part2",
+    "partTitle": "Part 2: Module 1 — RAG Fundamentals",
+    "subtopic": "2.4 Vector Database Setup (ChromaDB, Qdrant, Pgvector)",
+    "moduleId": "mod05",
+    "type": "fill-in-blank",
+    "question": "In ChromaDB Python client, to ensure vectors are saved to a persistent directory on disk rather than discarded when the process exits, you instantiate chromadb.________(path='./chroma_db').",
+    "acceptedAnswers": [
+      "PersistentClient",
+      "PersistentClient()",
+      "persistent_client"
+    ],
+    "placeholder": "e.g., PersistentClient",
+    "explanation": "Lesson 05 Slide 56: PersistentClient(path=...) persists ChromaDB collections to disk.",
+    "slideRef": "Lesson 05 Slide 56"
   },
   {
-    id: 41,
-    moduleId: "mod05",
-    type: "fill-in-blank",
-    question: "When chunking documents with sliding windows, adding chunk ________ ensures that semantic context is not abruptly severed between adjacent chunks.",
-    acceptedAnswers: ["overlap", "chunk overlap", "chunk_overlap"],
-    placeholder: "e.g., overlap",
-    explanation: "Lesson 05 Slide 18 states that chunk overlap (typically 10-20% of chunk size) repeats boundary tokens so sentences spanning the cut point remain intact in at least one chunk.",
-    slideRef: "Lesson 05 Slide 18"
+    "id": 41,
+    "partId": "part3",
+    "partTitle": "Part 3: Module 2 — Advanced RAG Architecture & Evaluation",
+    "subtopic": "3.1 Hybrid Retrieval: Keyword + Vector Search",
+    "moduleId": "mod06",
+    "type": "qcm",
+    "question": "Why does Hybrid Retrieval (Sparse BM25 + Dense Semantic Vector) outperform Dense Vector search alone in enterprise search?",
+    "options": [
+      "Dense vectors cannot process queries longer than 5 words.",
+      "BM25 reduces database storage requirements to 0 MB.",
+      "BM25 handles exact keyword matches, code identifiers, and acronyms, while dense vectors capture semantic concepts, neutralizing each other's weaknesses.",
+      "Dense vectors cannot run on Linux servers."
+    ],
+    "correctIndex": 2,
+    "explanation": "Lesson 06 Slide 12-15: Dense embeddings frequently fail on specific entity codes (e.g. 'CVE-2024-38077' or 'SKU-9921'), while BM25 excels at exact keyword matching but misses semantic synonyms. Hybrid combines both.",
+    "slideRef": "Lesson 06 Slide 12-15"
   },
   {
-    id: 42,
-    moduleId: "mod06",
-    type: "fill-in-blank",
-    question: "In Neo4j Cypher ingestion pipelines, to ensure idempotency and avoid creating duplicate nodes and relationships upon re-running scripts, engineers should always use ________ instead of CREATE.",
-    codeSnippet: `// Idempotent ingestion pattern:
-________ (a:Entity {name: "Sokha"})-[r:WORKS_ON]->(b:Entity {name: "Invoicing Service"})
-RETURN a, r, b;`,
-    acceptedAnswers: ["MERGE", "merge"],
-    placeholder: "e.g., MERGE",
-    explanation: "Teacher Highlight & Lesson 06 Slide 34: Always use MERGE in data ingestion pipelines. CREATE always produces new nodes/edges, leading to duplicate entities and graph pollution.",
-    slideRef: "Lesson 06 Slide 34 (Teacher Highlight)"
+    "id": 42,
+    "partId": "part3",
+    "partTitle": "Part 3: Module 2 — Advanced RAG Architecture & Evaluation",
+    "subtopic": "3.1 Hybrid Retrieval: Keyword + Vector Search",
+    "moduleId": "mod06",
+    "type": "true-false",
+    "question": "In Reciprocal Rank Fusion (RRF), the formula for document scoring is RRF_Score(d) = sum(1 / (k + r(d))), where k is a smoothing constant typically set to 60.",
+    "options": [
+      "True",
+      "False"
+    ],
+    "correctIndex": 0,
+    "explanation": "Lesson 06 Slide 16 & Exam Formula: RRF fuses ranks across multiple retrieval lists using k=60 to prevent high-ranked outliers from completely dominating the combined score.",
+    "slideRef": "Lesson 06 Slide 16"
   },
   {
-    id: 43,
-    moduleId: "mod06",
-    type: "fill-in-blank",
-    question: "The binary database driver protocol port used by Python applications (via LangChain or neo4j driver) to connect to Neo4j is ________.",
-    acceptedAnswers: ["7687"],
-    placeholder: "e.g., 7687",
-    explanation: "Exam Trap Alert: Port 7474 is for the HTTP Browser UI only. Python applications and LangChain GraphCypherQAChain must connect via Bolt binary protocol on port 7687 (bolt://localhost:7687).",
-    slideRef: "Lesson 06 Neo4j Ports (7474 vs 7687)"
+    "id": 43,
+    "partId": "part3",
+    "partTitle": "Part 3: Module 2 — Advanced RAG Architecture & Evaluation",
+    "subtopic": "3.1 Hybrid Retrieval: Keyword + Vector Search",
+    "moduleId": "mod06",
+    "type": "open-question",
+    "question": "Given two retrieval systems: BM25 ranks Document X at position 1 and Document Y at position 5. Vector search ranks Document Y at position 2 and Document X at position 8. Using Reciprocal Rank Fusion (RRF) with constant k = 60, calculate the RRF score for both documents and determine which document ranks higher.",
+    "modelAnswer": "Formula: RRF_Score(d) = sum( 1 / (k + rank(d)) ) with k = 60.\n\n1) For Document X:\n   - BM25 rank = 1 -> 1 / (60 + 1) = 1 / 61 ≈ 0.01639\n   - Vector rank = 8 -> 1 / (60 + 8) = 1 / 68 ≈ 0.01471\n   - Total RRF(X) = 0.01639 + 0.01471 = 0.03110\n\n2) For Document Y:\n   - BM25 rank = 5 -> 1 / (60 + 5) = 1 / 65 ≈ 0.01538\n   - Vector rank = 2 -> 1 / (60 + 2) = 1 / 62 ≈ 0.01613\n   - Total RRF(Y) = 0.01538 + 0.01613 = 0.03151\n\nConclusion: Document Y (0.03151) achieves a higher RRF score than Document X (0.03110) because it performed consistently well in the top 5 of both retrieval lists.",
+    "keyPoints": [
+      "Correct formula application: 1 / (k + rank).",
+      "Calculation for Doc X: 1/61 + 1/68 ≈ 0.03110.",
+      "Calculation for Doc Y: 1/65 + 1/62 ≈ 0.03151.",
+      "Document Y wins due to consistent balanced performance across both lists."
+    ],
+    "explanation": "Lesson 06 Slide 16 explains the RRF algorithm and provides sample calculations.",
+    "slideRef": "Lesson 06 Slide 16"
   },
   {
-    id: 44,
-    moduleId: "mod06",
-    type: "fill-in-blank",
-    question: "In Reciprocal Rank Fusion (RRF), the formula RRF_Score = 1 / (k + rank) uses a standard smoothing constant k = ________.",
-    acceptedAnswers: ["60", "k=60", "k = 60"],
-    placeholder: "e.g., 60",
-    explanation: "Lesson 06 Slide 22 states that k=60 is the empirical standard constant in Reciprocal Rank Fusion to prevent high-ranking outliers from completely dominating the fused score.",
-    slideRef: "Lesson 06 Slide 22 (RRF Constant)"
+    "id": 44,
+    "partId": "part3",
+    "partTitle": "Part 3: Module 2 — Advanced RAG Architecture & Evaluation",
+    "subtopic": "3.1 Hybrid Retrieval: Keyword + Vector Search",
+    "moduleId": "mod06",
+    "type": "fill-in-blank",
+    "question": "In the Reciprocal Rank Fusion (RRF) scoring formula `score = 1 / (k + rank)`, the standard smoothing constant `k` recommended in research and slide 16 is ________.",
+    "acceptedAnswers": [
+      "60",
+      "k=60",
+      "sixty"
+    ],
+    "placeholder": "e.g., 60",
+    "explanation": "Lesson 06 Slide 16: Constant k=60 is the empirical standard in Cormack et al. and slide 16.",
+    "slideRef": "Lesson 06 Slide 16"
   },
   {
-    id: 45,
-    moduleId: "mod06",
-    type: "fill-in-blank",
-    question: "To completely delete a node and all of its connected relationships in Neo4j without triggering constraint violation errors, use the command: MATCH (n:Entity) ________ DELETE n;",
-    acceptedAnswers: ["DETACH", "detach"],
-    placeholder: "e.g., DETACH",
-    explanation: "Lesson 06 Slide 30: Neo4j prevents deleting a node that still has active relationships attached. The DETACH keyword removes all attached relationships before deleting the node.",
-    slideRef: "Lesson 06 Slide 30"
+    "id": 45,
+    "partId": "part3",
+    "partTitle": "Part 3: Module 2 — Advanced RAG Architecture & Evaluation",
+    "subtopic": "3.2 Graph RAG",
+    "moduleId": "mod06",
+    "type": "qcm",
+    "question": "In Neo4j Cypher script loading, why is the `MERGE` clause strongly preferred over `CREATE` when constructing knowledge graphs from ingested chunks?",
+    "options": [
+      "CREATE is only compatible with MySQL, not graph databases.",
+      "CREATE requires GPU acceleration while MERGE runs on CPU.",
+      "MERGE automatically deletes all relationships on every transaction.",
+      "MERGE is idempotent: it matches existing nodes/relationships and only creates them if absent, avoiding duplicate entity explosion."
+    ],
+    "correctIndex": 3,
+    "explanation": "Lesson 06 Slide 29 & Exam Highlight: 'Always MERGE, never CREATE. MERGE is idempotent. Running CREATE twice duplicates every node and relationship.'",
+    "slideRef": "Lesson 06 Slide 29"
   },
   {
-    id: 46,
-    moduleId: "mod07",
-    type: "fill-in-blank",
-    question: "In autonomous agent architectures, the ReAct pattern combines ________ and Acting in an iterative loop to solve complex tasks with external tools.",
-    acceptedAnswers: ["Reasoning", "reasoning", "Reason", "reason"],
-    placeholder: "e.g., Reasoning",
-    explanation: "Lesson 07 Slide 14: ReAct stands for 'Reasoning + Acting'. The agent generates a reasoning trace (Thought), invokes an action/tool (Action), observes the result (Observation), and repeats.",
-    slideRef: "Lesson 07 Slide 14"
+    "id": 46,
+    "partId": "part3",
+    "partTitle": "Part 3: Module 2 — Advanced RAG Architecture & Evaluation",
+    "subtopic": "3.2 Graph RAG",
+    "moduleId": "mod06",
+    "type": "true-false",
+    "question": "In Microsoft GraphRAG, Global Search answers corpus-wide thematic questions by querying pre-generated community summaries, while Local Search focuses on specific entity neighborhoods.",
+    "options": [
+      "True",
+      "False"
+    ],
+    "correctIndex": 0,
+    "explanation": "Lesson 06 Slide 27: Local Search explores specific entity nodes and 1-2 hop neighbors; Global Search aggregates hierarchical Leiden community summaries across the whole corpus.",
+    "slideRef": "Lesson 06 Slide 27"
   },
   {
-    id: 47,
-    moduleId: "mod07",
-    type: "fill-in-blank",
-    question: "In Model Context Protocol (MCP) and FastMCP, executable functions that an LLM can actively invoke to perform actions are defined using the @mcp.________() decorator.",
-    acceptedAnswers: ["tool", "tool()", "@mcp.tool"],
-    placeholder: "e.g., tool",
-    explanation: "Lesson 07 Slide 38: In FastMCP, '@mcp.tool()' defines callable actions with side-effects or dynamic computation, while '@mcp.resource()' provides read-only static data/files.",
-    slideRef: "Lesson 07 Slide 38"
+    "id": 47,
+    "partId": "part3",
+    "partTitle": "Part 3: Module 2 — Advanced RAG Architecture & Evaluation",
+    "subtopic": "3.2 Graph RAG",
+    "moduleId": "mod06",
+    "type": "open-question",
+    "question": "Why does standard chunk-based top-k vector retrieval fail on multi-hop questions like 'Who is the manager of the person who architected the Billing Service?', and how does Graph RAG resolve this?",
+    "modelAnswer": "In standard vector RAG, knowledge is split into isolated chunks. Fact 1 ('Alice architected the Billing Service') might reside in Chunk 14, while Fact 2 ('Bob manages Alice') resides in Chunk 840. A vector search for 'Who is the manager of the person who architected Billing?' will likely retrieve Chunk 14 (high semantic match with 'Billing Service') but completely miss Chunk 840 (which mentions Alice and Bob but has zero semantic overlap with 'Billing Service').\n\nGraph RAG resolves this by extracting an entity-relationship graph:\n(Alice)-[:ARCHITECTED]->(Billing) and (Alice)<-[:MANAGES]-(Bob).\nA single Cypher pattern query `MATCH (b:Service {name: 'Billing'})<-[:ARCHITECTED]-(p)-[:MANAGES]-(m) RETURN m.name` or a 2-hop graph walk effortlessly traverses the connected edges, joining the disparate facts into a coherent context regardless of where they were originally written.",
+    "keyPoints": [
+      "Disparate facts are isolated across disconnected text chunks.",
+      "Vector search retrieves only the chunk matching surface query terms, missing the second hop.",
+      "Graph RAG extracts nodes (entities) and edges (relationships) into a graph.",
+      "Multi-hop queries traverse graph paths to connect facts across disparate sources."
+    ],
+    "explanation": "Lesson 06 Slide 18-22 details why multi-hop queries fail in Naive RAG and how Graph RAG solves them.",
+    "slideRef": "Lesson 06 Slide 18-22"
   },
   {
-    id: 48,
-    moduleId: "mod04",
-    type: "fill-in-blank",
-    question: "When deploying a multi-worker vLLM model inference container with Docker, you must specify the flag --ipc=________ to prevent PyTorch shared memory crashes.",
-    codeSnippet: `docker run -d --gpus all --shm-size 1g -p 8000:8000 --ipc=________ vllm/vllm-openai:latest`,
-    acceptedAnswers: ["host", "--ipc=host"],
-    placeholder: "e.g., host",
-    explanation: "Lesson 02 Serving & CLI Cheatsheet: The '--ipc=host' flag is mandatory for PyTorch NCCL multi-process tensor parallelism so workers can share host IPC memory without crashing.",
-    slideRef: "Lesson 02 Docker Serving"
+    "id": 48,
+    "partId": "part3",
+    "partTitle": "Part 3: Module 2 — Advanced RAG Architecture & Evaluation",
+    "subtopic": "3.2 Graph RAG",
+    "moduleId": "mod06",
+    "type": "fill-in-blank",
+    "question": "In Neo4j Cypher, to safely delete a node along with all its attached incoming and outgoing relationships in one operation, you use the clause ________ DELETE.",
+    "acceptedAnswers": [
+      "DETACH",
+      "detach",
+      "DETACH DELETE",
+      "detach delete"
+    ],
+    "placeholder": "e.g., DETACH",
+    "explanation": "Lesson 06 Slide 29 & Cypher Cheatsheet: 'DETACH DELETE n' removes the node and severs attached relationships.",
+    "slideRef": "Lesson 06 Slide 29"
   },
   {
-    id: 49,
-    moduleId: "mod04",
-    type: "fill-in-blank",
-    question: "In Ollama CLI, to view currently running models loaded in GPU VRAM and their active memory usage, use the command: ollama ________.",
-    acceptedAnswers: ["ps", "ollama ps"],
-    placeholder: "e.g., ps",
-    explanation: "Ollama CLI Cheatsheet: 'ollama ps' displays active models in VRAM/RAM, processor split (e.g. 100% GPU vs 58% CPU), and the time until automatic keep_alive unload.",
-    slideRef: "Lesson 02 Ollama CLI"
+    "id": 49,
+    "partId": "part3",
+    "partTitle": "Part 3: Module 2 — Advanced RAG Architecture & Evaluation",
+    "subtopic": "3.3 Agentic RAG",
+    "moduleId": "mod06",
+    "type": "qcm",
+    "question": "In Corrective RAG (CRAG), what action is triggered if the retrieval evaluator determines that the retrieved internal documents are 'Incorrect' (completely irrelevant)?",
+    "options": [
+      "The system triggers a web search fallback query to retrieve authoritative external documents before generation.",
+      "The system immediately shuts down the database connection.",
+      "The system outputs random chunks from the vector database.",
+      "The system fine-tunes the LLM weights on the irrelevant chunks."
+    ],
+    "correctIndex": 0,
+    "explanation": "Lesson 06 Slide 35-37: CRAG evaluates retrieval quality as Correct, Ambiguous, or Incorrect. If Incorrect, it falls back to external web search to find relevant context.",
+    "slideRef": "Lesson 06 Slide 35-37"
   },
   {
-    id: 50,
-    moduleId: "mod04",
-    type: "fill-in-blank",
-    question: "In an Ollama Modelfile, the parameter used to expand the context window size (for example, from 2048 to 8192 tokens) is PARAMETER ________.",
-    codeSnippet: `FROM qwen2.5:3b
-PARAMETER ________ 8192
-SYSTEM You are an exam review assistant.`,
-    acceptedAnswers: ["num_ctx", "num_ctx 8192", "num_ctx=8192"],
-    placeholder: "e.g., num_ctx",
-    explanation: "Lesson 02 Modelfile Configuration: 'PARAMETER num_ctx 8192' sets the maximum KV cache context window allocated for model attention during inference.",
-    slideRef: "Lesson 02 Modelfiles"
+    "id": 50,
+    "partId": "part3",
+    "partTitle": "Part 3: Module 2 — Advanced RAG Architecture & Evaluation",
+    "subtopic": "3.3 Agentic RAG",
+    "moduleId": "mod06",
+    "type": "true-false",
+    "question": "In Self-RAG, the model generates reflection tokens such as `[Retrieve]`, `[IsRel]`, `[IsSup]`, and `[IsUse]` to dynamically decide whether retrieval is necessary and whether generated claims are supported.",
+    "options": [
+      "True",
+      "False"
+    ],
+    "correctIndex": 0,
+    "explanation": "Lesson 06 Slide 32-34: Self-RAG trains reflection tokens to evaluate retrieval need, relevance, factual support, and overall utility.",
+    "slideRef": "Lesson 06 Slide 32-34"
+  },
+  {
+    "id": 51,
+    "partId": "part3",
+    "partTitle": "Part 3: Module 2 — Advanced RAG Architecture & Evaluation",
+    "subtopic": "3.3 Agentic RAG",
+    "moduleId": "mod06",
+    "type": "open-question",
+    "question": "Explain how an Agentic RAG system differs from a traditional static RAG pipeline when handling an ambiguous or poorly formulated user query.",
+    "modelAnswer": "A traditional static RAG pipeline executes a single linear pass: it embeds the ambiguous query as-is, performs top-k retrieval, and forces the LLM to generate an answer—frequently retrieving irrelevant noise and hallucinating.\n\nAn Agentic RAG system introduces dynamic decision loops:\n1) Query Analysis & Rewriting: An agent inspects the user query, detects ambiguity, and rewrites or decomposes it into multiple targeted sub-queries.\n2) Retrieval Evaluation: It inspects retrieved documents (e.g. CRAG evaluation) to determine if they actually answer the question.\n3) Conditional Correction: If retrieved documents are insufficient, the agent can re-query with modified search terms, execute a web search fallback, or clarify with the user.\n4) Hallucination Guardrails: The agent verifies that the final answer is factually supported by the retrieved context before delivering it.",
+    "keyPoints": [
+      "Static RAG is a rigid one-pass pipeline vulnerable to ambiguous queries.",
+      "Agentic RAG uses query rewriting and decomposition.",
+      "Evaluates retrieval quality dynamically and retries if chunks are irrelevant.",
+      "Implements self-correction and web search fallback before responding."
+    ],
+    "explanation": "Lesson 06 Slide 30-38 explores Agentic RAG patterns: Self-RAG, CRAG, and iterative routing.",
+    "slideRef": "Lesson 06 Slide 30-38"
+  },
+  {
+    "id": 52,
+    "partId": "part3",
+    "partTitle": "Part 3: Module 2 — Advanced RAG Architecture & Evaluation",
+    "subtopic": "3.3 Agentic RAG",
+    "moduleId": "mod06",
+    "type": "fill-in-blank",
+    "question": "In Corrective RAG (CRAG), the retrieval evaluator classifies retrieved documents into three confidence grades: Correct, Ambiguous, or ________.",
+    "acceptedAnswers": [
+      "Incorrect",
+      "incorrect"
+    ],
+    "placeholder": "e.g., Incorrect",
+    "explanation": "Lesson 06 Slide 35: CRAG grades retrieval into Correct, Ambiguous, or Incorrect.",
+    "slideRef": "Lesson 06 Slide 35"
+  },
+  {
+    "id": 53,
+    "partId": "part3",
+    "partTitle": "Part 3: Module 2 — Advanced RAG Architecture & Evaluation",
+    "subtopic": "3.4 Reranking with Cross-Encoders",
+    "moduleId": "mod06",
+    "type": "qcm",
+    "question": "Why is a 2-stage retrieval pipeline (Bi-Encoder first, Cross-Encoder second) standard practice rather than using a Cross-Encoder for the entire database?",
+    "options": [
+      "Cross-encoders cannot process English text.",
+      "Bi-encoders are fast ($O(1)$ index lookup) for filtering 1,000,000 docs down to top 50, while Cross-encoders perform expensive full self-attention across $(query, doc)$ pairs and can only score top candidates.",
+      "Cross-encoders only work with SQLite databases.",
+      "Bi-encoders have 100% accuracy, so cross-encoders are only for backup."
+    ],
+    "correctIndex": 1,
+    "explanation": "Lesson 06 Slide 40-44: Bi-encoders encode queries and docs independently into vector space (fast ANN search). Cross-encoders concatenate query + doc and compute cross-attention over all tokens (slow, highly accurate). 2-stage gives speed + accuracy.",
+    "slideRef": "Lesson 06 Slide 40-44"
+  },
+  {
+    "id": 54,
+    "partId": "part3",
+    "partTitle": "Part 3: Module 2 — Advanced RAG Architecture & Evaluation",
+    "subtopic": "3.4 Reranking with Cross-Encoders",
+    "moduleId": "mod06",
+    "type": "true-false",
+    "question": "A Cross-Encoder computes separate embedding vectors for the query and document independently, then takes their cosine similarity.",
+    "options": [
+      "True",
+      "False"
+    ],
+    "correctIndex": 1,
+    "explanation": "Lesson 06 Slide 41: That describes a Bi-Encoder. A Cross-Encoder feeds the combined `(query, document)` pair simultaneously into the transformer model, allowing every query token to attend to every document token.",
+    "slideRef": "Lesson 06 Slide 41"
+  },
+  {
+    "id": 55,
+    "partId": "part3",
+    "partTitle": "Part 3: Module 2 — Advanced RAG Architecture & Evaluation",
+    "subtopic": "3.4 Reranking with Cross-Encoders",
+    "moduleId": "mod06",
+    "type": "open-question",
+    "question": "Describe the step-by-step architecture of a 2-Stage Retrieval system utilizing `bge-small-en-v1.5` and `bge-reranker-large`. Specify candidate counts and performance trade-offs at each stage.",
+    "modelAnswer": "Stage 1: Candidate Generation (Bi-Encoder)\n- Model: `bge-small-en-v1.5`.\n- Operation: The query is embedded into a 384-dimensional dense vector. An approximate nearest neighbor (ANN) search scans the vector database (e.g. Qdrant with HNSW index) across 1,000,000 chunks.\n- Output: Fast retrieval of the top 50-100 candidate chunks within 5-15 milliseconds.\n- Trade-off: Extremely fast ($O(1)$ indexed search) with high recall, but lower precision due to independent embedding generation.\n\nStage 2: Precision Reranking (Cross-Encoder)\n- Model: `bge-reranker-large`.\n- Operation: Concatenates `[CLS] query [SEP] candidate_chunk [SEP]` for each of the 50 candidates and executes full bidirectional self-attention across all token pairs to generate a calibrated relevance score (0.0 to 1.0).\n- Output: Reranks the 50 candidates and selects the top 3-5 highest scoring chunks for prompt injection.\n- Trade-off: Higher computational cost (~50-100ms) but provides state-of-the-art semantic precision and eliminates false positives.",
+    "keyPoints": [
+      "Stage 1: Bi-encoder retrieves broad candidate pool (top 50-100) via fast ANN vector search.",
+      "Bi-encoder performance: Low latency (sub-15ms), high recall, moderate precision.",
+      "Stage 2: Cross-encoder performs joint self-attention on (query, chunk) pairs.",
+      "Stage 3: Selects top 3-5 high-precision chunks; eliminates false positives before LLM generation."
+    ],
+    "explanation": "Lesson 06 Slide 40-45 illustrates the two-stage retrieval pattern and cross-encoder attention mechanics.",
+    "slideRef": "Lesson 06 Slide 40-45"
+  },
+  {
+    "id": 56,
+    "partId": "part3",
+    "partTitle": "Part 3: Module 2 — Advanced RAG Architecture & Evaluation",
+    "subtopic": "3.4 Reranking with Cross-Encoders",
+    "moduleId": "mod06",
+    "type": "fill-in-blank",
+    "question": "In a 2-stage retrieval pipeline, the fast initial retrieval model that embeds queries and documents into independent vector representations is called a ________-Encoder.",
+    "acceptedAnswers": [
+      "Bi",
+      "bi",
+      "Bi-Encoder",
+      "bi-encoder"
+    ],
+    "placeholder": "e.g., Bi",
+    "explanation": "Lesson 06 Slide 40: Bi-Encoders map text to separate dense vectors; Cross-Encoders compute joint attention.",
+    "slideRef": "Lesson 06 Slide 40"
+  },
+  {
+    "id": 57,
+    "partId": "part3",
+    "partTitle": "Part 3: Module 2 — Advanced RAG Architecture & Evaluation",
+    "subtopic": "3.5 Context Management",
+    "moduleId": "mod06",
+    "type": "qcm",
+    "question": "What is the 'Lost in the Middle' phenomenon discovered by Liu et al. regarding LLM context windows?",
+    "options": [
+      "LLMs lose internet connectivity when generating more than 1,000 tokens.",
+      "Middle layers in transformer neural networks are deleted during quantization.",
+      "Models recall information best when placed at the very beginning or end of the prompt context, while information located in the middle suffers from significantly lower retrieval attention.",
+      "Vector databases discard the middle 50% of document embeddings."
+    ],
+    "correctIndex": 2,
+    "explanation": "Lesson 06 Slide 50-52: The 'Lost in the Middle' phenomenon proves that transformer attention weights are highest at prompt boundaries (primacy and recency effects), causing facts buried in the middle of long contexts to be overlooked.",
+    "slideRef": "Lesson 06 Slide 50-52"
+  },
+  {
+    "id": 58,
+    "partId": "part3",
+    "partTitle": "Part 3: Module 2 — Advanced RAG Architecture & Evaluation",
+    "subtopic": "3.5 Context Management",
+    "moduleId": "mod06",
+    "type": "true-false",
+    "question": "To counter the 'Lost in the Middle' effect, practitioners should re-order retrieved chunks so that the most relevant documents are placed at the beginning and the end of the context window rather than in the center.",
+    "options": [
+      "True",
+      "False"
+    ],
+    "correctIndex": 0,
+    "explanation": "Lesson 06 Slide 53: Position-aware chunk reordering places highest-ranked chunks at the very start and very end of the prompt to maximize LLM attention retrieval.",
+    "slideRef": "Lesson 06 Slide 53"
+  },
+  {
+    "id": 59,
+    "partId": "part3",
+    "partTitle": "Part 3: Module 2 — Advanced RAG Architecture & Evaluation",
+    "subtopic": "3.5 Context Management",
+    "moduleId": "mod06",
+    "type": "open-question",
+    "question": "A team injects 20 retrieved chunks (totaling 12,000 tokens) directly into an LLM's prompt. The model frequently fails to answer questions despite the relevant sentence being present. Explain 3 context management strategies to fix this problem.",
+    "modelAnswer": "1) Position-Aware Re-ordering: Counteract the 'Lost in the Middle' bias by ordering the retrieved chunks such that the top 2 highest-scoring chunks are placed at the very beginning and very end of the context, while lower-confidence chunks occupy the middle.\n2) Contextual Compression & Extraction: Use a small, fast model (or LLMLingua) to prune redundant sentences, boilerplate, and irrelevant tokens from the 20 chunks before passing them to the generator model, reducing 12,000 tokens down to 2,000 focused tokens.\n3) Top-K Thresholding & Deduplication: Instead of blindly passing 20 chunks, apply a strict similarity score cutoff and deduplicate semantically overlapping chunks so only the top 3-5 distinct, authoritative chunks are provided.",
+    "keyPoints": [
+      "Position re-ordering (placing highest relevance at prompt start and end).",
+      "Context compression / sentence extraction (pruning irrelevant sentences to save token budget).",
+      "Top-K reduction and deduplication (lowering chunk count to top 3-5 to eliminate noise).",
+      "Mitigates attention dilution and 'Lost in the Middle' failure."
+    ],
+    "explanation": "Lesson 06 Slide 50-55 covers context management, compression techniques, and prompt optimization.",
+    "slideRef": "Lesson 06 Slide 50-55"
+  },
+  {
+    "id": 60,
+    "partId": "part3",
+    "partTitle": "Part 3: Module 2 — Advanced RAG Architecture & Evaluation",
+    "subtopic": "3.5 Context Management",
+    "moduleId": "mod06",
+    "type": "fill-in-blank",
+    "question": "The empirical finding where LLMs fail to retrieve facts located in the middle of long context windows is called the 'Lost in the ________' phenomenon.",
+    "acceptedAnswers": [
+      "Middle",
+      "middle",
+      "Lost in the Middle"
+    ],
+    "placeholder": "e.g., Middle",
+    "explanation": "Lesson 06 Slide 50: The 'Lost in the Middle' paper (Liu et al.) highlights attention degradation in middle context.",
+    "slideRef": "Lesson 06 Slide 50"
+  },
+  {
+    "id": 61,
+    "partId": "part4",
+    "partTitle": "Part 4: Autonomous Agents & Tool Integration",
+    "subtopic": "4.1 Tool Calling with Local Models",
+    "moduleId": "mod07",
+    "type": "qcm",
+    "question": "When using local LLMs (e.g. Qwen2.5 or Llama 3.1) with Ollama or vLLM, in what format are tool definitions presented to the model?",
+    "options": [
+      "As compiled C++ binary executables.",
+      "As raw assembly opcodes.",
+      "As PNG screenshots of function documentation.",
+      "As JSON Schema specifications describing the function name, description, parameters, and required fields."
+    ],
+    "correctIndex": 3,
+    "explanation": "Lesson 07 Slide 14-18: Tool calling relies on JSON Schema definitions injected into the model's chat template, enabling the model to output structured tool invocations.",
+    "slideRef": "Lesson 07 Slide 14-18"
+  },
+  {
+    "id": 62,
+    "partId": "part4",
+    "partTitle": "Part 4: Autonomous Agents & Tool Integration",
+    "subtopic": "4.1 Tool Calling with Local Models",
+    "moduleId": "mod07",
+    "type": "true-false",
+    "question": "Local open-weight LLMs like Qwen 2.5 and Llama 3.1 cannot execute tool calls or emit structured JSON function arguments under any configuration.",
+    "options": [
+      "True",
+      "False"
+    ],
+    "correctIndex": 1,
+    "explanation": "False. Modern open-weight models (such as Qwen 2.5 and Llama 3.1/3.2) have native tool-calling training and emit structured OpenAI-compatible tool_calls JSON objects.",
+    "slideRef": "Lesson 07 Slide 16"
+  },
+  {
+    "id": 63,
+    "partId": "part4",
+    "partTitle": "Part 4: Autonomous Agents & Tool Integration",
+    "subtopic": "4.1 Tool Calling with Local Models",
+    "moduleId": "mod07",
+    "type": "open-question",
+    "question": "Describe the lifecycle of a Tool Call when a user asks an agent: 'What is the current temperature in Phnom Penh?' Assume the agent has access to a tool named `get_weather(city: str)`.",
+    "modelAnswer": "1) User Query: User submits: 'What is the current temperature in Phnom Penh?'\n2) Tool Declaration Injection: The client formats the prompt, passing the JSON schema of `get_weather(city: str)` in the `tools` payload.\n3) Model Generation (Tool Call): The LLM recognizes that it lacks real-time weather knowledge, generates reasoning, and emits a structured `tool_calls` object: `{\"name\": \"get_weather\", \"arguments\": {\"city\": \"Phnom Penh\"}}` with `finish_reason=\"tool_calls\"`.\n4) Client Execution: The client application (harness/runtime) intercepts the tool call, executes the actual Python function `get_weather(\"Phnom Penh\")`, and fetches the result (e.g. `{\"temperature\": \"32°C\", \"condition\": \"Sunny\"}`).\n5) Tool Output Injection: The client appends the tool response as a message with `role: \"tool\"` back into the conversation history.\n6) Final Answer Generation: The LLM receives the updated conversation containing the tool observation and synthesizes the user-facing response: 'The current temperature in Phnom Penh is 32°C and sunny.'",
+    "keyPoints": [
+      "Prompt sent with tool JSON schema definitions.",
+      "LLM generates structured tool_calls invocation instead of direct answer.",
+      "Harness intercepts call and executes local function get_weather().",
+      "Function result injected as role='tool' message; LLM synthesizes final answer."
+    ],
+    "explanation": "Lesson 07 Slide 14-22 details the tool execution cycle: Schema -> Tool Call -> Runtime Execution -> Observation -> Final Synthesis.",
+    "slideRef": "Lesson 07 Slide 14-22"
+  },
+  {
+    "id": 64,
+    "partId": "part4",
+    "partTitle": "Part 4: Autonomous Agents & Tool Integration",
+    "subtopic": "4.1 Tool Calling with Local Models",
+    "moduleId": "mod07",
+    "type": "fill-in-blank",
+    "question": "When an LLM finishes generating a tool call instead of normal text, the API response object indicates this with the property `finish_reason = '________'`. ",
+    "acceptedAnswers": [
+      "tool_calls",
+      "tool_call",
+      "tool_calls'"
+    ],
+    "placeholder": "e.g., tool_calls",
+    "explanation": "Lesson 07 Slide 18: finish_reason='tool_calls' signals the client harness to parse arguments and execute tools.",
+    "slideRef": "Lesson 07 Slide 18"
+  },
+  {
+    "id": 65,
+    "partId": "part4",
+    "partTitle": "Part 4: Autonomous Agents & Tool Integration",
+    "subtopic": "4.2 Structured Function Invocation",
+    "moduleId": "mod07",
+    "type": "qcm",
+    "question": "What Python library is widely used with LLM clients to enforce strict schema validation, type casting, and automatic retry on JSON parsing failures?",
+    "options": [
+      "instructor (along with Pydantic)",
+      "pygame",
+      "matplotlib",
+      "celery"
+    ],
+    "correctIndex": 0,
+    "explanation": "Lesson 07 Slide 24-28: The `instructor` library wraps OpenAI/Ollama clients, binding Pydantic models for structured output, schema validation, and automatic retries on validation failure.",
+    "slideRef": "Lesson 07 Slide 24-28"
+  },
+  {
+    "id": 66,
+    "partId": "part4",
+    "partTitle": "Part 4: Autonomous Agents & Tool Integration",
+    "subtopic": "4.2 Structured Function Invocation",
+    "moduleId": "mod07",
+    "type": "true-false",
+    "question": "Pydantic `Field(ge=0, le=100, description='...')` annotations in tool schemas are discarded by LLM frameworks and have no effect on tool calling precision.",
+    "options": [
+      "True",
+      "False"
+    ],
+    "correctIndex": 1,
+    "explanation": "Lesson 07 Slide 26: Pydantic Field constraints and descriptions are converted directly into JSON Schema `minimum`, `maximum`, and `description` properties that guide the model's parameter generation.",
+    "slideRef": "Lesson 07 Slide 26"
+  },
+  {
+    "id": 67,
+    "partId": "part4",
+    "partTitle": "Part 4: Autonomous Agents & Tool Integration",
+    "subtopic": "4.2 Structured Function Invocation",
+    "moduleId": "mod07",
+    "type": "open-question",
+    "question": "Write a Pydantic schema for a tool named `create_user_account` requiring a string `username` (between 3 and 20 characters), an integer `age` (must be at least 18), and an optional string `email`. Explain what happens if the LLM generates `age: 15`.",
+    "modelAnswer": "```python\nfrom pydantic import BaseModel, Field\nfrom typing import Optional\n\nclass CreateUserAccount(BaseModel):\n    username: str = Field(..., min_length=3, max_length=20, description=\"Unique account username\")\n    age: int = Field(..., ge=18, description=\"User age, must be at least 18\")\n    email: Optional[str] = Field(None, description=\"Optional email address\")\n```\n\nWhat happens if the LLM generates `age: 15`:\nPydantic will raise a `ValidationError: Input should be greater than or equal to 18`. In an agent runtime with validation retry (e.g. using `instructor`), the harness intercepts the error, feeds the validation error message back to the LLM as a system/user prompt, and prompts the LLM to correct its generated arguments according to the constraint.",
+    "keyPoints": [
+      "Proper Pydantic schema with Field constraints (min_length, max_length, ge=18).",
+      "Pydantic raises ValidationError when constraints are violated.",
+      "Runtime catches ValidationError and prompts LLM with error details for automatic self-correction.",
+      "Prevents bad data from executing in underlying business systems."
+    ],
+    "explanation": "Lesson 07 Slide 25-28 covers structured output validation with Pydantic and Instructor.",
+    "slideRef": "Lesson 07 Slide 25-28"
+  },
+  {
+    "id": 68,
+    "partId": "part4",
+    "partTitle": "Part 4: Autonomous Agents & Tool Integration",
+    "subtopic": "4.2 Structured Function Invocation",
+    "moduleId": "mod07",
+    "type": "fill-in-blank",
+    "question": "In Pydantic schemas, the constraint argument used inside `Field(________=18)` to enforce that an integer must be greater than or equal to 18 is called ge.",
+    "acceptedAnswers": [
+      "ge",
+      "ge=18",
+      "ge = 18"
+    ],
+    "placeholder": "e.g., ge",
+    "explanation": "Lesson 07 Slide 26: 'ge' stands for Greater than or Equal to in Pydantic validation fields.",
+    "slideRef": "Lesson 07 Slide 26"
+  },
+  {
+    "id": 69,
+    "partId": "part4",
+    "partTitle": "Part 4: Autonomous Agents & Tool Integration",
+    "subtopic": "4.3 Executing Bounded Actions",
+    "moduleId": "mod07",
+    "type": "qcm",
+    "question": "Why must autonomous agents execute code and OS commands inside bounded sandbox environments (such as ephemeral Docker containers or WASM sandboxes)?",
+    "options": [
+      "To speed up GPU inference by 10x.",
+      "To prevent unbounded destructive actions (e.g. `rm -rf /`, host file exfiltration, or denial-of-service) from harming the host system.",
+      "Because Python cannot run directly on Windows or macOS.",
+      "To allow LLMs to bypass network firewalls."
+    ],
+    "correctIndex": 1,
+    "explanation": "Lesson 07 Slide 34-38: Agents generating executable commands must be strictly bounded with sandbox execution, resource quotas, and isolated networks to prevent catastrophic system damage.",
+    "slideRef": "Lesson 07 Slide 34-38"
+  },
+  {
+    "id": 70,
+    "partId": "part4",
+    "partTitle": "Part 4: Autonomous Agents & Tool Integration",
+    "subtopic": "4.3 Executing Bounded Actions",
+    "moduleId": "mod07",
+    "type": "true-false",
+    "question": "Giving an autonomous agent unrestricted root access to production database mutation tools without rate limits or read-only boundaries is safe as long as the LLM temperature is set to 0.0.",
+    "options": [
+      "True",
+      "False"
+    ],
+    "correctIndex": 1,
+    "explanation": "Lesson 07 Slide 36: Temperature 0.0 does NOT prevent hallucinations, prompt injection, or logic flaws. Unbounded root access violates basic security principles.",
+    "slideRef": "Lesson 07 Slide 36"
+  },
+  {
+    "id": 71,
+    "partId": "part4",
+    "partTitle": "Part 4: Autonomous Agents & Tool Integration",
+    "subtopic": "4.3 Executing Bounded Actions",
+    "moduleId": "mod07",
+    "type": "open-question",
+    "question": "Identify 4 essential bounding controls that an engineering team must implement before allowing an LLM agent to execute SQL queries or filesystem tools.",
+    "modelAnswer": "1) Privilege Least Authority: The agent's database user must be restricted to `SELECT` permissions on specific views/tables only; `DROP`, `ALTER`, `DELETE`, and `UPDATE` must be revoked unless explicitly gated.\n2) Sandbox Isolation: Filesystem commands must run in an ephemeral container with a read-only root filesystem and restricted scratch directory, without mounting host paths.\n3) Timeout & Resource Quotas: Every query or process execution must have strict timeout limits (e.g. max 5 seconds) and CPU/memory limits (e.g. 512MB RAM) to prevent denial-of-service hangs.\n4) Result Set Clamping (LIMIT): Automatically append `LIMIT 100` to prevent unbounded queries from exhausting memory or flooding the LLM's context window.",
+    "keyPoints": [
+      "Least privilege (read-only SELECT, revoke DROP/DELETE).",
+      "Ephemeral container/sandbox isolation without host filesystem mounts.",
+      "Strict timeouts (e.g. 5s) and CPU/RAM resource quotas.",
+      "Bounded result sets (mandatory LIMIT clauses to avoid context overflow)."
+    ],
+    "explanation": "Lesson 07 Slide 35-40 outlines security boundaries and isolation safeguards for agent tools.",
+    "slideRef": "Lesson 07 Slide 35-40"
+  },
+  {
+    "id": 72,
+    "partId": "part4",
+    "partTitle": "Part 4: Autonomous Agents & Tool Integration",
+    "subtopic": "4.3 Executing Bounded Actions",
+    "moduleId": "mod07",
+    "type": "fill-in-blank",
+    "question": "The security principle stating that an agent should only be granted the minimal privileges and access permissions strictly necessary to accomplish its task is the Principle of Least ________.",
+    "acceptedAnswers": [
+      "Privilege",
+      "privilege",
+      "Least Privilege"
+    ],
+    "placeholder": "e.g., Privilege",
+    "explanation": "Lesson 07 Slide 37: Principle of Least Privilege is the bedrock of agent security.",
+    "slideRef": "Lesson 07 Slide 37"
+  },
+  {
+    "id": 73,
+    "partId": "part4",
+    "partTitle": "Part 4: Autonomous Agents & Tool Integration",
+    "subtopic": "4.4 Workflow Safety & Failure Boundaries",
+    "moduleId": "mod07",
+    "type": "qcm",
+    "question": "What safety mechanism prevents an autonomous agent from entering an infinite loop of failing tool calls and draining API budgets?",
+    "options": [
+      "Lowering the GPU fan speed.",
+      "Increasing the model's context window from 8k to 128k.",
+      "A circuit breaker / max step boundary (e.g. `max_steps = 10` or recursion limit).",
+      "Deleting the vector database."
+    ],
+    "correctIndex": 2,
+    "explanation": "Lesson 07 Slide 44-46: Hard step limits (`recursion_limit`, `max_iterations = 10`) act as circuit breakers, halting execution and notifying the user when an agent is stuck in repetitive loops.",
+    "slideRef": "Lesson 07 Slide 44-46"
+  },
+  {
+    "id": 74,
+    "partId": "part4",
+    "partTitle": "Part 4: Autonomous Agents & Tool Integration",
+    "subtopic": "4.4 Workflow Safety & Failure Boundaries",
+    "moduleId": "mod07",
+    "type": "true-false",
+    "question": "Indirect prompt injection occurs when an agent retrieves untrusted external data (such as web pages or emails) that contains hidden instructions commanding the agent to hijack execution.",
+    "options": [
+      "True",
+      "False"
+    ],
+    "correctIndex": 0,
+    "explanation": "Lesson 07 Slide 48: Indirect prompt injection is a critical vulnerability where external untrusted content overrides the agent's core system instructions.",
+    "slideRef": "Lesson 07 Slide 48"
+  },
+  {
+    "id": 75,
+    "partId": "part4",
+    "partTitle": "Part 4: Autonomous Agents & Tool Integration",
+    "subtopic": "4.4 Workflow Safety & Failure Boundaries",
+    "moduleId": "mod07",
+    "type": "open-question",
+    "question": "Explain what an 'Idempotency Key' is and why it is a mandatory failure boundary when designing agent tools that perform financial transactions or external API webhooks.",
+    "modelAnswer": "An Idempotency Key is a unique identifier (e.g. a UUID `trans-9941a`) attached to an API request. The receiving server records this key upon executing the action. If the client makes another request with the exact same idempotency key, the server returns the cached result without executing the action a second time.\n\nWhy it is mandatory for agents:\nLLM agents can experience network timeouts, transient JSON parse errors, or non-deterministic retries. If an agent calls `charge_credit_card(amount=500)` and the network drops during the response acknowledgment, a naive agent will retry the tool call. Without an idempotency key, the customer would be charged twice. With an idempotency key, the duplicate call is recognized and safely deduplicated.",
+    "keyPoints": [
+      "Idempotency key uniquely identifies a specific transaction or action.",
+      "Servers execute the action once and return cached results for identical keys.",
+      "Agents frequently retry actions after network glitches or JSON parsing retries.",
+      "Prevents disastrous duplicate executions (e.g. charging credit cards twice, duplicate database writes)."
+    ],
+    "explanation": "Lesson 07 Slide 45-47 discusses failure boundaries, retries, and idempotency guarantees in agent execution.",
+    "slideRef": "Lesson 07 Slide 45-47"
+  },
+  {
+    "id": 76,
+    "partId": "part4",
+    "partTitle": "Part 4: Autonomous Agents & Tool Integration",
+    "subtopic": "4.4 Workflow Safety & Failure Boundaries",
+    "moduleId": "mod07",
+    "type": "fill-in-blank",
+    "question": "In LangGraph and agent frameworks, the execution guardrail that sets a maximum ceiling on graph step transitions to prevent infinite loops is called the ________ limit.",
+    "acceptedAnswers": [
+      "recursion",
+      "recursion_limit",
+      "recursion limit",
+      "step"
+    ],
+    "placeholder": "e.g., recursion",
+    "explanation": "Lesson 07 Slide 44: 'recursion_limit' terminates graph execution if steps exceed the defined threshold.",
+    "slideRef": "Lesson 07 Slide 44"
+  },
+  {
+    "id": 77,
+    "partId": "part4",
+    "partTitle": "Part 4: Autonomous Agents & Tool Integration",
+    "subtopic": "4.5 Agent Patterns: ReAct",
+    "moduleId": "mod07",
+    "type": "qcm",
+    "question": "What are the three alternating phases that define the ReAct agent design pattern?",
+    "options": [
+      "Read -> Encrypt -> Transmit",
+      "Download -> Compile -> Execute",
+      "Tokenize -> Vectorize -> Cosine Similarity",
+      "Thought (Reasoning) -> Action (Tool Call) -> Observation (Tool Output)"
+    ],
+    "correctIndex": 3,
+    "explanation": "Lesson 07 Slide 52-56: ReAct (Reasoning + Acting) operates in a continuous loop: Thought (internal reasoning), Action (tool selection and invocation), Observation (parsing tool output), repeating until the task is complete.",
+    "slideRef": "Lesson 07 Slide 52-56"
+  },
+  {
+    "id": 78,
+    "partId": "part4",
+    "partTitle": "Part 4: Autonomous Agents & Tool Integration",
+    "subtopic": "4.5 Agent Patterns: ReAct",
+    "moduleId": "mod07",
+    "type": "true-false",
+    "question": "The ReAct agent pattern completely eliminates internal model reasoning (Thought), forcing the agent to execute external tool actions blindly without intermediate deliberation.",
+    "options": [
+      "True",
+      "False"
+    ],
+    "correctIndex": 1,
+    "explanation": "False. ReAct explicitly synergizes Reasoning and Acting: Thought (deliberative planning), Action (tool invocation), and Observation (environment feedback).",
+    "slideRef": "Lesson 07 Slide 54"
+  },
+  {
+    "id": 79,
+    "partId": "part4",
+    "partTitle": "Part 4: Autonomous Agents & Tool Integration",
+    "subtopic": "4.5 Agent Patterns: ReAct",
+    "moduleId": "mod07",
+    "type": "open-question",
+    "question": "Trace how a ReAct agent answers the user query: 'Who won the most recent FIFA World Cup and what stadium hosted the final?' Present the specific Thought, Action, and Observation sequences.",
+    "modelAnswer": "Step 1:\n- Thought: I need to determine who won the most recent FIFA World Cup (2022) and the stadium where the final was held. I will search for the 2022 World Cup winner and final venue.\n- Action: `web_search(query='2022 FIFA World Cup final winner and stadium')`\n- Observation: 'Argentina won the 2022 FIFA World Cup, defeating France on penalties. The final match was played at Lusail Iconic Stadium in Lusail, Qatar on December 18, 2022.'\n\nStep 2:\n- Thought: The observation clearly confirms that Argentina won the tournament and the final was hosted at Lusail Iconic Stadium. I have all the facts needed to formulate the final answer.\n- Action: `Final Answer(response='Argentina won the most recent FIFA World Cup (2022), and the final match was hosted at Lusail Iconic Stadium in Qatar.')`",
+    "keyPoints": [
+      "Clear Thought formulating search plan for tournament winner and stadium.",
+      "Action invoking tool (web_search) with specific parameters.",
+      "Observation capturing external tool result.",
+      "Final Thought synthesizing observed facts into accurate answer."
+    ],
+    "explanation": "Lesson 07 Slide 52-58 outlines the ReAct prompt structure and execution trace.",
+    "slideRef": "Lesson 07 Slide 52-58"
+  },
+  {
+    "id": 80,
+    "partId": "part4",
+    "partTitle": "Part 4: Autonomous Agents & Tool Integration",
+    "subtopic": "4.5 Agent Patterns: ReAct",
+    "moduleId": "mod07",
+    "type": "fill-in-blank",
+    "question": "The ReAct agent paradigm combines two foundational AI concepts: ________ and Acting.",
+    "acceptedAnswers": [
+      "Reasoning",
+      "reasoning"
+    ],
+    "placeholder": "e.g., Reasoning",
+    "explanation": "Lesson 07 Slide 52: ReAct stands for Reasoning + Acting (Yao et al., 2022).",
+    "slideRef": "Lesson 07 Slide 52"
+  },
+  {
+    "id": 81,
+    "partId": "part4",
+    "partTitle": "Part 4: Autonomous Agents & Tool Integration",
+    "subtopic": "4.6 Harness Design",
+    "moduleId": "mod07",
+    "type": "qcm",
+    "question": "In AI engineering, what is the primary responsibility of an Agent Test Harness?",
+    "options": [
+      "To provide a controlled, reproducible testbed with mocked tools and telemetry to benchmark agent trajectories, tool accuracy, and task completion rates.",
+      "To mine cryptocurrency while the model is idle.",
+      "To convert all Python code into JavaScript automatically.",
+      "To delete log files after every step to save disk space."
+    ],
+    "correctIndex": 0,
+    "explanation": "Lesson 07 Slide 62-66: An evaluation harness provides reproducible test environments, mocks network tools, records action trajectories, and tracks benchmark metrics like pass@k and cost per task.",
+    "slideRef": "Lesson 07 Slide 62-66"
+  },
+  {
+    "id": 82,
+    "partId": "part4",
+    "partTitle": "Part 4: Autonomous Agents & Tool Integration",
+    "subtopic": "4.6 Harness Design",
+    "moduleId": "mod07",
+    "type": "true-false",
+    "question": "Logging an agent's full trajectory (thought steps, tool names, parameters, execution times, and return values) is unnecessary once the agent passes basic unit tests.",
+    "options": [
+      "True",
+      "False"
+    ],
+    "correctIndex": 1,
+    "explanation": "Lesson 07 Slide 64: Trajectory logging is vital in production for debugging tool call errors, analyzing latency bottlenecks, detecting hallucinations, and auditing compliance.",
+    "slideRef": "Lesson 07 Slide 64"
+  },
+  {
+    "id": 83,
+    "partId": "part4",
+    "partTitle": "Part 4: Autonomous Agents & Tool Integration",
+    "subtopic": "4.6 Harness Design",
+    "moduleId": "mod07",
+    "type": "open-question",
+    "question": "You are tasked with building a test harness to evaluate an automated software engineering agent (similar to SWE-bench). Describe 3 core requirements that the test harness must provide to ensure rigorous evaluation.",
+    "modelAnswer": "1) Isolated Reproducible Environments: Every test task must run in a clean, isolated container (e.g. Docker container with pinned dependencies, git repo checkout, and pre-seeded database) to guarantee no state leaks between test runs.\n2) Mocked External Services & Deterministic Clocks: External APIs (Stripe, GitHub, internet access) must be mocked with deterministic responses so test results do not fluctuate due to network downtime or external rate limits.\n3) Automated Verification & Trajectory Telemetry: The harness must execute objective unit test suites (assert statements) to verify task completion, while logging token consumption, execution latency, step count, and full tool call trajectories for post-mortem analysis.",
+    "keyPoints": [
+      "Isolated, reproducible environment per test run (containerized sandbox).",
+      "Deterministic mocks for external services and network dependencies.",
+      "Objective assertion verification (pass/fail unit test criteria).",
+      "Comprehensive telemetry logging (token cost, latency, trajectory trace)."
+    ],
+    "explanation": "Lesson 07 Slide 62-68 covers test harness architecture, evaluation metrics, and deterministic benchmarking.",
+    "slideRef": "Lesson 07 Slide 62-68"
+  },
+  {
+    "id": 84,
+    "partId": "part4",
+    "partTitle": "Part 4: Autonomous Agents & Tool Integration",
+    "subtopic": "4.6 Harness Design",
+    "moduleId": "mod07",
+    "type": "fill-in-blank",
+    "question": "The recorded step-by-step sequence of an agent's thoughts, tool invocations, inputs, and observations during a run is called the agent's ________.",
+    "acceptedAnswers": [
+      "trajectory",
+      "Trajectory",
+      "trace",
+      "run trace"
+    ],
+    "placeholder": "e.g., trajectory",
+    "explanation": "Lesson 07 Slide 64: An agent's trajectory records the full history of decisions and actions taken to solve a task.",
+    "slideRef": "Lesson 07 Slide 64"
+  },
+  {
+    "id": 85,
+    "partId": "part4",
+    "partTitle": "Part 4: Autonomous Agents & Tool Integration",
+    "subtopic": "4.7 MCP Server",
+    "moduleId": "mod07",
+    "type": "qcm",
+    "question": "What open standard protocol, introduced by Anthropic, standardizes how AI applications connect to external tools, resources, and prompt templates?",
+    "options": [
+      "Simple Mail Transfer Protocol (SMTP)",
+      "Model Context Protocol (MCP)",
+      "Open Database Connectivity (ODBC)",
+      "File Transfer Protocol (FTP)"
+    ],
+    "correctIndex": 1,
+    "explanation": "Lesson 07 Slide 72-76 & Exam Highlight: Model Context Protocol (MCP) defines a unified JSON-RPC client-server protocol for exposing tools, prompts, and resources to LLM clients.",
+    "slideRef": "Lesson 07 Slide 72-76"
+  },
+  {
+    "id": 86,
+    "partId": "part4",
+    "partTitle": "Part 4: Autonomous Agents & Tool Integration",
+    "subtopic": "4.7 MCP Server",
+    "moduleId": "mod07",
+    "type": "true-false",
+    "question": "In Python FastMCP, exposing a function as an agent tool is done using the `@mcp.tool()` decorator.",
+    "options": [
+      "True",
+      "False"
+    ],
+    "correctIndex": 0,
+    "explanation": "Lesson 07 Slide 78 & Code Lab: FastMCP uses `@mcp.tool()` to declare tools, `@mcp.resource()` for static data, and `@mcp.prompt()` for prompt templates.",
+    "slideRef": "Lesson 07 Slide 78"
+  },
+  {
+    "id": 87,
+    "partId": "part4",
+    "partTitle": "Part 4: Autonomous Agents & Tool Integration",
+    "subtopic": "4.7 MCP Server",
+    "moduleId": "mod07",
+    "type": "open-question",
+    "question": "Explain the three core architectural primitives of the Model Context Protocol (MCP): Tools, Resources, and Prompts. Provide a practical example of each.",
+    "modelAnswer": "1) Tools: Executable functions that allow the LLM to take actions or perform side effects in external systems.\n   - Example: `@mcp.tool() def restart_docker_container(container_id: str) -> bool`.\n2) Resources: Read-only data endpoints (similar to GET endpoints or files) that supply context or documents into the LLM conversation.\n   - Example: `@mcp.resource('system://logs/nginx') def get_nginx_logs() -> str`.\n3) Prompts: Pre-defined, reusable prompt templates and workflows parameterized for user interactions.\n   - Example: `@mcp.prompt() def code_review_prompt(language: str) -> str`.",
+    "keyPoints": [
+      "Tools: Executable functions with side effects (e.g. database query, API POST).",
+      "Resources: Read-only contextual data providers (e.g. log files, documentation URIs).",
+      "Prompts: Parameterized, standardized prompt templates for common tasks.",
+      "Unified architecture decouples data/tools from specific LLM models."
+    ],
+    "explanation": "Lesson 07 Slide 75-80 details the MCP specification: Tools, Resources, and Prompts.",
+    "slideRef": "Lesson 07 Slide 75-80"
+  },
+  {
+    "id": 88,
+    "partId": "part4",
+    "partTitle": "Part 4: Autonomous Agents & Tool Integration",
+    "subtopic": "4.7 MCP Server",
+    "moduleId": "mod07",
+    "type": "fill-in-blank",
+    "question": "In the Model Context Protocol (MCP), the two standard transport layers used for client-server communication are stdio (standard input/output for local processes) and ________ (Server-Sent Events over HTTP for remote servers).",
+    "acceptedAnswers": [
+      "SSE",
+      "sse",
+      "Server-Sent Events",
+      "HTTP/SSE"
+    ],
+    "placeholder": "e.g., SSE",
+    "explanation": "Lesson 07 Slide 74: MCP uses stdio for local child processes and SSE (Server-Sent Events) over HTTP for remote servers.",
+    "slideRef": "Lesson 07 Slide 74"
+  },
+  {
+    "id": 89,
+    "partId": "part4",
+    "partTitle": "Part 4: Autonomous Agents & Tool Integration",
+    "subtopic": "4.8 Local Tools vs MCP Server",
+    "moduleId": "mod07",
+    "type": "qcm",
+    "question": "What is the primary architectural advantage of using an MCP Server over hardcoding local Python tool functions directly in your application codebase?",
+    "options": [
+      "Local Python tools cannot use `for` loops.",
+      "MCP Servers do not require an operating system.",
+      "MCP Servers are decoupled, language-agnostic, run in isolated processes, and can be reused across any MCP client (Claude Desktop, Cursor, custom agents) without rewriting tool code.",
+      "Local Python tools require 100GB of GPU VRAM."
+    ],
+    "correctIndex": 2,
+    "explanation": "Lesson 07 Slide 82-86: MCP decouples tool development from client implementations. One MCP server (e.g. Postgres or GitHub MCP) can be plugged into Cursor, Claude Desktop, or custom Python agents seamlessly.",
+    "slideRef": "Lesson 07 Slide 82-86"
+  },
+  {
+    "id": 90,
+    "partId": "part4",
+    "partTitle": "Part 4: Autonomous Agents & Tool Integration",
+    "subtopic": "4.8 Local Tools vs MCP Server",
+    "moduleId": "mod07",
+    "type": "true-false",
+    "question": "Direct in-process local tool calling typically provides lower inter-process communication (IPC) latency than calling remote MCP servers over HTTP/SSE.",
+    "options": [
+      "True",
+      "False"
+    ],
+    "correctIndex": 0,
+    "explanation": "Lesson 07 Slide 84: Local functions run in-memory within the same Python process ($O(0)$ IPC overhead), whereas network MCP servers incur JSON serialization and network transport latency.",
+    "slideRef": "Lesson 07 Slide 84"
+  },
+  {
+    "id": 91,
+    "partId": "part4",
+    "partTitle": "Part 4: Autonomous Agents & Tool Integration",
+    "subtopic": "4.8 Local Tools vs MCP Server",
+    "moduleId": "mod07",
+    "type": "open-question",
+    "question": "An engineering manager asks: 'Should our company implement our enterprise tools as local Python functions inside our LangGraph codebase, or as standalone MCP Servers?' Provide an architectural trade-off analysis.",
+    "modelAnswer": "Choose Local Python Tools when:\n1) Latency is paramount: In-memory function execution avoids network serialization overhead.\n2) Tight Coupling & Complexity: The tools rely heavily on internal application state or ephemeral in-memory objects.\n3) Simplicity: A simple prototype or internal service does not need process isolation or cross-platform tool sharing.\n\nChoose MCP Server when:\n1) Cross-Platform Interoperability: The tools need to be shared across multiple diverse clients (e.g., developers using Cursor, business analysts using Claude Desktop, and backend LangGraph agents).\n2) Security & Process Isolation: Running tools in a separate process/container prevents rogue tool bugs or memory leaks from crashing the core agent application.\n3) Multi-Language Support: Tools can be written in Go, Rust, or Node.js while being consumed by a Python agent over standard JSON-RPC.",
+    "keyPoints": [
+      "Local tools: Low latency, in-memory execution, simple codebase, but tightly coupled.",
+      "MCP servers: Cross-client reuse (Claude Desktop, Cursor, LangGraph), language agnostic.",
+      "MCP provides security isolation (separate process/container boundaries).",
+      "Recommendation based on interoperability vs sub-millisecond latency needs."
+    ],
+    "explanation": "Lesson 07 Slide 82-88 provides comparative evaluation between in-process functions and decoupled MCP architectures.",
+    "slideRef": "Lesson 07 Slide 82-88"
+  },
+  {
+    "id": 92,
+    "partId": "part4",
+    "partTitle": "Part 4: Autonomous Agents & Tool Integration",
+    "subtopic": "4.8 Local Tools vs MCP Server",
+    "moduleId": "mod07",
+    "type": "fill-in-blank",
+    "question": "Under the Model Context Protocol (MCP) specification, client and server exchange structured messages formatted using the JSON-________ protocol.",
+    "acceptedAnswers": [
+      "RPC",
+      "rpc",
+      "RPC 2.0",
+      "rpc 2.0",
+      "JSON-RPC"
+    ],
+    "placeholder": "e.g., RPC",
+    "explanation": "Lesson 07 Slide 74: MCP uses JSON-RPC 2.0 as its wire messaging protocol.",
+    "slideRef": "Lesson 07 Slide 74"
+  },
+  {
+    "id": 93,
+    "partId": "part4",
+    "partTitle": "Part 4: Autonomous Agents & Tool Integration",
+    "subtopic": "4.9 Human-in-the-Loop Design",
+    "moduleId": "mod07",
+    "type": "qcm",
+    "question": "In LangGraph, which mechanism allows execution to pause immediately before an irreversible action (e.g. executing a financial payment) so a human can inspect and approve it?",
+    "options": [
+      "`sys.exit(0)`",
+      "`time.sleep(86400)`",
+      "An infinite while loop (`while True: pass`).",
+      "`interrupt_before=['execute_action']` breakpoint configuration during graph compilation."
+    ],
+    "correctIndex": 3,
+    "explanation": "Lesson 07 Slide 92-96 & Exam Highlight: LangGraph provides native `interrupt_before` and `interrupt_after` breakpoints. The graph saves state to the checkpointer and pauses, waiting for an explicit resume signal.",
+    "slideRef": "Lesson 07 Slide 92-96"
+  },
+  {
+    "id": 94,
+    "partId": "part4",
+    "partTitle": "Part 4: Autonomous Agents & Tool Integration",
+    "subtopic": "4.9 Human-in-the-Loop Design",
+    "moduleId": "mod07",
+    "type": "true-false",
+    "question": "In Human-in-the-Loop workflows, once a human operator edits the draft state or grants approval, execution resumes from the saved checkpoint without re-running prior upstream nodes.",
+    "options": [
+      "True",
+      "False"
+    ],
+    "correctIndex": 0,
+    "explanation": "Lesson 07 Slide 94: Checkpointers preserve intermediate node states, allowing resumption directly from the breakpoint with modified or approved state.",
+    "slideRef": "Lesson 07 Slide 94"
+  },
+  {
+    "id": 95,
+    "partId": "part4",
+    "partTitle": "Part 4: Autonomous Agents & Tool Integration",
+    "subtopic": "4.9 Human-in-the-Loop Design",
+    "moduleId": "mod07",
+    "type": "open-question",
+    "question": "Design a Human-in-the-Loop (HITL) approval workflow in LangGraph for an automated Database Migration Agent. Explain the roles of breakpoints, state persistence, and human feedback injection.",
+    "modelAnswer": "1) Workflow Structure:\n   - Node 1: `generate_migration_sql` - Analyzes schema diffs and writes DDL scripts.\n   - Breakpoint: `interrupt_before=['execute_migration']`.\n   - Node 2: `execute_migration` - Connects to database and executes the DDL.\n2) Breakpoint & State Persistence:\n   When execution reaches `execute_migration`, LangGraph halts. The checkpointer (e.g. PostgresSaver) persists the complete graph state (including proposed SQL) under the session's `thread_id`. The server process can sleep or handle other requests.\n3) Human Inspection & Approval UI:\n   A database administrator (DBA) reviews the proposed SQL in a web dashboard. The DBA has three options:\n   - Approve: The client calls `graph.invoke(Command(resume='approved'), config)` to resume Node 2.\n   - Edit: The DBA modifies the SQL script via `graph.update_state(config, {'sql_script': modified_sql})` and approves.\n   - Reject: The DBA provides critique (e.g. 'Missing index on user_id'), routing execution back to Node 1 for revision.\n4) Benefit: Guarantees zero unreviewed, destructive schema changes in production while preserving automated drafting.",
+    "keyPoints": [
+      "interrupt_before breakpoint halts execution prior to destructive node.",
+      "Checkpointer persists state safely per thread_id during human review.",
+      "Human review interface supports Approve, Edit state, or Reject with feedback.",
+      "Resumes from breakpoint without re-running upstream generation."
+    ],
+    "explanation": "Lesson 07 Slide 92-98 outlines Human-in-the-Loop patterns, interrupt breakpoints, and state resumption.",
+    "slideRef": "Lesson 07 Slide 92-98"
+  },
+  {
+    "id": 96,
+    "partId": "part4",
+    "partTitle": "Part 4: Autonomous Agents & Tool Integration",
+    "subtopic": "4.9 Human-in-the-Loop Design",
+    "moduleId": "mod07",
+    "type": "fill-in-blank",
+    "question": "In LangGraph, to modify the saved thread state before resuming a paused workflow, you invoke the method `app.update_________(config, values)`.",
+    "acceptedAnswers": [
+      "state",
+      "State",
+      "update_state"
+    ],
+    "placeholder": "e.g., state",
+    "explanation": "Lesson 07 Slide 95: 'update_state' injects modifications into a checkpointed thread state before resumption.",
+    "slideRef": "Lesson 07 Slide 95"
   }
 ];
 
