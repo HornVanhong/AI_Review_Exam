@@ -748,15 +748,15 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "1.1 Introduction to LLM Workflow",
     "moduleId": "mod04",
     "type": "qcm",
-    "question": "Why do complex real-world AI applications require structured LLM Workflows instead of a single massive prompt?",
+    "question": "Why is it better to build a multi-step workflow instead of putting everything into one giant prompt?",
     "options": [
-      "Workflows decompose tasks into modular, debuggable steps with deterministic control flow, error handling, and specialized prompts.",
-      "Single prompts cannot be version-controlled in Git repositories.",
-      "Single prompts exceed GPU memory limits regardless of model context size.",
-      "LLMs refuse to generate text when prompt lengths exceed 500 characters."
+      "Workflows break the job into small steps that are easy to test, fix, and control when the AI makes a mistake.",
+      "One giant prompt takes more than 10 hours to send over the internet.",
+      "AI models will completely turn off if a prompt has more than 50 words.",
+      "Single prompts cannot be typed on a keyboard."
     ],
     "correctIndex": 0,
-    "explanation": "Lesson 04 Slide 12-15: Monolithic prompts are brittle, lack predictable intermediate checkpoints, and suffer from high hallucination rates. Workflows provide modularity, inspectability, and robust branching.",
+    "explanation": "Lesson 04 Slide 12-15: Workflows split big problems into smaller, reliable steps with clear error handling.",
     "slideRef": "Lesson 04 Slide 12-15"
   },
   {
@@ -766,14 +766,14 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "1.1 Introduction to LLM Workflow",
     "moduleId": "mod04",
     "type": "true-false",
-    "question": "In LLM workflow engineering, cyclical graphs containing loops are strictly forbidden because LLMs cannot be re-invoked within the same execution thread.",
+    "question": "In AI workflow engineering, is it strictly forbidden for steps to loop back to let the AI fix its own mistakes?",
     "options": [
       "True",
       "False"
     ],
     "correctIndex": 1,
-    "explanation": "False. Cyclical workflows (graphs with loops) are essential in modern LLM engineering for reflection, iterative evaluation, and self-correction loops (such as Evaluator-Optimizer and Agentic loops).",
-    "slideRef": "Lesson 04 Slide 22"
+    "explanation": "False. Loops (cycles) are essential so the AI can review its answer, see errors, and fix them before finishing.",
+    "slideRef": "Lesson 04 Slide 22-26"
   },
   {
     "id": 3,
@@ -782,15 +782,15 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "1.1 Introduction to LLM Workflow",
     "moduleId": "mod04",
     "type": "open-question",
-    "question": "Explain why cyclical graphs (workflows with loops) are necessary for LLM applications, whereas standard data pipelines traditionally enforce strict DAGs (Directed Acyclic Graphs).",
-    "modelAnswer": "Standard ETL data pipelines assume deterministic transformations where operations succeed or fail cleanly in one downstream pass. In contrast, LLMs are non-deterministic and can produce invalid JSON, incomplete answers, or hallucinations. Cyclical workflows enable iterative self-correction (reflection, evaluator-optimizer loops) where an evaluator inspects the output and routes back to the generator node with specific critique until quality conditions are met or maximum retry limits are reached.",
+    "question": "Why are loops (cycles) useful in an AI workflow? Give a simple real-life example.",
+    "modelAnswer": "Loops let an AI check its own work and fix mistakes.\nFor example: Step 1 writes code. Step 2 runs a test on the code. If the test fails, the workflow loops back to Step 1 with the error message so the AI can fix the code until it passes.",
     "keyPoints": [
-      "LLMs are probabilistic and prone to intermediate failures/hallucinations.",
-      "Cyclic workflows enable iterative reflection, evaluation, and repair loops.",
-      "Standard DAGs cannot loop back without complex unrolling or recursion.",
-      "Loops must include termination boundaries (e.g. max retries) to prevent infinite loops."
+      "Allows the AI to self-correct and improve its output.",
+      "Runs tests or checks on the result.",
+      "Loops back with feedback if something is wrong.",
+      "Stops once the answer is correct or reaches max tries."
     ],
-    "explanation": "Lesson 04 Slide 24-26 emphasizes that agentic workflows require cycles for reflection, error recovery, and iterative refinement.",
+    "explanation": "Lesson 04 Slide 24-26: Evaluator-Optimizer loops allow iterative self-correction.",
     "slideRef": "Lesson 04 Slide 24-26"
   },
   {
@@ -800,15 +800,15 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "1.1 Introduction to LLM Workflow",
     "moduleId": "mod04",
     "type": "fill-in-blank",
-    "question": "In graph-based LLM architectures, computational units that perform individual tasks (such as LLM generation or tool execution) are called ________, while transitions connecting them are called edges.",
+    "question": "In a graph workflow, each individual task or step is called a ________, and the lines connecting them are called edges.",
     "acceptedAnswers": [
-      "nodes",
       "node",
-      "Nodes",
-      "Node"
+      "Node",
+      "nodes",
+      "Nodes"
     ],
     "placeholder": "Type your answer here...",
-    "explanation": "Lesson 04 Slide 22: Graph workflows are built from Nodes (discrete computation functions) and Edges (transitions and routing logic).",
+    "explanation": "Lesson 04 Slide 22: Graphs are made of Nodes (steps) and Edges (connections).",
     "slideRef": "Lesson 04 Slide 22"
   },
   {
@@ -818,15 +818,15 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "1.2 Chaining & Execution Patterns",
     "moduleId": "mod04",
     "type": "qcm",
-    "question": "In the 'Evaluator-Optimizer' workflow execution pattern, what is the primary role of the Evaluator node?",
+    "question": "In an 'Evaluator-Optimizer' workflow loop, what is the job of the Evaluator?",
     "options": [
-      "To tokenize raw text into integer vectors before vector database insertion.",
-      "To critique and score the optimizer's candidate output against criteria and provide actionable feedback for the next iteration.",
-      "To run PyTorch backpropagation to fine-tune the base foundation weights.",
-      "To terminate the process immediately whenever an LLM generates a refusal token."
+      "To delete the database files after each step.",
+      "To check the AI's answer, score it, and give helpful feedback on what to fix.",
+      "To turn your text into raw binary numbers (0s and 1s).",
+      "To connect your computer to the WiFi router."
     ],
     "correctIndex": 1,
-    "explanation": "Lesson 04 Slide 31-33: The Evaluator-Optimizer loop uses an Evaluator to inspect candidate answers against rubric/criteria, providing feedback to guide the Optimizer's revision loop.",
+    "explanation": "Lesson 04 Slide 31-33: The Evaluator checks the generated result and tells the Optimizer what needs improvement.",
     "slideRef": "Lesson 04 Slide 31-33"
   },
   {
@@ -836,13 +836,13 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "1.2 Chaining & Execution Patterns",
     "moduleId": "mod04",
     "type": "true-false",
-    "question": "In a Sequential Chaining workflow pattern, all downstream tasks execute simultaneously in parallel across independent threads to minimize latency.",
+    "question": "In a Sequential Chain, all steps run at the exact same time in parallel.",
     "options": [
       "True",
       "False"
     ],
     "correctIndex": 1,
-    "explanation": "False. Sequential chaining executes tasks strictly one after another in linear order. Simultaneous execution is characteristic of Parallel (Fan-out / Fan-in) execution patterns.",
+    "explanation": "False. Sequential means one step after another in a line. Running at the same time is called Parallel execution.",
     "slideRef": "Lesson 04 Slide 28"
   },
   {
@@ -852,15 +852,15 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "1.2 Chaining & Execution Patterns",
     "moduleId": "mod04",
     "type": "open-question",
-    "question": "You are designing an AI customer support router. Incoming user tickets can be Technical, Billing, or Sales inquiries. Describe how you would implement a Routing Pattern and detail the fallback mechanism when classification fails.",
-    "modelAnswer": "1) Router Node: An intent classification LLM or embedding classifier receives the user query and outputs a structured category: Technical, Billing, or Sales.\n2) Conditional Edges: The graph routes execution to the appropriate specialized subgraph (e.g. TechnicalSupportChain with docs, BillingChain with invoice tool).\n3) Fallback Mechanism: If the classifier returns 'Unknown', confidence score is below threshold (< 0.7), or an exception occurs, route to a GeneralFallbackNode that provides a graceful default answer, asks the user for clarification, or creates a human agent escalation ticket.",
+    "question": "What is a 'Router' in an AI workflow, and how does it help handle different user questions?",
+    "modelAnswer": "A Router is a step that checks what the user wants and sends their question to the right specialist.\nFor example, if a customer asks about a broken product, the Router sends them to Tech Support. If they ask about a bill, the Router sends them to Billing. If the Router isn't sure, it sends them to a fallback helper.",
     "keyPoints": [
-      "Intent classifier / Router node at entry point.",
-      "Conditional edges directing execution to domain-specific chains.",
-      "Fallback node triggered on low confidence, exceptions, or unclassified queries.",
-      "Human-in-the-loop escalation or clarification prompt."
+      "A Router inspects user intent and picks the best path.",
+      "Routes to specialized chains (e.g., Tech support vs Billing).",
+      "Provides a fallback option when the question is unclear.",
+      "Keeps workflows organized instead of handling everything in one place."
     ],
-    "explanation": "Lesson 04 Slide 29-30: Router patterns direct traffic dynamically based on intent classification with explicit fallback paths.",
+    "explanation": "Lesson 04 Slide 29-30: Routers direct traffic to specialized sub-chains based on intent.",
     "slideRef": "Lesson 04 Slide 29-30"
   },
   {
@@ -870,15 +870,16 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "1.2 Chaining & Execution Patterns",
     "moduleId": "mod04",
     "type": "fill-in-blank",
-    "question": "The execution pattern where an LLM repeatedly generates content, an evaluator critiques it, and the loop continues until a quality threshold is reached is called the ________-Optimizer loop.",
+    "question": "When you run multiple AI tasks at the same time to save time and combine their results later, this is called ________ execution.",
     "acceptedAnswers": [
-      "Evaluator",
-      "evaluator",
-      "Evaluator-Optimizer"
+      "parallel",
+      "Parallel",
+      "concurrent",
+      "Concurrent"
     ],
     "placeholder": "Type your answer here...",
-    "explanation": "Lesson 04 Slide 31: The Evaluator-Optimizer loop is a foundational iterative pattern for high-stakes generation tasks.",
-    "slideRef": "Lesson 04 Slide 31"
+    "explanation": "Lesson 04 Slide 28: Parallel (Fan-out / Fan-in) runs multiple steps simultaneously.",
+    "slideRef": "Lesson 04 Slide 28"
   },
   {
     "id": 9,
@@ -887,15 +888,15 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "1.3 Managing State, Memory, and Persistence",
     "moduleId": "mod04",
     "type": "qcm",
-    "question": "What is the fundamental architectural distinction between 'State' and 'Memory' in an AI workflow?",
+    "question": "What is the main difference between 'State' and 'Memory' in an AI workflow?",
     "options": [
-      "State is persistent across server reboots; Memory is always wiped immediately after every token.",
-      "State is stored in a vector DB; Memory is stored exclusively in GPU VRAM registers.",
-      "State manages the transient execution context of the current run; Memory retains long-term user context and facts across multiple sessions.",
-      "State is only for single-turn chats; Memory is only for image processing models."
+      "State and Memory are the exact same thing with different spellings.",
+      "State is stored in text files; Memory is stored on USB flash drives.",
+      "State is the temporary data for the current run right now; Memory saves user facts and history across future conversations.",
+      "State only works on mobile phones; Memory only works on supercomputers."
     ],
     "correctIndex": 2,
-    "explanation": "Lesson 04 Slide 39-42: State is the temporary, execution-scoped data container for an ongoing workflow run. Memory is cross-session persistence that stores long-term facts, preferences, and chat history.",
+    "explanation": "Lesson 04 Slide 39-42: State is temporary for the active run; Memory remembers long-term facts across multiple sessions.",
     "slideRef": "Lesson 04 Slide 39-42"
   },
   {
@@ -905,13 +906,13 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "1.3 Managing State, Memory, and Persistence",
     "moduleId": "mod04",
     "type": "true-false",
-    "question": "In LangGraph, using an `InMemorySaver` checkpointer guarantees that conversational state survives container restarts and server redeployments.",
+    "question": "If you use `InMemorySaver` in LangGraph, your chat history will survive even if the server restarts or crashes.",
     "options": [
       "True",
       "False"
     ],
     "correctIndex": 1,
-    "explanation": "Lesson 04 Slide 114: InMemorySaver stores checkpoints in Python process RAM only. When the container restarts or crashes, all state is lost. Production requires PostgresSaver or MongoSaver.",
+    "explanation": "False. `InMemorySaver` stores data only in RAM. If the server restarts, everything is erased. You need a database checkpointer like `PostgresSaver` for real persistence.",
     "slideRef": "Lesson 04 Slide 114"
   },
   {
@@ -921,16 +922,16 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "1.3 Managing State, Memory, and Persistence",
     "moduleId": "mod04",
     "type": "open-question",
-    "question": "Explain how LangGraph partitions conversational state using `thread_id` and how cross-session long-term memory can be isolated across multiple users.",
-    "modelAnswer": "1) Short-term Thread State: LangGraph uses a checkpointer (e.g. PostgresSaver) where every conversation run receives a configuration key `{'configurable': {'thread_id': '<id>'}}`. The checkpointer indexes checkpoints by `thread_id`, ensuring calls within that thread share message history and intermediate graph variables.\n2) Long-term Cross-Thread Memory: LangGraph Store (e.g. `InMemoryStore` or `AsyncPostgresStore`) manages persistent memory using hierarchical namespaces, such as `(user_id, 'profile')` or `(user_id, 'memories')`. This allows an agent to save user preferences across conversations while strictly preventing user data leaks.",
+    "question": "In LangGraph, what is `thread_id`, and what bad thing happens if two different users accidentally share the same `thread_id`?",
+    "modelAnswer": "`thread_id` is a unique ID for a specific conversation.\nIf two different users share the same `thread_id`, their chat messages will get mixed together! User A will see User B's private messages and the AI will get confused and hallucinate.",
     "keyPoints": [
-      "thread_id scopes short-term checkpoints to a specific conversation thread.",
-      "Checkpointer persists intermediate graph state snapshots per thread_id.",
-      "Long-term memory is managed via LangGraph Store using namespaced keys (e.g. user_id, profile).",
-      "Strict separation prevents cross-tenant data leaks in multi-user applications."
+      "thread_id identifies and separates different chat sessions.",
+      "Keeps each user's history private and isolated.",
+      "Sharing thread_id causes chat messages to collide and leak private data.",
+      "Checkpointers use thread_id to save and load the right state."
     ],
-    "explanation": "Lesson 04 Slide 114-118: Checkpointers isolate threads via thread_id; Stores manage persistent cross-session memory namespaces.",
-    "slideRef": "Lesson 04 Slide 114-118"
+    "explanation": "Lesson 04 Slide 114: thread_id partitions conversation state in checkpointers.",
+    "slideRef": "Lesson 04 Slide 114"
   },
   {
     "id": 12,
@@ -939,14 +940,14 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "1.3 Managing State, Memory, and Persistence",
     "moduleId": "mod04",
     "type": "fill-in-blank",
-    "question": "In LangGraph, the configuration parameter passed in `config={'configurable': {'________': 'conv-101'}}` is used to partition short-term conversation checkpoints.",
+    "question": "In LangGraph, the configuration key used to separate chat history for each user conversation is `thread_________`.",
     "acceptedAnswers": [
-      "thread_id",
-      "thread_id",
-      "threadId"
+      "id",
+      "ID",
+      "thread_id"
     ],
     "placeholder": "Type your answer here...",
-    "explanation": "Lesson 04 Slide 114: thread_id is the primary session identifier for LangGraph checkpointers.",
+    "explanation": "Lesson 04 Slide 114: thread_id is passed in config={'configurable': {'thread_id': '...'}}.",
     "slideRef": "Lesson 04 Slide 114"
   },
   {
@@ -956,15 +957,15 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "1.4 Document Ingestion Pipelines",
     "moduleId": "mod04",
     "type": "qcm",
-    "question": "During document ingestion, what is the primary benefit of applying metadata extractors (e.g. TitleExtractor, KeywordExtractor)?",
+    "question": "Why do we clean text and add metadata (like titles and keywords) to document chunks before saving them?",
     "options": [
-      "They translate English documents into binary machine code.",
-      "They compress text so that 10,000 pages fit into 1 single token.",
-      "They automatically fine-tune the LLM weights without gradient descent.",
-      "They enrich chunks with contextual tags, enabling hybrid filtering and mitigating loss of global document context."
+      "To make the files look colorful on the screen.",
+      "To encrypt the text with a secret password.",
+      "To delete all the words and replace them with numbers.",
+      "To help the search engine find the right chunks easily and keep important context attached to each piece."
     ],
     "correctIndex": 3,
-    "explanation": "Lesson 04 Slide 48-52: Chunks lose parent context when split. Metadata extractors (titles, summaries, entity tags) enrich chunks, allowing vector databases to filter by metadata and improving retrieval precision.",
+    "explanation": "Lesson 04 Slide 48-52: Metadata tags and clean text help the retriever find exact matches and preserve parent document context.",
     "slideRef": "Lesson 04 Slide 48-52"
   },
   {
@@ -974,13 +975,13 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "1.4 Document Ingestion Pipelines",
     "moduleId": "mod04",
     "type": "true-false",
-    "question": "Running a document ingestion pipeline without document hashing or deduplication checks causes duplicate vectors to accumulate every time the pipeline is re-run.",
+    "question": "If your ingestion script does not check for duplicate files, re-running it will create duplicate copies of all your chunks in the vector database.",
     "options": [
       "True",
       "False"
     ],
     "correctIndex": 0,
-    "explanation": "Lesson 04 Slide 54: Ingestion pipelines must maintain document hashes or use upsert/idempotent keys; otherwise, re-indexing inserts duplicate chunks, bloating the index and corrupting ranking.",
+    "explanation": "True. Without deduplication or document hashing, re-uploading documents will insert duplicate vectors every time.",
     "slideRef": "Lesson 04 Slide 54"
   },
   {
@@ -990,15 +991,15 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "1.4 Document Ingestion Pipelines",
     "moduleId": "mod04",
     "type": "open-question",
-    "question": "List the 5 primary stages of a robust document ingestion pipeline and explain why preprocessing/cleaning text is critical before generating vector embeddings.",
-    "modelAnswer": "The 5 primary stages are:\n1) Load: Extract raw text and metadata from sources (PDFs, Markdown, Web, DBs).\n2) Split/Chunk: Partition continuous text into manageable, overlapping chunks.\n3) Transform/Enrich: Clean formatting artifacts and extract metadata (titles, keywords, summaries).\n4) Embed: Convert cleaned text chunks into dense mathematical vectors using an embedding model.\n5) Index/Store: Upsert vectors and metadata into the vector database.\n\nCleaning text is critical because uncleaned noise (headers, footers, whitespace, boilerplate CSS/HTML, repeated logos) pollutes embedding representations, wastes token context budgets, and causes semantic drift that lowers retrieval similarity scores.",
+    "question": "What are the 5 simple steps to process a PDF document so an AI can search it in RAG?",
+    "modelAnswer": "1. Load: Read text from the PDF file.\n2. Split (Chunk): Cut long text into small, readable chunks.\n3. Clean/Enrich: Remove messy headers/footers and add tags (titles, dates).\n4. Embed: Convert each text chunk into a vector (list of numbers).\n5. Save (Index): Store the vectors and chunks into a vector database.",
     "keyPoints": [
-      "5 stages: Load, Split/Chunk, Transform/Enrich, Embed, Index/Store.",
-      "Noise and boilerplate distort semantic vector embeddings.",
-      "Reduces token waste and context dilution during prompt generation.",
-      "Enables high-fidelity similarity matching."
+      "1. Load (read source document).",
+      "2. Split / Chunk (divide into smaller pieces).",
+      "3. Clean / Enrich (remove noise and add metadata).",
+      "4. Embed (convert text to vectors) and Store in database."
     ],
-    "explanation": "Lesson 04 Slide 45-56 outlines the end-to-end ingestion pipeline architecture and data sanitization guidelines.",
+    "explanation": "Lesson 04 Slide 45-56 outlines the Load -> Split -> Transform -> Embed -> Store pipeline.",
     "slideRef": "Lesson 04 Slide 45-56"
   },
   {
@@ -1008,14 +1009,14 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "1.4 Document Ingestion Pipelines",
     "moduleId": "mod04",
     "type": "fill-in-blank",
-    "question": "In LlamaIndex ingestion pipelines, the transformation component used to generate semantic document title tags for chunks is called ________.",
+    "question": "In LlamaIndex, the component that automatically reads chunks and generates a title tag for each one is called ________Extractor.",
     "acceptedAnswers": [
-      "TitleExtractor",
-      "TitleExtractor()",
-      "title_extractor"
+      "Title",
+      "title",
+      "TitleExtractor"
     ],
     "placeholder": "Type your answer here...",
-    "explanation": "Lesson 04 Slide 51: TitleExtractor extracts contextual document titles from chunks to inject into metadata.",
+    "explanation": "Lesson 04 Slide 51: TitleExtractor creates title metadata for chunks.",
     "slideRef": "Lesson 04 Slide 51"
   },
   {
@@ -1025,15 +1026,15 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "1.5 Modular Workflow Design",
     "moduleId": "mod04",
     "type": "qcm",
-    "question": "Which software engineering principle is violated when a single LLM prompt is asked to extract entities, analyze sentiment, query a database, and draft a final customer email all at once?",
+    "question": "Why should each step (node) in an AI workflow do only ONE simple job?",
     "options": [
-      "Single Responsibility Principle (SRP)",
-      "Liskov Substitution Principle",
-      "Don't Repeat Yourself (DRY)",
-      "Open-Closed Principle"
+      "It makes it easy to test, fix mistakes, and retry just that one step if it fails.",
+      "AI models can only understand one word per minute.",
+      "Computer CPUs stop working if you run two lines of code.",
+      "Python requires every function to have only 3 letters."
     ],
     "correctIndex": 0,
-    "explanation": "Lesson 04 Slide 60-63: Combining multiple disparate tasks into one mega-prompt violates the Single Responsibility Principle, dramatically increasing hallucination rates and making debugging impossible.",
+    "explanation": "Lesson 04 Slide 60-63: Single Responsibility Principle (SRP) makes each node reliable, testable, and easy to debug.",
     "slideRef": "Lesson 04 Slide 60-63"
   },
   {
@@ -1043,13 +1044,13 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "1.5 Modular Workflow Design",
     "moduleId": "mod04",
     "type": "true-false",
-    "question": "Defining strongly-typed State schemas (using TypedDict or Pydantic) in modular workflows allows static type checkers and IDEs to catch runtime key errors before deployment.",
+    "question": "Using Pydantic or TypedDict to define what data flows through your workflow helps prevent bugs and missing data errors.",
     "options": [
       "True",
       "False"
     ],
     "correctIndex": 0,
-    "explanation": "Lesson 04 Slide 66: Explicit state schemas (TypedDict, Pydantic) ensure contract safety between workflow nodes, preventing runtime KeyErrors when nodes pass data.",
+    "explanation": "True. Explicit state schemas make sure every step receives the exact data fields it expects.",
     "slideRef": "Lesson 04 Slide 66"
   },
   {
@@ -1059,15 +1060,15 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "1.5 Modular Workflow Design",
     "moduleId": "mod04",
     "type": "open-question",
-    "question": "Why is modular workflow design superior to monolithic mega-prompts when building enterprise AI systems? Provide 3 distinct technical reasons.",
-    "modelAnswer": "1) Isolated Error Handling & Granular Retries: If entity extraction fails, only the extraction node needs to be retried rather than the entire multi-step pipeline.\n2) Independent Caching & Cost Optimization: Deterministic or repetitive sub-tasks (e.g. classification or embeddings) can be cached; expensive frontier LLMs can be reserved only for complex reasoning nodes while smaller local models handle simple parsing.\n3) Unit Testability & Observability: Each node has explicit input/output contracts (e.g. Pydantic schemas) allowing automated unit tests, latency profiling, and regression tracking.",
+    "question": "What goes wrong if you ask a single prompt to do 4 things at once: read a PDF, check legal rules, calculate taxes, and write an email?",
+    "modelAnswer": "1. High chance of mistakes: The AI gets overloaded and starts hallucinating or skipping instructions.\n2. Hard to fix: If the tax calculation is wrong, you have to re-run the entire expensive prompt from the start.\n3. Hard to test: You cannot easily unit-test the tax math separately from the email writing.",
     "keyPoints": [
-      "Granular retries without re-running the entire workflow.",
-      "Model tiering and selective caching (small fast models for parsing, large models for reasoning).",
-      "Independent unit testing and observability per node.",
-      "Prevents prompt degradation and attention diffusion seen in monolithic prompts."
+      "AI gets confused by too many instructions and hallucinates.",
+      "Cannot retry just the failed step (wastes tokens/money).",
+      "Impossible to test and debug individual parts in isolation.",
+      "Modular steps are much more reliable."
     ],
-    "explanation": "Lesson 04 Slide 60-68 discusses modularity benefits: testability, cost control, caching, and resiliency.",
+    "explanation": "Lesson 04 Slide 60-68: Overloaded prompts violate Single Responsibility and increase failure rates.",
     "slideRef": "Lesson 04 Slide 60-68"
   },
   {
@@ -1077,14 +1078,14 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "1.5 Modular Workflow Design",
     "moduleId": "mod04",
     "type": "fill-in-blank",
-    "question": "In LangGraph, state schemas are defined as Python classes inheriting from ________ (or TypedDict) to specify the state fields and reducer functions.",
+    "question": "In LangGraph and Python, you can define your state fields with data validation using Pydantic's ________ class.",
     "acceptedAnswers": [
       "BaseModel",
-      "TypedDict",
-      "pydantic.BaseModel"
+      "base_model",
+      "BaseModel()"
     ],
     "placeholder": "Type your answer here...",
-    "explanation": "Lesson 04 Slide 66: Pydantic BaseModel and typing.TypedDict are standard schemas for LangGraph State definition.",
+    "explanation": "Lesson 04 Slide 66: Pydantic BaseModel and TypedDict are standard state containers.",
     "slideRef": "Lesson 04 Slide 66"
   },
   {
@@ -1094,15 +1095,15 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "1.6 Orchestration Frameworks: LlamaIndex, LangChain, LangGraph",
     "moduleId": "mod04",
     "type": "qcm",
-    "question": "When should an architect select LangGraph over basic LangChain Linear Chains (LCEL)?",
+    "question": "When should you choose LangGraph instead of simple LangChain chains?",
     "options": [
-      "When the application only runs on mobile devices with zero internet access.",
-      "When the application requires cyclical flows, branching state machines, multi-agent collaboration, and human-in-the-loop checkpoints.",
-      "When the application does not use any LLMs and only performs SQL queries.",
-      "When the application needs to run exclusively on CUDA compute capability 3.0."
+      "When you only want to translate one sentence into French.",
+      "When your AI application needs loops, step-by-step state, and human approval buttons.",
+      "When you do not want to use any AI at all.",
+      "When your computer has no internet connection."
     ],
     "correctIndex": 1,
-    "explanation": "Lesson 04 Slide 105-112: LangChain LCEL is designed for linear DAG pipelines; LangGraph is designed for complex cyclical graphs, multi-agent coordination, and persistent state machines with human intervention.",
+    "explanation": "Lesson 04 Slide 105-112: LangGraph is built for stateful graphs, loops, multi-agent systems, and human-in-the-loop workflows.",
     "slideRef": "Lesson 04 Slide 105-112"
   },
   {
@@ -1112,13 +1113,13 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "1.6 Orchestration Frameworks: LlamaIndex, LangChain, LangGraph",
     "moduleId": "mod04",
     "type": "true-false",
-    "question": "In LangChain Expression Language (LCEL), the syntax `chain = prompt | model | StrOutputParser()` uses the pipe operator (`|`) to compose Runnables sequentially.",
+    "question": "In LangChain (LCEL), the pipe operator (`|`) can only be used for math operations, not for chaining prompts and models.",
     "options": [
       "True",
       "False"
     ],
-    "correctIndex": 0,
-    "explanation": "Lesson 04 Slide 92: The pipe operator in LCEL connects Runnables, piping the dictionary or text output of the upstream component into the downstream component.",
+    "correctIndex": 1,
+    "explanation": "False. The pipe symbol `|` in LCEL is specifically used to connect components together into a chain.",
     "slideRef": "Lesson 04 Slide 92"
   },
   {
@@ -1128,15 +1129,14 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "1.6 Orchestration Frameworks: LlamaIndex, LangChain, LangGraph",
     "moduleId": "mod04",
     "type": "open-question",
-    "question": "Compare LlamaIndex, LangChain, and LangGraph. In what practical architectural scenario would you integrate all three frameworks together?",
-    "modelAnswer": "1) LlamaIndex: Specialized for data-centric pipelines—document connectors, hierarchical indexing, chunking, and advanced vector/graph retrieval.\n2) LangChain: General-purpose LLM building blocks—standardized model wrappers, prompt templates, output parsers, and tool interfaces.\n3) LangGraph: State machine orchestrator—coordinates complex multi-step cycles, agents, human approvals, and persistent state.\n\nUnified Architecture Scenario:\nIn an enterprise compliance agent: LlamaIndex indexes 100,000 regulatory PDFs and retrieves relevant sections; LangChain provides prompt templates and structured Pydantic output parsers; LangGraph manages the multi-agent review graph, routing between auditor and reviewer agents, maintaining checkpoint state, and pausing for human compliance sign-off.",
+    "question": "In simple words, what is LlamaIndex best at, and what is LangGraph best at?",
+    "modelAnswer": "LlamaIndex is best for data and documents: reading PDFs, splitting chunks, creating indexes, and retrieving answers (RAG).\nLangGraph is best for decision making and control flow: running loops, managing state, handling agents, and pausing for human approval.",
     "keyPoints": [
-      "LlamaIndex specializes in data ingestion, indexing, and advanced retrieval.",
-      "LangChain provides core model wrappers, prompt templates, and output parsers.",
-      "LangGraph manages stateful orchestration, cycles, and human-in-the-loop.",
-      "Unified scenario: LlamaIndex as retriever, LangChain for parsing/prompts, LangGraph as overarching coordinator."
+      "LlamaIndex: Data-centric, document ingestion, indexing, and smart search.",
+      "LangGraph: Agent control, state machines, cycles/loops, and human approval.",
+      "They work great together in production systems."
     ],
-    "explanation": "Lesson 04 Slide 85-118 provides comparative analysis across LlamaIndex, LangChain, and LangGraph.",
+    "explanation": "Lesson 04 Slide 85-118: LlamaIndex excels at data indexing; LangGraph excels at agent orchestration.",
     "slideRef": "Lesson 04 Slide 85-118"
   },
   {
@@ -1146,15 +1146,14 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "1.6 Orchestration Frameworks: LlamaIndex, LangChain, LangGraph",
     "moduleId": "mod04",
     "type": "fill-in-blank",
-    "question": "In LangChain Expression Language (LCEL), the overloaded Python operator used to compose Runnables into a chain is the ________ operator.",
+    "question": "In LangChain Expression Language (LCEL), the syntax `prompt | model | parser` uses the ________ operator to link steps together.",
     "acceptedAnswers": [
       "pipe",
       "|",
-      "pipe operator",
-      "pipe (|)"
+      "pipe operator"
     ],
     "placeholder": "Type your answer here...",
-    "explanation": "Lesson 04 Slide 92: The pipe operator '|' connects Runnables in LCEL.",
+    "explanation": "Lesson 04 Slide 92: The pipe symbol '|' chains Runnables in LCEL.",
     "slideRef": "Lesson 04 Slide 92"
   },
   {
@@ -1164,15 +1163,15 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "2.1 RAG Architecture Overview",
     "moduleId": "mod05",
     "type": "qcm",
-    "question": "What is the primary technical motivation for deploying Retrieval-Augmented Generation (RAG) instead of fine-tuning a model on private data?",
+    "question": "What is the main advantage of using RAG (Retrieval-Augmented Generation) instead of fine-tuning an AI model on company documents?",
     "options": [
-      "Fine-tuning completely eliminates hallucinations forever, whereas RAG does not.",
-      "RAG reduces model parameter count from 70B down to 1B automatically.",
-      "RAG allows models to ground responses in private, rapidly updating dynamic documents with source citations without costly GPU re-training.",
-      "RAG bypasses the need for prompt engineering and tokenizers entirely."
+      "Fine-tuning deletes the model's brain, while RAG keeps it intact.",
+      "Fine-tuning only works on Apple MacBooks.",
+      "RAG lets you add or update private documents immediately without spending thousands of dollars re-training the model.",
+      "RAG makes the model answer questions using only 1 single letter."
     ],
     "correctIndex": 2,
-    "explanation": "Lesson 05 Slide 10-14: RAG grounds LLM generation in external authoritative documents, supports real-time updates without re-training, provides document citations, and prevents parametric hallucinations.",
+    "explanation": "Lesson 05 Slide 10-14: RAG allows real-time knowledge updates, provides source citations, and avoids costly GPU re-training.",
     "slideRef": "Lesson 05 Slide 10-14"
   },
   {
@@ -1182,13 +1181,13 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "2.1 RAG Architecture Overview",
     "moduleId": "mod05",
     "type": "true-false",
-    "question": "Naive RAG guarantees 100% accuracy on multi-hop questions where facts are distributed across disparate document pages.",
+    "question": "Basic (Naive) RAG is guaranteed to always answer correctly even when an answer is spread across 5 completely different pages.",
     "options": [
       "True",
       "False"
     ],
     "correctIndex": 1,
-    "explanation": "Lesson 05 Slide 18 & Lesson 06 Slide 8: Naive RAG relies solely on semantic top-k similarity and frequently misses multi-hop relationships spread across non-adjacent chunks.",
+    "explanation": "False. Naive RAG only looks for single top-k chunk similarities and often misses connections spread across multiple distant pages.",
     "slideRef": "Lesson 05 Slide 18"
   },
   {
@@ -1198,15 +1197,15 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "2.1 RAG Architecture Overview",
     "moduleId": "mod05",
     "type": "open-question",
-    "question": "Walk through the complete end-to-end data flow of a standard Naive RAG pipeline when a user submits the question: 'What is our return policy for damaged electronics?'",
-    "modelAnswer": "1) User Query: User submits query string.\n2) Query Embedding: The query is passed to an embedding model (e.g. BGE or text-embedding-3-small) which generates a dense numerical vector representation.\n3) Vector Database Search: The vector DB executes an approximate nearest neighbor (ANN) search (e.g. cosine similarity) comparing the query vector against pre-indexed document chunk vectors.\n4) Top-K Retrieval: The vector DB returns the top K most similar text chunks (e.g. K=3) along with metadata.\n5) Prompt Augmentation: The application synthesizes an augmented prompt containing: System instructions, the retrieved context chunks, and the user's original question.\n6) Generation: The LLM processes the augmented prompt and generates a grounded response referencing the specific return policy terms.",
+    "question": "In simple words, explain how RAG answers a question like: 'What is our company refund policy?'",
+    "modelAnswer": "1. The user asks: 'What is our refund policy?'\n2. The system converts this question into a search vector (numbers).\n3. It searches the vector database and finds the top 2-3 document chunks about refunds.\n4. It pastes those chunks into a prompt: 'Here are the refund rules: [chunks]. Now answer the user's question.'\n5. The AI reads the rules and writes a truthful answer with citations.",
     "keyPoints": [
-      "Query embedding generation using dense encoder.",
-      "Vector database ANN search (cosine similarity) to retrieve top-k chunks.",
-      "Prompt augmentation combining retrieved chunks, system prompt, and question.",
-      "LLM generation grounded strictly on retrieved context."
+      "Converts user question to search vector.",
+      "Finds matching chunks in vector database.",
+      "Pastes chunks into the prompt for the AI to read.",
+      "AI writes an answer based strictly on the retrieved facts."
     ],
-    "explanation": "Lesson 05 Slide 14-17 illustrates the end-to-end Naive RAG query and generation lifecycle.",
+    "explanation": "Lesson 05 Slide 14-17: RAG query lifecycle: Query -> Search -> Prompt Augmentation -> Generation.",
     "slideRef": "Lesson 05 Slide 14-17"
   },
   {
@@ -1216,15 +1215,14 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "2.1 RAG Architecture Overview",
     "moduleId": "mod05",
     "type": "fill-in-blank",
-    "question": "The process of combining the user question with the retrieved document chunks inside the system prompt before calling the LLM is known as prompt ________.",
+    "question": "In RAG, putting retrieved document chunks into the prompt so the AI can read them before answering is called prompt ________.",
     "acceptedAnswers": [
       "augmentation",
-      "synthesis",
-      "construction",
-      "Prompt Augmentation"
+      "Augmentation",
+      "synthesis"
     ],
     "placeholder": "Type your answer here...",
-    "explanation": "Lesson 05 Slide 16: Prompt Augmentation injects retrieved context chunks into the model's context window.",
+    "explanation": "Lesson 05 Slide 16: Prompt Augmentation adds retrieved context to the prompt.",
     "slideRef": "Lesson 05 Slide 16"
   },
   {
@@ -1234,15 +1232,15 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "2.2 Ingestion, Chunking, Embeddings, Retrieval, Generation",
     "moduleId": "mod05",
     "type": "qcm",
-    "question": "What is the operational consequence of setting chunk size too small (e.g., 30 tokens) in a RAG pipeline?",
+    "question": "What problem happens if your text chunks are made too small (for example, only 15 words per chunk)?",
     "options": [
-      "Vector search latency increases by 1000x.",
-      "Embeddings cannot be computed because models require minimum 512 tokens.",
-      "The vector database throws a dimension mismatch error.",
-      "Chunks lose crucial semantic context and sentence completeness, causing retrieval to return fragments that cannot answer the query."
+      "Your computer screen will run out of colors.",
+      "The AI will start typing in Latin.",
+      "The vector database will instantly delete itself.",
+      "The chunks lose their full meaning and context, so the AI cannot understand the whole explanation."
     ],
     "correctIndex": 3,
-    "explanation": "Lesson 05 Slide 28-31: Tiny chunks strip context from surrounding ideas, resulting in fragmented snippets. Conversely, overly large chunks dilute specific facts with irrelevant noise.",
+    "explanation": "Lesson 05 Slide 28-31: Tiny chunks chop sentences into fragments and lose surrounding context, making retrieval useless.",
     "slideRef": "Lesson 05 Slide 28-31"
   },
   {
@@ -1252,13 +1250,13 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "2.2 Ingestion, Chunking, Embeddings, Retrieval, Generation",
     "moduleId": "mod05",
     "type": "true-false",
-    "question": "Setting chunk overlap to 0% is the recommended best practice in RAG ingestion because overlapping tokens corrupt the mathematical calculation of cosine similarity.",
+    "question": "In RAG chunking, is it a bad mistake to have any overlap between chunks?",
     "options": [
       "True",
       "False"
     ],
     "correctIndex": 1,
-    "explanation": "False. Chunk overlap (typically 10-20%) is standard practice to prevent sentences or semantic thoughts from being severed across chunk boundaries, ensuring complete contextual capture.",
+    "explanation": "False. Overlap (typically 10% to 20%) is recommended because it stops sentences or ideas from being cut right down the middle.",
     "slideRef": "Lesson 05 Slide 32"
   },
   {
@@ -1268,16 +1266,16 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "2.2 Ingestion, Chunking, Embeddings, Retrieval, Generation",
     "moduleId": "mod05",
     "type": "open-question",
-    "question": "Detail the trade-offs between Cosine Similarity, Dot Product, and Euclidean Distance (L2) when querying vector databases for RAG retrieval.",
-    "modelAnswer": "1) Cosine Similarity: Measures the cosine of the angle between two vectors, ignoring magnitude. Range is [-1, 1] (or [0, 1] for positive embeddings). Best when document length varies or embeddings are not normalized, focusing purely on orientation/semantic direction.\n2) Dot Product (Inner Product): Computes the sum of products of corresponding vector components. Sensitive to both vector length and direction. If vectors are unit-normalized (length=1.0), Dot Product is mathematically identical to Cosine Similarity but computationally faster.\n3) Euclidean Distance (L2): Measures the straight-line geometric distance between two points in n-dimensional space. Distance is 0 for identical vectors and increases with dissimilarity. Sensitive to scale and magnitude unless vectors are normalized.",
+    "question": "What is 'chunk overlap' in RAG, and why is it important when splitting a document?",
+    "modelAnswer": "Chunk overlap means the end of one chunk shares some text (like 50 words) with the start of the next chunk.\nThis is important because if a key sentence or definition happens to land right at the split point, overlap prevents it from being chopped in half. At least one chunk will have the complete thought.",
     "keyPoints": [
-      "Cosine similarity measures angle/direction independent of magnitude.",
-      "Dot product is fast and equals cosine similarity when vectors are unit-normalized.",
-      "Euclidean (L2) measures geometric distance (0 = identical).",
-      "Normalized embeddings allow dot product for maximum computational efficiency."
+      "Shares consecutive text across boundary points.",
+      "Prevents sentences and ideas from being cut in half.",
+      "Ensures complete semantic context in at least one chunk.",
+      "Usually set to 10% - 20% of chunk size."
     ],
-    "explanation": "Lesson 05 Slide 40-44 explains similarity metrics and vector distance calculations in embedding space.",
-    "slideRef": "Lesson 05 Slide 40-44"
+    "explanation": "Lesson 05 Slide 32: Chunk overlap preserves continuity across split boundaries.",
+    "slideRef": "Lesson 05 Slide 32"
   },
   {
     "id": 32,
@@ -1286,16 +1284,15 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "2.2 Ingestion, Chunking, Embeddings, Retrieval, Generation",
     "moduleId": "mod05",
     "type": "fill-in-blank",
-    "question": "When all embedding vectors are unit-normalized (length = 1.0), the Cosine Similarity metric produces the exact same numerical ranking as the ________ Product metric.",
+    "question": "When embedding vectors are normalized to length 1.0, Cosine Similarity gives the exact same result as the ________ Product.",
     "acceptedAnswers": [
       "Dot",
       "dot",
       "inner",
-      "Dot Product",
-      "Inner Product"
+      "Dot Product"
     ],
     "placeholder": "Type your answer here...",
-    "explanation": "Lesson 05 Slide 42: For unit-length vectors (||u||=||v||=1), dot product u · v equals cosine similarity.",
+    "explanation": "Lesson 05 Slide 42: When vectors are unit-length, cosine similarity equals dot product.",
     "slideRef": "Lesson 05 Slide 42"
   },
   {
@@ -1305,15 +1302,15 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "2.3 Text Splitting Strategies & Local Embedding Models",
     "moduleId": "mod05",
     "type": "qcm",
-    "question": "How does LangChain's `RecursiveCharacterTextSplitter` split text differently than a naive `CharacterTextSplitter`?",
+    "question": "Why is `RecursiveCharacterTextSplitter` better than simply cutting text every 500 characters?",
     "options": [
-      "It attempts splits using a hierarchy of separators (['\\n\\n', '\\n', ' ', '']) in order, preserving paragraphs and sentences as cohesive units.",
-      "It splits text based on character counts regardless of word boundaries.",
-      "It splits text strictly by sentence punctuation (.) without checking length.",
-      "It calls an external LLM to decide split points using zero-shot reasoning."
+      "It tries to split at paragraph breaks first, then line breaks, then spaces, keeping whole sentences and thoughts together.",
+      "It translates the text into Spanish first.",
+      "It deletes all vowels to make the text smaller.",
+      "It turns text into MP3 audio files."
     ],
     "correctIndex": 0,
-    "explanation": "Lesson 05 Slide 34-36: RecursiveCharacterTextSplitter tests double newlines first, then single newlines, then spaces, keeping semantic paragraphs and sentences intact.",
+    "explanation": "Lesson 05 Slide 34-36: RecursiveCharacterTextSplitter checks double newlines first, then single newlines, then spaces to keep paragraphs intact.",
     "slideRef": "Lesson 05 Slide 34-36"
   },
   {
@@ -1323,13 +1320,13 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "2.3 Text Splitting Strategies & Local Embedding Models",
     "moduleId": "mod05",
     "type": "true-false",
-    "question": "Local embedding models like BAAI/bge-small-en-v1.5 require continuous internet connectivity to proprietary cloud APIs to generate vector embeddings.",
+    "question": "Do local embedding models like `bge-small-en-v1.5` require paying API fees to cloud companies?",
     "options": [
       "True",
       "False"
     ],
     "correctIndex": 1,
-    "explanation": "False. Models like BAAI/bge-small-en-v1.5 and all-MiniLM-L6-v2 run completely offline locally on CPU or local GPU via HuggingFace sentence-transformers with zero internet dependency.",
+    "explanation": "False. Local embedding models run 100% locally on your computer with zero API costs and full privacy.",
     "slideRef": "Lesson 05 Slide 46"
   },
   {
@@ -1339,15 +1336,15 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "2.3 Text Splitting Strategies & Local Embedding Models",
     "moduleId": "mod05",
     "type": "open-question",
-    "question": "Explain why syntax-aware splitting (e.g., MarkdownHeaderTextSplitter or CodeSplitter) is far superior to fixed-size character chunking when indexing technical documentation or Python source code.",
-    "modelAnswer": "Fixed-size character chunking blindly cuts text at arbitrary character limits (e.g. 500 characters), splitting code in the middle of a function definition, separating a class header from its methods, or severing Markdown tables and section headers from their explanations. This produces syntactically broken snippets that confuse the retriever and hallucinate answers.\n\nIn contrast, syntax-aware splitters parse the AST or Markdown structure:\n1) MarkdownHeaderTextSplitter: Splits by headers (#, ##, ###), keeping entire sections intact and injecting header hierarchy (e.g. Header 1 > Header 2) into chunk metadata.\n2) CodeSplitter: Parses language grammar (classes, functions, decorators), ensuring each chunk contains a complete, valid code block with docstrings.",
+    "question": "Why is it bad to split Python code or Markdown files by a fixed character count (like every 300 characters)?",
+    "modelAnswer": "Fixed character splitting cuts text blindly. It can cut a Python function right in half, separate a class name from its code, or split a Markdown table so it cannot be read.\nUsing a syntax-aware splitter (like MarkdownHeaderTextSplitter or CodeSplitter) respects the code structure so every chunk is a valid, readable piece of code.",
     "keyPoints": [
-      "Fixed-size chunking cuts through functions, classes, and Markdown tables arbitrarily.",
-      "Syntax-aware splitters preserve semantic AST structures and section boundaries.",
-      "MarkdownHeaderTextSplitter injects header hierarchy into chunk metadata.",
-      "Provides self-contained, valid context to the generator model."
+      "Fixed-length chunking cuts functions and classes in half.",
+      "Breaks Markdown tables and headings.",
+      "Syntax-aware splitters keep complete code blocks intact.",
+      "Allows the AI to read valid code and understand it."
     ],
-    "explanation": "Lesson 05 Slide 37-39 contrasts naive splitting with structural Markdown/Code text splitting.",
+    "explanation": "Lesson 05 Slide 37-39: Syntax-aware splitters preserve code and markdown structure.",
     "slideRef": "Lesson 05 Slide 37-39"
   },
   {
@@ -1357,14 +1354,14 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "2.3 Text Splitting Strategies & Local Embedding Models",
     "moduleId": "mod05",
     "type": "fill-in-blank",
-    "question": "In LangChain, the recommended text splitter that attempts splits on `['\\n\\n', '\\n', ' ', '']` in descending order is called ________CharacterTextSplitter.",
+    "question": "In LangChain, the smart text splitter that tries to split paragraphs, then lines, then words is called ________CharacterTextSplitter.",
     "acceptedAnswers": [
       "Recursive",
       "recursive",
       "RecursiveCharacterTextSplitter"
     ],
     "placeholder": "Type your answer here...",
-    "explanation": "Lesson 05 Slide 34: RecursiveCharacterTextSplitter is the standard text splitting strategy.",
+    "explanation": "Lesson 05 Slide 34: RecursiveCharacterTextSplitter is the recommended default splitter.",
     "slideRef": "Lesson 05 Slide 34"
   },
   {
@@ -1374,15 +1371,15 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "2.4 Vector Database Setup (ChromaDB, Qdrant, Pgvector)",
     "moduleId": "mod05",
     "type": "qcm",
-    "question": "Which default network ports are utilized by Qdrant for its REST API and high-performance gRPC API respectively?",
+    "question": "What are the default network ports used by Qdrant for REST API and gRPC API?",
     "options": [
-      "REST: 8080, gRPC: 8081",
+      "REST: 80, gRPC: 443",
       "REST: 6333, gRPC: 6334",
-      "REST: 5432, gRPC: 5433",
-      "REST: 11434, gRPC: 11435"
+      "REST: 3000, gRPC: 8080",
+      "REST: 5432, gRPC: 11434"
     ],
     "correctIndex": 1,
-    "explanation": "Lesson 05 Slide 58-60: Qdrant runs REST on port 6333 and gRPC on port 6334 by default.",
+    "explanation": "Lesson 05 Slide 58-60: Qdrant uses port 6333 for HTTP REST and port 6334 for high-speed gRPC.",
     "slideRef": "Lesson 05 Slide 58-60"
   },
   {
@@ -1392,13 +1389,13 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "2.4 Vector Database Setup (ChromaDB, Qdrant, Pgvector)",
     "moduleId": "mod05",
     "type": "true-false",
-    "question": "In PostgreSQL, enabling the pgvector extension requires running the SQL command: `CREATE EXTENSION vector;`.",
+    "question": "In PostgreSQL, to turn on vector search capabilities, you run the SQL command: `CREATE EXTENSION vector;`.",
     "options": [
       "True",
       "False"
     ],
     "correctIndex": 0,
-    "explanation": "Lesson 05 Slide 62 & Exam CLI Cheatsheet: 'CREATE EXTENSION vector;' installs the vector data type and indexing operators into PostgreSQL.",
+    "explanation": "True. `CREATE EXTENSION vector;` enables pgvector data types and similarity search in PostgreSQL.",
     "slideRef": "Lesson 05 Slide 62"
   },
   {
@@ -1408,15 +1405,15 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "2.4 Vector Database Setup (ChromaDB, Qdrant, Pgvector)",
     "moduleId": "mod05",
     "type": "open-question",
-    "question": "Compare ChromaDB, Qdrant, and Pgvector. What criteria determine when an engineering team should pick each one?",
-    "modelAnswer": "1) ChromaDB: Lightweight, embedded or client-server Python vector store. Ideal for rapid prototyping, research, local desktop apps, and lightweight workloads where simplicity is paramount and SQLite persistence suffices.\n2) Qdrant: Production-grade, high-performance standalone vector database written in Rust. Features advanced payload filtering, HNSW indexing, distributed clustering, low-latency gRPC (port 6334), and snapshot management. Pick Qdrant for large-scale production RAG with millions of vectors and complex metadata filtering.\n3) Pgvector: PostgreSQL extension adding vector data types and indexing (HNSW, IVFFlat). Pick Pgvector when an enterprise already uses PostgreSQL for relational data and wants ACID transactions, unified joins between business data and embeddings, and zero extra database infrastructure to maintain.",
+    "question": "In simple terms, when should you choose ChromaDB, and when should you choose Pgvector?",
+    "modelAnswer": "Choose ChromaDB for simple local projects, quick prototypes, or desktop apps because it is lightweight, runs in Python, and needs zero complex setup.\nChoose Pgvector if your company already uses PostgreSQL for regular business data (like users, orders, and products) and you want to keep your vectors and regular tables in the same database with standard SQL.",
     "keyPoints": [
-      "ChromaDB: Lightweight, embedded SQLite, rapid local prototyping.",
-      "Qdrant: Rust-based, enterprise scale, fast gRPC (6334), advanced payload filtering.",
-      "Pgvector: PostgreSQL extension, ACID transactions, unified relational + vector queries.",
-      "Decision driven by operational complexity, existing database stack, and throughput needs."
+      "ChromaDB: Simple, lightweight, zero-setup, great for quick local apps.",
+      "Pgvector: PostgreSQL extension, combines regular SQL tables with vector search.",
+      "No need to manage a separate standalone database if using Postgres.",
+      "Qdrant: Dedicated high-speed Rust database for large-scale production."
     ],
-    "explanation": "Lesson 05 Slide 55-65 compares ChromaDB, Qdrant, and Pgvector architectures.",
+    "explanation": "Lesson 05 Slide 55-65 compares ChromaDB, Qdrant, and Pgvector use cases.",
     "slideRef": "Lesson 05 Slide 55-65"
   },
   {
@@ -1426,14 +1423,14 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "2.4 Vector Database Setup (ChromaDB, Qdrant, Pgvector)",
     "moduleId": "mod05",
     "type": "fill-in-blank",
-    "question": "In ChromaDB Python client, to ensure vectors are saved to a persistent directory on disk rather than discarded when the process exits, you instantiate chromadb.________(path='./chroma_db').",
+    "question": "In ChromaDB Python, to make sure your data is saved to a folder on disk so you don't lose it on exit, you use chromadb.________(path='...').",
     "acceptedAnswers": [
       "PersistentClient",
-      "PersistentClient()",
-      "persistent_client"
+      "persistent_client",
+      "PersistentClient()"
     ],
     "placeholder": "Type your answer here...",
-    "explanation": "Lesson 05 Slide 56: PersistentClient(path=...) persists ChromaDB collections to disk.",
+    "explanation": "Lesson 05 Slide 56: PersistentClient saves ChromaDB collections permanently to disk.",
     "slideRef": "Lesson 05 Slide 56"
   },
   {
@@ -1443,15 +1440,15 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "3.1 Hybrid Retrieval: Keyword + Vector Search",
     "moduleId": "mod06",
     "type": "qcm",
-    "question": "Why does Hybrid Retrieval (Sparse BM25 + Dense Semantic Vector) outperform Dense Vector search alone in enterprise search?",
+    "question": "Why is Hybrid Search (Keyword BM25 + Vector Search) better than Vector Search alone?",
     "options": [
-      "Dense vectors cannot process queries longer than 5 words.",
-      "BM25 reduces database storage requirements to 0 MB.",
-      "BM25 handles exact keyword matches, code identifiers, and acronyms, while dense vectors capture semantic concepts, neutralizing each other's weaknesses.",
-      "Dense vectors cannot run on Linux servers."
+      "Because Vector search cannot read the English alphabet.",
+      "Because Keyword search only works on Saturdays.",
+      "Because Keyword search finds exact part numbers and codes, while Vector search finds general concepts and synonyms.",
+      "Because Hybrid Search makes the database run on battery power."
     ],
     "correctIndex": 2,
-    "explanation": "Lesson 06 Slide 12-15: Dense embeddings frequently fail on specific entity codes (e.g. 'CVE-2024-38077' or 'SKU-9921'), while BM25 excels at exact keyword matching but misses semantic synonyms. Hybrid combines both.",
+    "explanation": "Lesson 06 Slide 12-15: Vector search struggles with exact IDs, product codes, and rare names. BM25 handles exact terms, giving the best of both worlds.",
     "slideRef": "Lesson 06 Slide 12-15"
   },
   {
@@ -1461,13 +1458,13 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "3.1 Hybrid Retrieval: Keyword + Vector Search",
     "moduleId": "mod06",
     "type": "true-false",
-    "question": "In Reciprocal Rank Fusion (RRF), the formula for document scoring is RRF_Score(d) = sum(1 / (k + r(d))), where k is a smoothing constant typically set to 60.",
+    "question": "In Reciprocal Rank Fusion (RRF), the formula for combining search rankings uses a constant `k` that is usually set to 60.",
     "options": [
       "True",
       "False"
     ],
     "correctIndex": 0,
-    "explanation": "Lesson 06 Slide 16 & Exam Formula: RRF fuses ranks across multiple retrieval lists using k=60 to prevent high-ranked outliers from completely dominating the combined score.",
+    "explanation": "True. Cormack et al. and Lesson 06 Slide 16 set k=60 to prevent top-ranked outliers from unfairly dominating the score.",
     "slideRef": "Lesson 06 Slide 16"
   },
   {
@@ -1477,16 +1474,16 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "3.1 Hybrid Retrieval: Keyword + Vector Search",
     "moduleId": "mod06",
     "type": "open-question",
-    "question": "Given two retrieval systems: BM25 ranks Document X at position 1 and Document Y at position 5. Vector search ranks Document Y at position 2 and Document X at position 8. Using Reciprocal Rank Fusion (RRF) with constant k = 60, calculate the RRF score for both documents and determine which document ranks higher.",
-    "modelAnswer": "Formula: RRF_Score(d) = sum( 1 / (k + rank(d)) ) with k = 60.\n\n1) For Document X:\n   - BM25 rank = 1 -> 1 / (60 + 1) = 1 / 61 ≈ 0.01639\n   - Vector rank = 8 -> 1 / (60 + 8) = 1 / 68 ≈ 0.01471\n   - Total RRF(X) = 0.01639 + 0.01471 = 0.03110\n\n2) For Document Y:\n   - BM25 rank = 5 -> 1 / (60 + 5) = 1 / 65 ≈ 0.01538\n   - Vector rank = 2 -> 1 / (60 + 2) = 1 / 62 ≈ 0.01613\n   - Total RRF(Y) = 0.01538 + 0.01613 = 0.03151\n\nConclusion: Document Y (0.03151) achieves a higher RRF score than Document X (0.03110) because it performed consistently well in the top 5 of both retrieval lists.",
+    "question": "Why does Vector Search sometimes fail to find an exact product code like 'MODEL-X99-PRO', and how does Hybrid Search solve this?",
+    "modelAnswer": "Vector models look for general meaning and concepts. Rare product codes or error numbers (like 'MODEL-X99-PRO') look like random letters to an embedding model, so it ranks other general text higher.\nHybrid Search adds keyword matching (BM25). BM25 checks for the exact word 'MODEL-X99-PRO' and immediately brings the exact right document to the top.",
     "keyPoints": [
-      "Correct formula application: 1 / (k + rank).",
-      "Calculation for Doc X: 1/61 + 1/68 ≈ 0.03110.",
-      "Calculation for Doc Y: 1/65 + 1/62 ≈ 0.03151.",
-      "Document Y wins due to consistent balanced performance across both lists."
+      "Embedding models struggle with rare codes, acronyms, and product IDs.",
+      "BM25 looks for exact character matches regardless of meaning.",
+      "Hybrid search combines both lists using RRF.",
+      "Gives high accuracy for both exact codes and conceptual questions."
     ],
-    "explanation": "Lesson 06 Slide 16 explains the RRF algorithm and provides sample calculations.",
-    "slideRef": "Lesson 06 Slide 16"
+    "explanation": "Lesson 06 Slide 12-16 explains why BM25 + Vector search covers each other's weaknesses.",
+    "slideRef": "Lesson 06 Slide 12-16"
   },
   {
     "id": 44,
@@ -1495,14 +1492,14 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "3.1 Hybrid Retrieval: Keyword + Vector Search",
     "moduleId": "mod06",
     "type": "fill-in-blank",
-    "question": "In the Reciprocal Rank Fusion (RRF) scoring formula `score = 1 / (k + rank)`, the standard smoothing constant `k` recommended in research and slide 16 is ________.",
+    "question": "In the Reciprocal Rank Fusion (RRF) formula `score = 1 / (k + rank)`, the standard number used for `k` is ________.",
     "acceptedAnswers": [
       "60",
       "k=60",
       "sixty"
     ],
     "placeholder": "Type your answer here...",
-    "explanation": "Lesson 06 Slide 16: Constant k=60 is the empirical standard in Cormack et al. and slide 16.",
+    "explanation": "Lesson 06 Slide 16: The smoothing constant k is standardly set to 60.",
     "slideRef": "Lesson 06 Slide 16"
   },
   {
@@ -1512,15 +1509,15 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "3.2 Graph RAG",
     "moduleId": "mod06",
     "type": "qcm",
-    "question": "In Neo4j Cypher script loading, why is the `MERGE` clause strongly preferred over `CREATE` when constructing knowledge graphs from ingested chunks?",
+    "question": "In Neo4j graph database queries, why should you use `MERGE` instead of `CREATE` when loading data?",
     "options": [
-      "CREATE is only compatible with MySQL, not graph databases.",
-      "CREATE requires GPU acceleration while MERGE runs on CPU.",
-      "MERGE automatically deletes all relationships on every transaction.",
-      "MERGE is idempotent: it matches existing nodes/relationships and only creates them if absent, avoiding duplicate entity explosion."
+      "`CREATE` deletes the computer hard drive.",
+      "`CREATE` requires an internet connection to Google.",
+      "`MERGE` only works on numbers, not names.",
+      "`MERGE` checks if the node already exists so it doesn't create duplicate copies, while `CREATE` creates duplicates every time."
     ],
     "correctIndex": 3,
-    "explanation": "Lesson 06 Slide 29 & Exam Highlight: 'Always MERGE, never CREATE. MERGE is idempotent. Running CREATE twice duplicates every node and relationship.'",
+    "explanation": "Lesson 06 Slide 29: 'Always MERGE, never CREATE.' MERGE is idempotent and prevents creating duplicate nodes and relationships.",
     "slideRef": "Lesson 06 Slide 29"
   },
   {
@@ -1530,13 +1527,13 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "3.2 Graph RAG",
     "moduleId": "mod06",
     "type": "true-false",
-    "question": "In Microsoft GraphRAG, Global Search answers corpus-wide thematic questions by querying pre-generated community summaries, while Local Search focuses on specific entity neighborhoods.",
+    "question": "In Microsoft GraphRAG, Local Search looks at specific entities and their neighbors, while Global Search uses community summaries to answer big-picture questions.",
     "options": [
       "True",
       "False"
     ],
     "correctIndex": 0,
-    "explanation": "Lesson 06 Slide 27: Local Search explores specific entity nodes and 1-2 hop neighbors; Global Search aggregates hierarchical Leiden community summaries across the whole corpus.",
+    "explanation": "True. Local Search inspects specific entities; Global Search aggregates community summaries across the whole corpus.",
     "slideRef": "Lesson 06 Slide 27"
   },
   {
@@ -1546,15 +1543,15 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "3.2 Graph RAG",
     "moduleId": "mod06",
     "type": "open-question",
-    "question": "Why does standard chunk-based top-k vector retrieval fail on multi-hop questions like 'Who is the manager of the person who architected the Billing Service?', and how does Graph RAG resolve this?",
-    "modelAnswer": "In standard vector RAG, knowledge is split into isolated chunks. Fact 1 ('Alice architected the Billing Service') might reside in Chunk 14, while Fact 2 ('Bob manages Alice') resides in Chunk 840. A vector search for 'Who is the manager of the person who architected Billing?' will likely retrieve Chunk 14 (high semantic match with 'Billing Service') but completely miss Chunk 840 (which mentions Alice and Bob but has zero semantic overlap with 'Billing Service').\n\nGraph RAG resolves this by extracting an entity-relationship graph:\n(Alice)-[:ARCHITECTED]->(Billing) and (Alice)<-[:MANAGES]-(Bob).\nA single Cypher pattern query `MATCH (b:Service {name: 'Billing'})<-[:ARCHITECTED]-(p)-[:MANAGES]-(m) RETURN m.name` or a 2-hop graph walk effortlessly traverses the connected edges, joining the disparate facts into a coherent context regardless of where they were originally written.",
+    "question": "Why is Graph RAG better than simple chunk search for a question like: 'Who is the manager of the person who built the Billing System?'",
+    "modelAnswer": "In normal chunk search, the fact 'Alice built Billing' is in Chunk 10, but the fact 'Bob manages Alice' is in Chunk 500. A vector search for 'manager of Billing creator' will find Chunk 10 (because it mentions Billing), but miss Chunk 500 completely!\nGraph RAG connects them with arrows: (Bob)-[:MANAGES]->(Alice)-[:BUILT]->(Billing). A single 2-step hop on the graph easily finds Bob, connecting the facts even if they were written pages apart.",
     "keyPoints": [
-      "Disparate facts are isolated across disconnected text chunks.",
-      "Vector search retrieves only the chunk matching surface query terms, missing the second hop.",
-      "Graph RAG extracts nodes (entities) and edges (relationships) into a graph.",
-      "Multi-hop queries traverse graph paths to connect facts across disparate sources."
+      "Facts are separated across distant, unconnected chunks.",
+      "Vector search retrieves only chunks with similar words, missing the second step.",
+      "Knowledge graphs connect entities with relationship edges.",
+      "Can easily follow multi-hop connections to answer complex questions."
     ],
-    "explanation": "Lesson 06 Slide 18-22 details why multi-hop queries fail in Naive RAG and how Graph RAG solves them.",
+    "explanation": "Lesson 06 Slide 18-22 contrasts chunk retrieval with multi-hop graph traversals.",
     "slideRef": "Lesson 06 Slide 18-22"
   },
   {
@@ -1564,15 +1561,14 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "3.2 Graph RAG",
     "moduleId": "mod06",
     "type": "fill-in-blank",
-    "question": "In Neo4j Cypher, to safely delete a node along with all its attached incoming and outgoing relationships in one operation, you use the clause ________ DELETE.",
+    "question": "In Neo4j Cypher, to safely delete a node and all of its attached relationship lines in one command, you write ________ DELETE.",
     "acceptedAnswers": [
       "DETACH",
       "detach",
-      "DETACH DELETE",
-      "detach delete"
+      "DETACH DELETE"
     ],
     "placeholder": "Type your answer here...",
-    "explanation": "Lesson 06 Slide 29 & Cypher Cheatsheet: 'DETACH DELETE n' removes the node and severs attached relationships.",
+    "explanation": "Lesson 06 Slide 29: 'DETACH DELETE n' removes the node and its attached relationships.",
     "slideRef": "Lesson 06 Slide 29"
   },
   {
@@ -1582,15 +1578,15 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "3.3 Agentic RAG",
     "moduleId": "mod06",
     "type": "qcm",
-    "question": "In Corrective RAG (CRAG), what action is triggered if the retrieval evaluator determines that the retrieved internal documents are 'Incorrect' (completely irrelevant)?",
+    "question": "In Corrective RAG (CRAG), what does the system do if it checks the retrieved documents and finds they are completely useless or wrong?",
     "options": [
-      "The system triggers a web search fallback query to retrieve authoritative external documents before generation.",
-      "The system immediately shuts down the database connection.",
-      "The system outputs random chunks from the vector database.",
-      "The system fine-tunes the LLM weights on the irrelevant chunks."
+      "It automatically does a web search to find real information online before answering.",
+      "It invents fake facts and guesses.",
+      "It crashes the server and stops.",
+      "It deletes all user accounts."
     ],
     "correctIndex": 0,
-    "explanation": "Lesson 06 Slide 35-37: CRAG evaluates retrieval quality as Correct, Ambiguous, or Incorrect. If Incorrect, it falls back to external web search to find relevant context.",
+    "explanation": "Lesson 06 Slide 35-37: If retrieved internal documents are evaluated as 'Incorrect', CRAG triggers an external web search fallback.",
     "slideRef": "Lesson 06 Slide 35-37"
   },
   {
@@ -1600,13 +1596,13 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "3.3 Agentic RAG",
     "moduleId": "mod06",
     "type": "true-false",
-    "question": "In Self-RAG, the model generates reflection tokens such as `[Retrieve]`, `[IsRel]`, `[IsSup]`, and `[IsUse]` to dynamically decide whether retrieval is necessary and whether generated claims are supported.",
+    "question": "In Self-RAG, the AI model generates special tokens (like `[Retrieve]`) to decide for itself whether it actually needs to search or if it already knows the answer.",
     "options": [
       "True",
       "False"
     ],
     "correctIndex": 0,
-    "explanation": "Lesson 06 Slide 32-34: Self-RAG trains reflection tokens to evaluate retrieval need, relevance, factual support, and overall utility.",
+    "explanation": "True. Self-RAG uses reflection tokens to dynamically decide when to retrieve and to check if its answer is supported by evidence.",
     "slideRef": "Lesson 06 Slide 32-34"
   },
   {
@@ -1616,15 +1612,15 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "3.3 Agentic RAG",
     "moduleId": "mod06",
     "type": "open-question",
-    "question": "Explain how an Agentic RAG system differs from a traditional static RAG pipeline when handling an ambiguous or poorly formulated user query.",
-    "modelAnswer": "A traditional static RAG pipeline executes a single linear pass: it embeds the ambiguous query as-is, performs top-k retrieval, and forces the LLM to generate an answer—frequently retrieving irrelevant noise and hallucinating.\n\nAn Agentic RAG system introduces dynamic decision loops:\n1) Query Analysis & Rewriting: An agent inspects the user query, detects ambiguity, and rewrites or decomposes it into multiple targeted sub-queries.\n2) Retrieval Evaluation: It inspects retrieved documents (e.g. CRAG evaluation) to determine if they actually answer the question.\n3) Conditional Correction: If retrieved documents are insufficient, the agent can re-query with modified search terms, execute a web search fallback, or clarify with the user.\n4) Hallucination Guardrails: The agent verifies that the final answer is factually supported by the retrieved context before delivering it.",
+    "question": "In simple words, what is the difference between simple Static RAG and smart Agentic RAG?",
+    "modelAnswer": "Static RAG is a rigid 1-way street: it takes your question, searches once, and forces the AI to answer—even if the search results are useless.\nAgentic RAG is smart: it can rewrite bad questions, check if the search results actually answer the question, search again with better keywords if needed, or search the web if internal files don't have the answer.",
     "keyPoints": [
-      "Static RAG is a rigid one-pass pipeline vulnerable to ambiguous queries.",
-      "Agentic RAG uses query rewriting and decomposition.",
-      "Evaluates retrieval quality dynamically and retries if chunks are irrelevant.",
-      "Implements self-correction and web search fallback before responding."
+      "Static RAG searches once blindly without checking quality.",
+      "Agentic RAG evaluates search quality before answering.",
+      "Can rewrite confusing questions to find better results.",
+      "Can fallback to web search or retry if results are poor."
     ],
-    "explanation": "Lesson 06 Slide 30-38 explores Agentic RAG patterns: Self-RAG, CRAG, and iterative routing.",
+    "explanation": "Lesson 06 Slide 30-38 explores Agentic RAG decision loops vs static pipelines.",
     "slideRef": "Lesson 06 Slide 30-38"
   },
   {
@@ -1634,7 +1630,7 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "3.3 Agentic RAG",
     "moduleId": "mod06",
     "type": "fill-in-blank",
-    "question": "In Corrective RAG (CRAG), the retrieval evaluator classifies retrieved documents into three confidence grades: Correct, Ambiguous, or ________.",
+    "question": "In Corrective RAG (CRAG), the evaluator grades search results into 3 categories: Correct, Ambiguous, or ________.",
     "acceptedAnswers": [
       "Incorrect",
       "incorrect"
@@ -1650,15 +1646,15 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "3.4 Reranking with Cross-Encoders",
     "moduleId": "mod06",
     "type": "qcm",
-    "question": "Why is a 2-stage retrieval pipeline (Bi-Encoder first, Cross-Encoder second) standard practice rather than using a Cross-Encoder for the entire database?",
+    "question": "Why do we use a Bi-Encoder first and a Cross-Encoder second in a 2-stage search pipeline?",
     "options": [
-      "Cross-encoders cannot process English text.",
-      "Bi-encoders are fast ($O(1)$ index lookup) for filtering 1,000,000 docs down to top 50, while Cross-encoders perform expensive full self-attention across $(query, doc)$ pairs and can only score top candidates.",
-      "Cross-encoders only work with SQLite databases.",
-      "Bi-encoders have 100% accuracy, so cross-encoders are only for backup."
+      "Because Cross-Encoders can only run on Windows 95.",
+      "Because Bi-Encoder is super fast to find the top 50 candidates from 1 million files, and Cross-Encoder is super accurate to pick the best 3.",
+      "Because Bi-Encoders only work with numbers less than 10.",
+      "Because doing two steps makes the search completely random."
     ],
     "correctIndex": 1,
-    "explanation": "Lesson 06 Slide 40-44: Bi-encoders encode queries and docs independently into vector space (fast ANN search). Cross-encoders concatenate query + doc and compute cross-attention over all tokens (slow, highly accurate). 2-stage gives speed + accuracy.",
+    "explanation": "Lesson 06 Slide 40-44: Bi-encoder provides fast speed ($O(1)$ vector lookup); Cross-encoder provides maximum accuracy on top candidates.",
     "slideRef": "Lesson 06 Slide 40-44"
   },
   {
@@ -1668,13 +1664,13 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "3.4 Reranking with Cross-Encoders",
     "moduleId": "mod06",
     "type": "true-false",
-    "question": "A Cross-Encoder computes separate embedding vectors for the query and document independently, then takes their cosine similarity.",
+    "question": "A Cross-Encoder is fast enough to search through 10 million documents in 1 millisecond.",
     "options": [
       "True",
       "False"
     ],
     "correctIndex": 1,
-    "explanation": "Lesson 06 Slide 41: That describes a Bi-Encoder. A Cross-Encoder feeds the combined `(query, document)` pair simultaneously into the transformer model, allowing every query token to attend to every document token.",
+    "explanation": "False. Cross-encoders compare every word of the question with every word of the document together, which is slow and can only be used on a few dozen candidates.",
     "slideRef": "Lesson 06 Slide 41"
   },
   {
@@ -1684,15 +1680,15 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "3.4 Reranking with Cross-Encoders",
     "moduleId": "mod06",
     "type": "open-question",
-    "question": "Describe the step-by-step architecture of a 2-Stage Retrieval system utilizing `bge-small-en-v1.5` and `bge-reranker-large`. Specify candidate counts and performance trade-offs at each stage.",
-    "modelAnswer": "Stage 1: Candidate Generation (Bi-Encoder)\n- Model: `bge-small-en-v1.5`.\n- Operation: The query is embedded into a 384-dimensional dense vector. An approximate nearest neighbor (ANN) search scans the vector database (e.g. Qdrant with HNSW index) across 1,000,000 chunks.\n- Output: Fast retrieval of the top 50-100 candidate chunks within 5-15 milliseconds.\n- Trade-off: Extremely fast ($O(1)$ indexed search) with high recall, but lower precision due to independent embedding generation.\n\nStage 2: Precision Reranking (Cross-Encoder)\n- Model: `bge-reranker-large`.\n- Operation: Concatenates `[CLS] query [SEP] candidate_chunk [SEP]` for each of the 50 candidates and executes full bidirectional self-attention across all token pairs to generate a calibrated relevance score (0.0 to 1.0).\n- Output: Reranks the 50 candidates and selects the top 3-5 highest scoring chunks for prompt injection.\n- Trade-off: Higher computational cost (~50-100ms) but provides state-of-the-art semantic precision and eliminates false positives.",
+    "question": "Why is a Cross-Encoder more accurate than a simple vector search (Bi-Encoder)?",
+    "modelAnswer": "A Bi-Encoder turns the question into a vector and the document into a vector separately without them seeing each other. Then it just checks the angle between them.\nA Cross-Encoder puts the question and the document together into the model at the same time. Every single word in the question can directly pay attention to every word in the document, catching exact context, negation, and fine details.",
     "keyPoints": [
-      "Stage 1: Bi-encoder retrieves broad candidate pool (top 50-100) via fast ANN vector search.",
-      "Bi-encoder performance: Low latency (sub-15ms), high recall, moderate precision.",
-      "Stage 2: Cross-encoder performs joint self-attention on (query, chunk) pairs.",
-      "Stage 3: Selects top 3-5 high-precision chunks; eliminates false positives before LLM generation."
+      "Bi-encoder embeds query and document separately (fast but misses subtle nuance).",
+      "Cross-encoder feeds (query + document) together into the transformer.",
+      "Full attention between all words gives much higher semantic accuracy.",
+      "Eliminates false matches before sending to the LLM."
     ],
-    "explanation": "Lesson 06 Slide 40-45 illustrates the two-stage retrieval pattern and cross-encoder attention mechanics.",
+    "explanation": "Lesson 06 Slide 40-45 explains the cross-attention difference between Bi-Encoders and Cross-Encoders.",
     "slideRef": "Lesson 06 Slide 40-45"
   },
   {
@@ -1702,7 +1698,7 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "3.4 Reranking with Cross-Encoders",
     "moduleId": "mod06",
     "type": "fill-in-blank",
-    "question": "In a 2-stage retrieval pipeline, the fast initial retrieval model that embeds queries and documents into independent vector representations is called a ________-Encoder.",
+    "question": "In a 2-stage search system, the fast initial model that converts text into independent vector representations is called a ________-Encoder.",
     "acceptedAnswers": [
       "Bi",
       "bi",
@@ -1710,7 +1706,7 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       "bi-encoder"
     ],
     "placeholder": "Type your answer here...",
-    "explanation": "Lesson 06 Slide 40: Bi-Encoders map text to separate dense vectors; Cross-Encoders compute joint attention.",
+    "explanation": "Lesson 06 Slide 40: Bi-Encoders encode texts into separate vectors.",
     "slideRef": "Lesson 06 Slide 40"
   },
   {
@@ -1720,15 +1716,15 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "3.5 Context Management",
     "moduleId": "mod06",
     "type": "qcm",
-    "question": "What is the 'Lost in the Middle' phenomenon discovered by Liu et al. regarding LLM context windows?",
+    "question": "What is the 'Lost in the Middle' problem in LLM context windows?",
     "options": [
-      "LLMs lose internet connectivity when generating more than 1,000 tokens.",
-      "Middle layers in transformer neural networks are deleted during quantization.",
-      "Models recall information best when placed at the very beginning or end of the prompt context, while information located in the middle suffers from significantly lower retrieval attention.",
-      "Vector databases discard the middle 50% of document embeddings."
+      "The AI loses its internet connection in the middle of a sentence.",
+      "The computer screen goes dark halfway through generation.",
+      "The AI pays the most attention to facts at the very beginning and very end of a prompt, often missing or forgetting facts placed in the middle.",
+      "The vector database deletes the middle 10 rows."
     ],
     "correctIndex": 2,
-    "explanation": "Lesson 06 Slide 50-52: The 'Lost in the Middle' phenomenon proves that transformer attention weights are highest at prompt boundaries (primacy and recency effects), causing facts buried in the middle of long contexts to be overlooked.",
+    "explanation": "Lesson 06 Slide 50-52: Research (Liu et al.) proves models remember facts at the start and end best, but struggle to notice facts in the middle.",
     "slideRef": "Lesson 06 Slide 50-52"
   },
   {
@@ -1738,13 +1734,13 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "3.5 Context Management",
     "moduleId": "mod06",
     "type": "true-false",
-    "question": "To counter the 'Lost in the Middle' effect, practitioners should re-order retrieved chunks so that the most relevant documents are placed at the beginning and the end of the context window rather than in the center.",
+    "question": "To help an AI find the most important facts, you should place the highest-ranked documents at the beginning and end of your prompt.",
     "options": [
       "True",
       "False"
     ],
     "correctIndex": 0,
-    "explanation": "Lesson 06 Slide 53: Position-aware chunk reordering places highest-ranked chunks at the very start and very end of the prompt to maximize LLM attention retrieval.",
+    "explanation": "True. Position-aware reordering puts the best chunks at the start and end to overcome the 'Lost in the Middle' effect.",
     "slideRef": "Lesson 06 Slide 53"
   },
   {
@@ -1754,15 +1750,14 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "3.5 Context Management",
     "moduleId": "mod06",
     "type": "open-question",
-    "question": "A team injects 20 retrieved chunks (totaling 12,000 tokens) directly into an LLM's prompt. The model frequently fails to answer questions despite the relevant sentence being present. Explain 3 context management strategies to fix this problem.",
-    "modelAnswer": "1) Position-Aware Re-ordering: Counteract the 'Lost in the Middle' bias by ordering the retrieved chunks such that the top 2 highest-scoring chunks are placed at the very beginning and very end of the context, while lower-confidence chunks occupy the middle.\n2) Contextual Compression & Extraction: Use a small, fast model (or LLMLingua) to prune redundant sentences, boilerplate, and irrelevant tokens from the 20 chunks before passing them to the generator model, reducing 12,000 tokens down to 2,000 focused tokens.\n3) Top-K Thresholding & Deduplication: Instead of blindly passing 20 chunks, apply a strict similarity score cutoff and deduplicate semantically overlapping chunks so only the top 3-5 distinct, authoritative chunks are provided.",
+    "question": "If you give an AI 20 document chunks and it misses the answer hidden in the middle, what are 2 simple ways to solve this?",
+    "modelAnswer": "1. Re-order the chunks: Put the most important chunks at the very top and very bottom of the prompt instead of leaving them in the middle.\n2. Cut down to top 3-5 chunks: Instead of dumping 20 chunks, filter out the weak ones so only the most relevant, concise information is passed to the AI.",
     "keyPoints": [
-      "Position re-ordering (placing highest relevance at prompt start and end).",
-      "Context compression / sentence extraction (pruning irrelevant sentences to save token budget).",
-      "Top-K reduction and deduplication (lowering chunk count to top 3-5 to eliminate noise).",
-      "Mitigates attention dilution and 'Lost in the Middle' failure."
+      "Position re-ordering: Place best chunks at the beginning and end.",
+      "Reduce chunk count: Only pass top 3-5 chunks to reduce noise.",
+      "Context compression: Remove useless sentences before feeding to LLM."
     ],
-    "explanation": "Lesson 06 Slide 50-55 covers context management, compression techniques, and prompt optimization.",
+    "explanation": "Lesson 06 Slide 50-55 covers position-aware chunk placement and context compression.",
     "slideRef": "Lesson 06 Slide 50-55"
   },
   {
@@ -1772,14 +1767,14 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "3.5 Context Management",
     "moduleId": "mod06",
     "type": "fill-in-blank",
-    "question": "The empirical finding where LLMs fail to retrieve facts located in the middle of long context windows is called the 'Lost in the ________' phenomenon.",
+    "question": "The phenomenon where an AI fails to notice information placed in the center of a long prompt is called 'Lost in the ________'.",
     "acceptedAnswers": [
       "Middle",
       "middle",
       "Lost in the Middle"
     ],
     "placeholder": "Type your answer here...",
-    "explanation": "Lesson 06 Slide 50: The 'Lost in the Middle' paper (Liu et al.) highlights attention degradation in middle context.",
+    "explanation": "Lesson 06 Slide 50: The 'Lost in the Middle' paper highlights attention drop-off in the middle of prompts.",
     "slideRef": "Lesson 06 Slide 50"
   },
   {
@@ -1789,15 +1784,15 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "4.1 Tool Calling with Local Models",
     "moduleId": "mod07",
     "type": "qcm",
-    "question": "When using local LLMs (e.g. Qwen2.5 or Llama 3.1) with Ollama or vLLM, in what format are tool definitions presented to the model?",
+    "question": "How does an AI model tell your program that it wants to run a tool (function)?",
     "options": [
-      "As compiled C++ binary executables.",
-      "As raw assembly opcodes.",
-      "As PNG screenshots of function documentation.",
-      "As JSON Schema specifications describing the function name, description, parameters, and required fields."
+      "It beeps through the computer speakers.",
+      "It prints a screenshot on paper.",
+      "It restarts the computer automatically.",
+      "It outputs a structured JSON block specifying the function name and arguments to use."
     ],
     "correctIndex": 3,
-    "explanation": "Lesson 07 Slide 14-18: Tool calling relies on JSON Schema definitions injected into the model's chat template, enabling the model to output structured tool invocations.",
+    "explanation": "Lesson 07 Slide 14-18: The LLM emits structured JSON with the function name and parameters in the `tool_calls` field.",
     "slideRef": "Lesson 07 Slide 14-18"
   },
   {
@@ -1807,13 +1802,13 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "4.1 Tool Calling with Local Models",
     "moduleId": "mod07",
     "type": "true-false",
-    "question": "Local open-weight LLMs like Qwen 2.5 and Llama 3.1 cannot execute tool calls or emit structured JSON function arguments under any configuration.",
+    "question": "Can local open-source models like Qwen 2.5 and Llama 3.1 run tool calls and output structured JSON?",
     "options": [
       "True",
       "False"
     ],
-    "correctIndex": 1,
-    "explanation": "False. Modern open-weight models (such as Qwen 2.5 and Llama 3.1/3.2) have native tool-calling training and emit structured OpenAI-compatible tool_calls JSON objects.",
+    "correctIndex": 0,
+    "explanation": "True. Qwen 2.5 and Llama 3.1 are trained specifically on tool calling and output standard OpenAI-compatible tool_calls.",
     "slideRef": "Lesson 07 Slide 16"
   },
   {
@@ -1823,15 +1818,15 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "4.1 Tool Calling with Local Models",
     "moduleId": "mod07",
     "type": "open-question",
-    "question": "Describe the lifecycle of a Tool Call when a user asks an agent: 'What is the current temperature in Phnom Penh?' Assume the agent has access to a tool named `get_weather(city: str)`.",
-    "modelAnswer": "1) User Query: User submits: 'What is the current temperature in Phnom Penh?'\n2) Tool Declaration Injection: The client formats the prompt, passing the JSON schema of `get_weather(city: str)` in the `tools` payload.\n3) Model Generation (Tool Call): The LLM recognizes that it lacks real-time weather knowledge, generates reasoning, and emits a structured `tool_calls` object: `{\"name\": \"get_weather\", \"arguments\": {\"city\": \"Phnom Penh\"}}` with `finish_reason=\"tool_calls\"`.\n4) Client Execution: The client application (harness/runtime) intercepts the tool call, executes the actual Python function `get_weather(\"Phnom Penh\")`, and fetches the result (e.g. `{\"temperature\": \"32°C\", \"condition\": \"Sunny\"}`).\n5) Tool Output Injection: The client appends the tool response as a message with `role: \"tool\"` back into the conversation history.\n6) Final Answer Generation: The LLM receives the updated conversation containing the tool observation and synthesizes the user-facing response: 'The current temperature in Phnom Penh is 32°C and sunny.'",
+    "question": "In simple steps, what happens when a user asks an AI: 'What is the weather in Tokyo?' and the AI has a `get_weather(city)` tool?",
+    "modelAnswer": "1. The user asks the question.\n2. The AI realizes it doesn't know live weather, so it outputs a tool request: `get_weather(city='Tokyo')`.\n3. Your Python code runs the real `get_weather` function and gets the result: '22°C, Sunny'.\n4. Your code feeds that result back to the AI.\n5. The AI reads the result and tells the user: 'The weather in Tokyo is 22°C and sunny.'",
     "keyPoints": [
-      "Prompt sent with tool JSON schema definitions.",
-      "LLM generates structured tool_calls invocation instead of direct answer.",
-      "Harness intercepts call and executes local function get_weather().",
-      "Function result injected as role='tool' message; LLM synthesizes final answer."
+      "User asks question needing live data.",
+      "AI outputs tool call with parameters (city='Tokyo').",
+      "Application runs the real function.",
+      "Result sent back to AI to write final human answer."
     ],
-    "explanation": "Lesson 07 Slide 14-22 details the tool execution cycle: Schema -> Tool Call -> Runtime Execution -> Observation -> Final Synthesis.",
+    "explanation": "Lesson 07 Slide 14-22: Tool call lifecycle: Schema -> Call -> Execution -> Tool Message -> Final Answer.",
     "slideRef": "Lesson 07 Slide 14-22"
   },
   {
@@ -1841,14 +1836,14 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "4.1 Tool Calling with Local Models",
     "moduleId": "mod07",
     "type": "fill-in-blank",
-    "question": "When an LLM finishes generating a tool call instead of normal text, the API response object indicates this with the property `finish_reason = '________'`. ",
+    "question": "When an AI finishes its response by requesting a tool execution, its API response sets finish_reason = '________'.",
     "acceptedAnswers": [
       "tool_calls",
       "tool_call",
       "tool_calls'"
     ],
     "placeholder": "Type your answer here...",
-    "explanation": "Lesson 07 Slide 18: finish_reason='tool_calls' signals the client harness to parse arguments and execute tools.",
+    "explanation": "Lesson 07 Slide 18: finish_reason='tool_calls' signals that the AI wants to run a tool.",
     "slideRef": "Lesson 07 Slide 18"
   },
   {
@@ -1858,15 +1853,15 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "4.2 Structured Function Invocation",
     "moduleId": "mod07",
     "type": "qcm",
-    "question": "What Python library is widely used with LLM clients to enforce strict schema validation, type casting, and automatic retry on JSON parsing failures?",
+    "question": "Why do we use Pydantic models when receiving function arguments from an AI?",
     "options": [
-      "instructor (along with Pydantic)",
-      "pygame",
-      "matplotlib",
-      "celery"
+      "To check that the AI provided the right data types (like numbers, strings, positive values) and catch invalid inputs.",
+      "To translate Python code into HTML.",
+      "To delete unused variables from computer RAM.",
+      "To speed up the internet speed by 2x."
     ],
     "correctIndex": 0,
-    "explanation": "Lesson 07 Slide 24-28: The `instructor` library wraps OpenAI/Ollama clients, binding Pydantic models for structured output, schema validation, and automatic retries on validation failure.",
+    "explanation": "Lesson 07 Slide 24-28: Pydantic validates types, ranges, and required fields, preventing corrupt data from running in your functions.",
     "slideRef": "Lesson 07 Slide 24-28"
   },
   {
@@ -1876,13 +1871,13 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "4.2 Structured Function Invocation",
     "moduleId": "mod07",
     "type": "true-false",
-    "question": "Pydantic `Field(ge=0, le=100, description='...')` annotations in tool schemas are discarded by LLM frameworks and have no effect on tool calling precision.",
+    "question": "If an AI generates an invalid age like -10, Pydantic will raise a `ValidationError` so your program can tell the AI to fix its mistake.",
     "options": [
       "True",
       "False"
     ],
-    "correctIndex": 1,
-    "explanation": "Lesson 07 Slide 26: Pydantic Field constraints and descriptions are converted directly into JSON Schema `minimum`, `maximum`, and `description` properties that guide the model's parameter generation.",
+    "correctIndex": 0,
+    "explanation": "True. Pydantic catches invalid values and allows the harness to prompt the AI to correct its arguments.",
     "slideRef": "Lesson 07 Slide 26"
   },
   {
@@ -1892,16 +1887,16 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "4.2 Structured Function Invocation",
     "moduleId": "mod07",
     "type": "open-question",
-    "question": "Write a Pydantic schema for a tool named `create_user_account` requiring a string `username` (between 3 and 20 characters), an integer `age` (must be at least 18), and an optional string `email`. Explain what happens if the LLM generates `age: 15`.",
-    "modelAnswer": "```python\nfrom pydantic import BaseModel, Field\nfrom typing import Optional\n\nclass CreateUserAccount(BaseModel):\n    username: str = Field(..., min_length=3, max_length=20, description=\"Unique account username\")\n    age: int = Field(..., ge=18, description=\"User age, must be at least 18\")\n    email: Optional[str] = Field(None, description=\"Optional email address\")\n```\n\nWhat happens if the LLM generates `age: 15`:\nPydantic will raise a `ValidationError: Input should be greater than or equal to 18`. In an agent runtime with validation retry (e.g. using `instructor`), the harness intercepts the error, feeds the validation error message back to the LLM as a system/user prompt, and prompts the LLM to correct its generated arguments according to the constraint.",
+    "question": "Why is structured output validation (like Pydantic or Instructor) important when an AI talks to a real database?",
+    "modelAnswer": "Without validation, an AI might generate bad data—like typing words where a number is needed, missing a required field, or sending a negative price. If that bad data is sent to a database, the database will crash or save corrupt data.\nPydantic checks every field first. If anything is wrong, it blocks the action and asks the AI to fix the mistake before anything touches the real database.",
     "keyPoints": [
-      "Proper Pydantic schema with Field constraints (min_length, max_length, ge=18).",
-      "Pydantic raises ValidationError when constraints are violated.",
-      "Runtime catches ValidationError and prompts LLM with error details for automatic self-correction.",
-      "Prevents bad data from executing in underlying business systems."
+      "AI output can have formatting mistakes or wrong data types.",
+      "Pydantic validates fields, types, and value limits.",
+      "Blocks invalid data before it executes in the database.",
+      "Can automatically ask the AI to correct invalid fields."
     ],
-    "explanation": "Lesson 07 Slide 25-28 covers structured output validation with Pydantic and Instructor.",
-    "slideRef": "Lesson 07 Slide 25-28"
+    "explanation": "Lesson 07 Slide 24-28: Schema enforcement ensures contract safety between AI output and backend systems.",
+    "slideRef": "Lesson 07 Slide 24-28"
   },
   {
     "id": 68,
@@ -1910,14 +1905,14 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "4.2 Structured Function Invocation",
     "moduleId": "mod07",
     "type": "fill-in-blank",
-    "question": "In Pydantic schemas, the constraint argument used inside `Field(________=18)` to enforce that an integer must be greater than or equal to 18 is called ge.",
+    "question": "In Pydantic field validation, the argument used to say a number must be 'greater than or equal to 18' is Field(________=18).",
     "acceptedAnswers": [
       "ge",
       "ge=18",
       "ge = 18"
     ],
     "placeholder": "Type your answer here...",
-    "explanation": "Lesson 07 Slide 26: 'ge' stands for Greater than or Equal to in Pydantic validation fields.",
+    "explanation": "Lesson 07 Slide 26: 'ge' stands for Greater than or Equal to.",
     "slideRef": "Lesson 07 Slide 26"
   },
   {
@@ -1927,15 +1922,15 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "4.3 Executing Bounded Actions",
     "moduleId": "mod07",
     "type": "qcm",
-    "question": "Why must autonomous agents execute code and OS commands inside bounded sandbox environments (such as ephemeral Docker containers or WASM sandboxes)?",
+    "question": "Why must an AI agent run shell commands or code inside an isolated sandbox (like a Docker container)?",
     "options": [
-      "To speed up GPU inference by 10x.",
-      "To prevent unbounded destructive actions (e.g. `rm -rf /`, host file exfiltration, or denial-of-service) from harming the host system.",
-      "Because Python cannot run directly on Windows or macOS.",
-      "To allow LLMs to bypass network firewalls."
+      "Because Python cannot run directly on Windows or Mac.",
+      "To stop the AI from accidentally deleting files, stealing private data, or damaging your main computer.",
+      "Because Docker makes computer graphics look sharper.",
+      "To make the code execute 10 times faster."
     ],
     "correctIndex": 1,
-    "explanation": "Lesson 07 Slide 34-38: Agents generating executable commands must be strictly bounded with sandbox execution, resource quotas, and isolated networks to prevent catastrophic system damage.",
+    "explanation": "Lesson 07 Slide 34-38: Sandboxes prevent unintended harm, file deletion, and security breaches by isolating the AI execution environment.",
     "slideRef": "Lesson 07 Slide 34-38"
   },
   {
@@ -1945,13 +1940,13 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "4.3 Executing Bounded Actions",
     "moduleId": "mod07",
     "type": "true-false",
-    "question": "Giving an autonomous agent unrestricted root access to production database mutation tools without rate limits or read-only boundaries is safe as long as the LLM temperature is set to 0.0.",
+    "question": "It is safe to give an autonomous AI agent full administrator (root) access to your production database as long as its temperature is set to 0.",
     "options": [
       "True",
       "False"
     ],
     "correctIndex": 1,
-    "explanation": "Lesson 07 Slide 36: Temperature 0.0 does NOT prevent hallucinations, prompt injection, or logic flaws. Unbounded root access violates basic security principles.",
+    "explanation": "False. Temperature 0 does not prevent errors, hallucinations, or prompt injection. Never give root access; always use least privilege.",
     "slideRef": "Lesson 07 Slide 36"
   },
   {
@@ -1961,15 +1956,15 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "4.3 Executing Bounded Actions",
     "moduleId": "mod07",
     "type": "open-question",
-    "question": "Identify 4 essential bounding controls that an engineering team must implement before allowing an LLM agent to execute SQL queries or filesystem tools.",
-    "modelAnswer": "1) Privilege Least Authority: The agent's database user must be restricted to `SELECT` permissions on specific views/tables only; `DROP`, `ALTER`, `DELETE`, and `UPDATE` must be revoked unless explicitly gated.\n2) Sandbox Isolation: Filesystem commands must run in an ephemeral container with a read-only root filesystem and restricted scratch directory, without mounting host paths.\n3) Timeout & Resource Quotas: Every query or process execution must have strict timeout limits (e.g. max 5 seconds) and CPU/memory limits (e.g. 512MB RAM) to prevent denial-of-service hangs.\n4) Result Set Clamping (LIMIT): Automatically append `LIMIT 100` to prevent unbounded queries from exhausting memory or flooding the LLM's context window.",
+    "question": "Name 3 simple safety rules to protect your system when an AI is allowed to run tools.",
+    "modelAnswer": "1. Read-only permissions: Give the AI only read access (SELECT), not permission to delete or drop tables.\n2. Isolated sandbox: Run code in a Docker container with no access to your personal files.\n3. Timeouts and limits: Set a timer (e.g. max 5 seconds) so a stuck command cannot hang your system forever.",
     "keyPoints": [
-      "Least privilege (read-only SELECT, revoke DROP/DELETE).",
-      "Ephemeral container/sandbox isolation without host filesystem mounts.",
-      "Strict timeouts (e.g. 5s) and CPU/RAM resource quotas.",
-      "Bounded result sets (mandatory LIMIT clauses to avoid context overflow)."
+      "Least privilege (read-only, restrict DROP/DELETE).",
+      "Isolated sandbox or container execution.",
+      "Strict timeouts and resource limits (memory/CPU).",
+      "Mandatory query LIMITs to prevent memory overflow."
     ],
-    "explanation": "Lesson 07 Slide 35-40 outlines security boundaries and isolation safeguards for agent tools.",
+    "explanation": "Lesson 07 Slide 35-40 outlines security boundaries and isolation techniques for agent tools.",
     "slideRef": "Lesson 07 Slide 35-40"
   },
   {
@@ -1979,14 +1974,14 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "4.3 Executing Bounded Actions",
     "moduleId": "mod07",
     "type": "fill-in-blank",
-    "question": "The security principle stating that an agent should only be granted the minimal privileges and access permissions strictly necessary to accomplish its task is the Principle of Least ________.",
+    "question": "The golden security rule that says an AI should only be given the minimum permissions needed to do its job is the Principle of Least ________.",
     "acceptedAnswers": [
       "Privilege",
       "privilege",
       "Least Privilege"
     ],
     "placeholder": "Type your answer here...",
-    "explanation": "Lesson 07 Slide 37: Principle of Least Privilege is the bedrock of agent security.",
+    "explanation": "Lesson 07 Slide 37: Principle of Least Privilege restricts agent capabilities to only what is necessary.",
     "slideRef": "Lesson 07 Slide 37"
   },
   {
@@ -1996,15 +1991,15 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "4.4 Workflow Safety & Failure Boundaries",
     "moduleId": "mod07",
     "type": "qcm",
-    "question": "What safety mechanism prevents an autonomous agent from entering an infinite loop of failing tool calls and draining API budgets?",
+    "question": "What stops an autonomous AI agent from running in an endless loop forever if a tool keeps returning errors?",
     "options": [
-      "Lowering the GPU fan speed.",
-      "Increasing the model's context window from 8k to 128k.",
-      "A circuit breaker / max step boundary (e.g. `max_steps = 10` or recursion limit).",
-      "Deleting the vector database."
+      "Changing the font size to 12.",
+      "Turning off the computer monitor.",
+      "Setting a maximum step limit (such as `recursion_limit` or max 10 steps).",
+      "Saving the file as a PDF."
     ],
     "correctIndex": 2,
-    "explanation": "Lesson 07 Slide 44-46: Hard step limits (`recursion_limit`, `max_iterations = 10`) act as circuit breakers, halting execution and notifying the user when an agent is stuck in repetitive loops.",
+    "explanation": "Lesson 07 Slide 44-46: Hard step limits act as circuit breakers, stopping runaway execution and notifying the user.",
     "slideRef": "Lesson 07 Slide 44-46"
   },
   {
@@ -2014,13 +2009,13 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "4.4 Workflow Safety & Failure Boundaries",
     "moduleId": "mod07",
     "type": "true-false",
-    "question": "Indirect prompt injection occurs when an agent retrieves untrusted external data (such as web pages or emails) that contains hidden instructions commanding the agent to hijack execution.",
+    "question": "An 'Indirect Prompt Injection' happens when an AI reads an untrusted website or email that contains secret hidden instructions telling the AI to disobey its original job.",
     "options": [
       "True",
       "False"
     ],
     "correctIndex": 0,
-    "explanation": "Lesson 07 Slide 48: Indirect prompt injection is a critical vulnerability where external untrusted content overrides the agent's core system instructions.",
+    "explanation": "True. Indirect prompt injection is a serious risk where external untrusted content hijacks the agent's instructions.",
     "slideRef": "Lesson 07 Slide 48"
   },
   {
@@ -2030,15 +2025,15 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "4.4 Workflow Safety & Failure Boundaries",
     "moduleId": "mod07",
     "type": "open-question",
-    "question": "Explain what an 'Idempotency Key' is and why it is a mandatory failure boundary when designing agent tools that perform financial transactions or external API webhooks.",
-    "modelAnswer": "An Idempotency Key is a unique identifier (e.g. a UUID `trans-9941a`) attached to an API request. The receiving server records this key upon executing the action. If the client makes another request with the exact same idempotency key, the server returns the cached result without executing the action a second time.\n\nWhy it is mandatory for agents:\nLLM agents can experience network timeouts, transient JSON parse errors, or non-deterministic retries. If an agent calls `charge_credit_card(amount=500)` and the network drops during the response acknowledgment, a naive agent will retry the tool call. Without an idempotency key, the customer would be charged twice. With an idempotency key, the duplicate call is recognized and safely deduplicated.",
+    "question": "What is an 'Idempotency Key', and why is it important when an AI calls a payment or order tool?",
+    "modelAnswer": "An Idempotency Key is a unique ticket number (like `order-101`) sent with a transaction.\nIf the AI tries to charge a credit card, but the internet hiccups for 1 second, the AI might try calling the tool again. With an idempotency key, the payment system sees the same key and says: 'I already charged this! Here is the receipt' instead of charging the customer twice!",
     "keyPoints": [
-      "Idempotency key uniquely identifies a specific transaction or action.",
-      "Servers execute the action once and return cached results for identical keys.",
-      "Agents frequently retry actions after network glitches or JSON parsing retries.",
-      "Prevents disastrous duplicate executions (e.g. charging credit cards twice, duplicate database writes)."
+      "A unique ID attached to an action or request.",
+      "Ensures the action only happens once, even if called multiple times.",
+      "Protects against duplicate charges during network retries.",
+      "Critical safety boundary for real-world mutations."
     ],
-    "explanation": "Lesson 07 Slide 45-47 discusses failure boundaries, retries, and idempotency guarantees in agent execution.",
+    "explanation": "Lesson 07 Slide 45-47 covers idempotency keys and safe retry boundaries.",
     "slideRef": "Lesson 07 Slide 45-47"
   },
   {
@@ -2048,15 +2043,14 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "4.4 Workflow Safety & Failure Boundaries",
     "moduleId": "mod07",
     "type": "fill-in-blank",
-    "question": "In LangGraph and agent frameworks, the execution guardrail that sets a maximum ceiling on graph step transitions to prevent infinite loops is called the ________ limit.",
+    "question": "In LangGraph and agent loops, the setting that sets a maximum ceiling on the number of steps to prevent infinite loops is called the ________ limit.",
     "acceptedAnswers": [
       "recursion",
       "recursion_limit",
-      "recursion limit",
-      "step"
+      "recursion limit"
     ],
     "placeholder": "Type your answer here...",
-    "explanation": "Lesson 07 Slide 44: 'recursion_limit' terminates graph execution if steps exceed the defined threshold.",
+    "explanation": "Lesson 07 Slide 44: recursion_limit terminates graphs if they exceed a maximum step count.",
     "slideRef": "Lesson 07 Slide 44"
   },
   {
@@ -2066,15 +2060,15 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "4.5 Agent Patterns: ReAct",
     "moduleId": "mod07",
     "type": "qcm",
-    "question": "What are the three alternating phases that define the ReAct agent design pattern?",
+    "question": "What are the 3 simple steps of the ReAct pattern that repeat in a loop?",
     "options": [
-      "Read -> Encrypt -> Transmit",
-      "Download -> Compile -> Execute",
-      "Tokenize -> Vectorize -> Cosine Similarity",
-      "Thought (Reasoning) -> Action (Tool Call) -> Observation (Tool Output)"
+      "Download -> Compile -> Install",
+      "Select -> Copy -> Paste",
+      "Click -> Drag -> Drop",
+      "Thought (Think) -> Action (Use tool) -> Observation (Read tool result)"
     ],
     "correctIndex": 3,
-    "explanation": "Lesson 07 Slide 52-56: ReAct (Reasoning + Acting) operates in a continuous loop: Thought (internal reasoning), Action (tool selection and invocation), Observation (parsing tool output), repeating until the task is complete.",
+    "explanation": "Lesson 07 Slide 52-56: ReAct loops through: Thought (reasoning), Action (calling tool), Observation (getting result) until done.",
     "slideRef": "Lesson 07 Slide 52-56"
   },
   {
@@ -2084,14 +2078,14 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "4.5 Agent Patterns: ReAct",
     "moduleId": "mod07",
     "type": "true-false",
-    "question": "The ReAct agent pattern completely eliminates internal model reasoning (Thought), forcing the agent to execute external tool actions blindly without intermediate deliberation.",
+    "question": "Does the ReAct pattern eliminate all thinking (Thought) and force the AI to use tools without any reasoning?",
     "options": [
       "True",
       "False"
     ],
     "correctIndex": 1,
-    "explanation": "False. ReAct explicitly synergizes Reasoning and Acting: Thought (deliberative planning), Action (tool invocation), and Observation (environment feedback).",
-    "slideRef": "Lesson 07 Slide 54"
+    "explanation": "False. ReAct explicitly combines Reasoning and Acting: it thinks first (Thought), then acts (Action), then reads the result (Observation).",
+    "slideRef": "Lesson 07 Slide 52"
   },
   {
     "id": 79,
@@ -2100,15 +2094,15 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "4.5 Agent Patterns: ReAct",
     "moduleId": "mod07",
     "type": "open-question",
-    "question": "Trace how a ReAct agent answers the user query: 'Who won the most recent FIFA World Cup and what stadium hosted the final?' Present the specific Thought, Action, and Observation sequences.",
-    "modelAnswer": "Step 1:\n- Thought: I need to determine who won the most recent FIFA World Cup (2022) and the stadium where the final was held. I will search for the 2022 World Cup winner and final venue.\n- Action: `web_search(query='2022 FIFA World Cup final winner and stadium')`\n- Observation: 'Argentina won the 2022 FIFA World Cup, defeating France on penalties. The final match was played at Lusail Iconic Stadium in Lusail, Qatar on December 18, 2022.'\n\nStep 2:\n- Thought: The observation clearly confirms that Argentina won the tournament and the final was hosted at Lusail Iconic Stadium. I have all the facts needed to formulate the final answer.\n- Action: `Final Answer(response='Argentina won the most recent FIFA World Cup (2022), and the final match was hosted at Lusail Iconic Stadium in Qatar.')`",
+    "question": "Explain how a ReAct agent answers: 'Who won the latest soccer World Cup?' using Thought, Action, and Observation.",
+    "modelAnswer": "Step 1:\n- Thought: I need to find who won the most recent World Cup. I will use the search tool.\n- Action: search('2022 World Cup winner')\n- Observation: 'Argentina won the 2022 FIFA World Cup.'\n\nStep 2:\n- Thought: I now have the answer from the observation.\n- Final Answer: 'Argentina won the latest FIFA World Cup.'",
     "keyPoints": [
-      "Clear Thought formulating search plan for tournament winner and stadium.",
-      "Action invoking tool (web_search) with specific parameters.",
-      "Observation capturing external tool result.",
-      "Final Thought synthesizing observed facts into accurate answer."
+      "Thought: Plans what information is missing.",
+      "Action: Invokes search tool with query.",
+      "Observation: Receives tool result.",
+      "Final Thought/Answer: Formulates final response based on observation."
     ],
-    "explanation": "Lesson 07 Slide 52-58 outlines the ReAct prompt structure and execution trace.",
+    "explanation": "Lesson 07 Slide 52-58 outlines the ReAct prompt format and trace steps.",
     "slideRef": "Lesson 07 Slide 52-58"
   },
   {
@@ -2118,13 +2112,13 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "4.5 Agent Patterns: ReAct",
     "moduleId": "mod07",
     "type": "fill-in-blank",
-    "question": "The ReAct agent paradigm combines two foundational AI concepts: ________ and Acting.",
+    "question": "The ReAct agent pattern gets its name by combining two words: ________ and Acting.",
     "acceptedAnswers": [
       "Reasoning",
       "reasoning"
     ],
     "placeholder": "Type your answer here...",
-    "explanation": "Lesson 07 Slide 52: ReAct stands for Reasoning + Acting (Yao et al., 2022).",
+    "explanation": "Lesson 07 Slide 52: ReAct = Reasoning + Acting (Yao et al., 2022).",
     "slideRef": "Lesson 07 Slide 52"
   },
   {
@@ -2134,15 +2128,15 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "4.6 Harness Design",
     "moduleId": "mod07",
     "type": "qcm",
-    "question": "In AI engineering, what is the primary responsibility of an Agent Test Harness?",
+    "question": "What is an AI Evaluation Test Harness used for?",
     "options": [
-      "To provide a controlled, reproducible testbed with mocked tools and telemetry to benchmark agent trajectories, tool accuracy, and task completion rates.",
-      "To mine cryptocurrency while the model is idle.",
-      "To convert all Python code into JavaScript automatically.",
-      "To delete log files after every step to save disk space."
+      "To test the AI automatically in a safe, repeatable sandbox and score whether it solved tasks correctly.",
+      "To format USB drives.",
+      "To turn Python code into an MP4 video.",
+      "To change computer desktop wallpaper."
     ],
     "correctIndex": 0,
-    "explanation": "Lesson 07 Slide 62-66: An evaluation harness provides reproducible test environments, mocks network tools, records action trajectories, and tracks benchmark metrics like pass@k and cost per task.",
+    "explanation": "Lesson 07 Slide 62-66: A test harness provides reproducible environments, mocked tools, and telemetry to measure agent accuracy.",
     "slideRef": "Lesson 07 Slide 62-66"
   },
   {
@@ -2152,13 +2146,13 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "4.6 Harness Design",
     "moduleId": "mod07",
     "type": "true-false",
-    "question": "Logging an agent's full trajectory (thought steps, tool names, parameters, execution times, and return values) is unnecessary once the agent passes basic unit tests.",
+    "question": "Keeping trajectory logs of an AI's tool calls and reasoning steps is completely useless in production.",
     "options": [
       "True",
       "False"
     ],
     "correctIndex": 1,
-    "explanation": "Lesson 07 Slide 64: Trajectory logging is vital in production for debugging tool call errors, analyzing latency bottlenecks, detecting hallucinations, and auditing compliance.",
+    "explanation": "False. Trajectory logs are essential for debugging mistakes, monitoring latency, and auditing safety.",
     "slideRef": "Lesson 07 Slide 64"
   },
   {
@@ -2168,15 +2162,15 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "4.6 Harness Design",
     "moduleId": "mod07",
     "type": "open-question",
-    "question": "You are tasked with building a test harness to evaluate an automated software engineering agent (similar to SWE-bench). Describe 3 core requirements that the test harness must provide to ensure rigorous evaluation.",
-    "modelAnswer": "1) Isolated Reproducible Environments: Every test task must run in a clean, isolated container (e.g. Docker container with pinned dependencies, git repo checkout, and pre-seeded database) to guarantee no state leaks between test runs.\n2) Mocked External Services & Deterministic Clocks: External APIs (Stripe, GitHub, internet access) must be mocked with deterministic responses so test results do not fluctuate due to network downtime or external rate limits.\n3) Automated Verification & Trajectory Telemetry: The harness must execute objective unit test suites (assert statements) to verify task completion, while logging token consumption, execution latency, step count, and full tool call trajectories for post-mortem analysis.",
+    "question": "Why do developers test AI agents with fake (mock) tools instead of real external APIs during automated testing?",
+    "modelAnswer": "1. Reliability: Real APIs might go down or have network lag, making tests fail randomly.\n2. Cost and limits: Calling real APIs (like credit card payments or email servers) costs money and burns API rate limits.\n3. Safety: Testing with mock tools prevents the AI from accidentally sending real emails or making real purchases while testing.",
     "keyPoints": [
-      "Isolated, reproducible environment per test run (containerized sandbox).",
-      "Deterministic mocks for external services and network dependencies.",
-      "Objective assertion verification (pass/fail unit test criteria).",
-      "Comprehensive telemetry logging (token cost, latency, trajectory trace)."
+      "Real APIs can fail or have network lag, causing unreliable test results.",
+      "Avoids burning API costs and rate limits during testing.",
+      "Prevents real-world accidental mutations (sending real emails/charges).",
+      "Guarantees reproducible, fast automated test runs."
     ],
-    "explanation": "Lesson 07 Slide 62-68 covers test harness architecture, evaluation metrics, and deterministic benchmarking.",
+    "explanation": "Lesson 07 Slide 62-68 covers mock environments and deterministic agent evaluation.",
     "slideRef": "Lesson 07 Slide 62-68"
   },
   {
@@ -2186,7 +2180,7 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "4.6 Harness Design",
     "moduleId": "mod07",
     "type": "fill-in-blank",
-    "question": "The recorded step-by-step sequence of an agent's thoughts, tool invocations, inputs, and observations during a run is called the agent's ________.",
+    "question": "The complete recorded step-by-step history of an AI's thoughts, tool calls, and observations during a task is called its ________.",
     "acceptedAnswers": [
       "trajectory",
       "Trajectory",
@@ -2194,7 +2188,7 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       "run trace"
     ],
     "placeholder": "Type your answer here...",
-    "explanation": "Lesson 07 Slide 64: An agent's trajectory records the full history of decisions and actions taken to solve a task.",
+    "explanation": "Lesson 07 Slide 64: An agent's trajectory records its decision steps from start to finish.",
     "slideRef": "Lesson 07 Slide 64"
   },
   {
@@ -2204,15 +2198,15 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "4.7 MCP Server",
     "moduleId": "mod07",
     "type": "qcm",
-    "question": "What open standard protocol, introduced by Anthropic, standardizes how AI applications connect to external tools, resources, and prompt templates?",
+    "question": "In simple terms, what is the Model Context Protocol (MCP)?",
     "options": [
-      "Simple Mail Transfer Protocol (SMTP)",
-      "Model Context Protocol (MCP)",
-      "Open Database Connectivity (ODBC)",
-      "File Transfer Protocol (FTP)"
+      "A video game for programmers.",
+      "A standard protocol that lets AI apps (like Claude, Cursor, or custom agents) easily connect to external tools and files without custom code.",
+      "A special brand of computer monitor.",
+      "A replacement for the Python programming language."
     ],
     "correctIndex": 1,
-    "explanation": "Lesson 07 Slide 72-76 & Exam Highlight: Model Context Protocol (MCP) defines a unified JSON-RPC client-server protocol for exposing tools, prompts, and resources to LLM clients.",
+    "explanation": "Lesson 07 Slide 72-76: Anthropic's Model Context Protocol (MCP) provides a standard open protocol for connecting AI clients to tools and resources.",
     "slideRef": "Lesson 07 Slide 72-76"
   },
   {
@@ -2222,13 +2216,13 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "4.7 MCP Server",
     "moduleId": "mod07",
     "type": "true-false",
-    "question": "In Python FastMCP, exposing a function as an agent tool is done using the `@mcp.tool()` decorator.",
+    "question": "In Python FastMCP, you turn a function into an AI tool simply by putting the `@mcp.tool()` decorator above it.",
     "options": [
       "True",
       "False"
     ],
     "correctIndex": 0,
-    "explanation": "Lesson 07 Slide 78 & Code Lab: FastMCP uses `@mcp.tool()` to declare tools, `@mcp.resource()` for static data, and `@mcp.prompt()` for prompt templates.",
+    "explanation": "True. FastMCP uses `@mcp.tool()` for tools, `@mcp.resource()` for data files, and `@mcp.prompt()` for prompt templates.",
     "slideRef": "Lesson 07 Slide 78"
   },
   {
@@ -2238,15 +2232,15 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "4.7 MCP Server",
     "moduleId": "mod07",
     "type": "open-question",
-    "question": "Explain the three core architectural primitives of the Model Context Protocol (MCP): Tools, Resources, and Prompts. Provide a practical example of each.",
-    "modelAnswer": "1) Tools: Executable functions that allow the LLM to take actions or perform side effects in external systems.\n   - Example: `@mcp.tool() def restart_docker_container(container_id: str) -> bool`.\n2) Resources: Read-only data endpoints (similar to GET endpoints or files) that supply context or documents into the LLM conversation.\n   - Example: `@mcp.resource('system://logs/nginx') def get_nginx_logs() -> str`.\n3) Prompts: Pre-defined, reusable prompt templates and workflows parameterized for user interactions.\n   - Example: `@mcp.prompt() def code_review_prompt(language: str) -> str`.",
+    "question": "In MCP (Model Context Protocol), what is the difference between a Tool and a Resource?",
+    "modelAnswer": "A Tool is an action that does something or changes data (like restarting a server, sending a message, or calculating a number).\nA Resource is read-only data that gives information to the AI (like reading a log file, reading documentation, or viewing a database record) without changing anything.",
     "keyPoints": [
-      "Tools: Executable functions with side effects (e.g. database query, API POST).",
-      "Resources: Read-only contextual data providers (e.g. log files, documentation URIs).",
-      "Prompts: Parameterized, standardized prompt templates for common tasks.",
-      "Unified architecture decouples data/tools from specific LLM models."
+      "Tool: An executable function that performs actions with side-effects.",
+      "Resource: A read-only data source (like files or logs) for context.",
+      "Tools change state; Resources provide static/read-only context.",
+      "Standardized in the MCP specification."
     ],
-    "explanation": "Lesson 07 Slide 75-80 details the MCP specification: Tools, Resources, and Prompts.",
+    "explanation": "Lesson 07 Slide 75-80 contrasts MCP Tools with MCP Resources.",
     "slideRef": "Lesson 07 Slide 75-80"
   },
   {
@@ -2256,16 +2250,15 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "4.7 MCP Server",
     "moduleId": "mod07",
     "type": "fill-in-blank",
-    "question": "In the Model Context Protocol (MCP), the two standard transport layers used for client-server communication are stdio (standard input/output for local processes) and ________ (Server-Sent Events over HTTP for remote servers).",
+    "question": "In Python FastMCP, the decorator written above a function to expose it as an AI tool is @mcp.________().",
     "acceptedAnswers": [
-      "SSE",
-      "sse",
-      "Server-Sent Events",
-      "HTTP/SSE"
+      "tool",
+      "tool()",
+      "@mcp.tool"
     ],
     "placeholder": "Type your answer here...",
-    "explanation": "Lesson 07 Slide 74: MCP uses stdio for local child processes and SSE (Server-Sent Events) over HTTP for remote servers.",
-    "slideRef": "Lesson 07 Slide 74"
+    "explanation": "Lesson 07 Slide 78: '@mcp.tool()' registers a function as an MCP tool.",
+    "slideRef": "Lesson 07 Slide 78"
   },
   {
     "id": 89,
@@ -2274,15 +2267,15 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "4.8 Local Tools vs MCP Server",
     "moduleId": "mod07",
     "type": "qcm",
-    "question": "What is the primary architectural advantage of using an MCP Server over hardcoding local Python tool functions directly in your application codebase?",
+    "question": "What is the main advantage of building an MCP Server instead of hardcoding Python functions directly inside your bot script?",
     "options": [
-      "Local Python tools cannot use `for` loops.",
-      "MCP Servers do not require an operating system.",
-      "MCP Servers are decoupled, language-agnostic, run in isolated processes, and can be reused across any MCP client (Claude Desktop, Cursor, custom agents) without rewriting tool code.",
-      "Local Python tools require 100GB of GPU VRAM."
+      "Hardcoded functions use more battery power.",
+      "MCP servers do not require a computer processor.",
+      "One MCP server can be reused across different apps (like Claude Desktop, Cursor IDE, and custom Python agents) without rewriting the tool code.",
+      "Hardcoded functions cannot print text."
     ],
     "correctIndex": 2,
-    "explanation": "Lesson 07 Slide 82-86: MCP decouples tool development from client implementations. One MCP server (e.g. Postgres or GitHub MCP) can be plugged into Cursor, Claude Desktop, or custom Python agents seamlessly.",
+    "explanation": "Lesson 07 Slide 82-86: MCP decouples tools from client apps, allowing the same tool server to work in Claude Desktop, Cursor, or any agent.",
     "slideRef": "Lesson 07 Slide 82-86"
   },
   {
@@ -2292,13 +2285,13 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "4.8 Local Tools vs MCP Server",
     "moduleId": "mod07",
     "type": "true-false",
-    "question": "Direct in-process local tool calling typically provides lower inter-process communication (IPC) latency than calling remote MCP servers over HTTP/SSE.",
+    "question": "Calling an in-memory local Python function is usually faster than calling a remote server over HTTP.",
     "options": [
       "True",
       "False"
     ],
     "correctIndex": 0,
-    "explanation": "Lesson 07 Slide 84: Local functions run in-memory within the same Python process ($O(0)$ IPC overhead), whereas network MCP servers incur JSON serialization and network transport latency.",
+    "explanation": "True. In-process local function calls have virtually zero network delay, while remote HTTP calls take more time.",
     "slideRef": "Lesson 07 Slide 84"
   },
   {
@@ -2308,15 +2301,15 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "4.8 Local Tools vs MCP Server",
     "moduleId": "mod07",
     "type": "open-question",
-    "question": "An engineering manager asks: 'Should our company implement our enterprise tools as local Python functions inside our LangGraph codebase, or as standalone MCP Servers?' Provide an architectural trade-off analysis.",
-    "modelAnswer": "Choose Local Python Tools when:\n1) Latency is paramount: In-memory function execution avoids network serialization overhead.\n2) Tight Coupling & Complexity: The tools rely heavily on internal application state or ephemeral in-memory objects.\n3) Simplicity: A simple prototype or internal service does not need process isolation or cross-platform tool sharing.\n\nChoose MCP Server when:\n1) Cross-Platform Interoperability: The tools need to be shared across multiple diverse clients (e.g., developers using Cursor, business analysts using Claude Desktop, and backend LangGraph agents).\n2) Security & Process Isolation: Running tools in a separate process/container prevents rogue tool bugs or memory leaks from crashing the core agent application.\n3) Multi-Language Support: Tools can be written in Go, Rust, or Node.js while being consumed by a Python agent over standard JSON-RPC.",
+    "question": "When should you write a simple local Python function, and when should you build an MCP Server?",
+    "modelAnswer": "Use a simple local Python function when you are building a small prototype, need maximum speed with zero network delay, and the tool is only used in this one Python file.\nBuild an MCP Server when you want to share the same tools across multiple tools (like Cursor, Claude Desktop, and web agents), or when you want tools to run in a safe, separate container.",
     "keyPoints": [
-      "Local tools: Low latency, in-memory execution, simple codebase, but tightly coupled.",
-      "MCP servers: Cross-client reuse (Claude Desktop, Cursor, LangGraph), language agnostic.",
-      "MCP provides security isolation (separate process/container boundaries).",
-      "Recommendation based on interoperability vs sub-millisecond latency needs."
+      "Local Python function: Best for single apps, fast in-memory speed, simple code.",
+      "MCP Server: Best for sharing tools across multiple clients (Cursor, Claude, web).",
+      "MCP provides process isolation and multi-language support.",
+      "Choice depends on reuse needs vs ultra-low latency."
     ],
-    "explanation": "Lesson 07 Slide 82-88 provides comparative evaluation between in-process functions and decoupled MCP architectures.",
+    "explanation": "Lesson 07 Slide 82-88 compares in-process functions vs decoupled MCP servers.",
     "slideRef": "Lesson 07 Slide 82-88"
   },
   {
@@ -2326,12 +2319,11 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "4.8 Local Tools vs MCP Server",
     "moduleId": "mod07",
     "type": "fill-in-blank",
-    "question": "Under the Model Context Protocol (MCP) specification, client and server exchange structured messages formatted using the JSON-________ protocol.",
+    "question": "The Model Context Protocol (MCP) sends messages between client and server using the JSON-________ standard.",
     "acceptedAnswers": [
       "RPC",
       "rpc",
       "RPC 2.0",
-      "rpc 2.0",
       "JSON-RPC"
     ],
     "placeholder": "Type your answer here...",
@@ -2345,15 +2337,15 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "4.9 Human-in-the-Loop Design",
     "moduleId": "mod07",
     "type": "qcm",
-    "question": "In LangGraph, which mechanism allows execution to pause immediately before an irreversible action (e.g. executing a financial payment) so a human can inspect and approve it?",
+    "question": "In LangGraph, how do you pause the workflow before a dangerous step (like deleting data or charging a card) so a human can inspect and approve it?",
     "options": [
-      "`sys.exit(0)`",
-      "`time.sleep(86400)`",
-      "An infinite while loop (`while True: pass`).",
-      "`interrupt_before=['execute_action']` breakpoint configuration during graph compilation."
+      "By turning off the WiFi router.",
+      "By closing the terminal window.",
+      "By writing a 100-page user manual.",
+      "By setting an `interrupt_before=['execute_action']` breakpoint when compiling the graph."
     ],
     "correctIndex": 3,
-    "explanation": "Lesson 07 Slide 92-96 & Exam Highlight: LangGraph provides native `interrupt_before` and `interrupt_after` breakpoints. The graph saves state to the checkpointer and pauses, waiting for an explicit resume signal.",
+    "explanation": "Lesson 07 Slide 92-96: `interrupt_before` pauses the graph, saves state to the checkpointer, and waits for human review.",
     "slideRef": "Lesson 07 Slide 92-96"
   },
   {
@@ -2363,13 +2355,13 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "4.9 Human-in-the-Loop Design",
     "moduleId": "mod07",
     "type": "true-false",
-    "question": "In Human-in-the-Loop workflows, once a human operator edits the draft state or grants approval, execution resumes from the saved checkpoint without re-running prior upstream nodes.",
+    "question": "In Human-in-the-Loop workflows, after a human reviews and approves the step, does the AI have to start all the way back from step 1?",
     "options": [
       "True",
       "False"
     ],
-    "correctIndex": 0,
-    "explanation": "Lesson 07 Slide 94: Checkpointers preserve intermediate node states, allowing resumption directly from the breakpoint with modified or approved state.",
+    "correctIndex": 1,
+    "explanation": "False. Checkpointers save the exact state at the breakpoint, so execution resumes immediately from the paused step without re-running earlier steps.",
     "slideRef": "Lesson 07 Slide 94"
   },
   {
@@ -2379,15 +2371,15 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "4.9 Human-in-the-Loop Design",
     "moduleId": "mod07",
     "type": "open-question",
-    "question": "Design a Human-in-the-Loop (HITL) approval workflow in LangGraph for an automated Database Migration Agent. Explain the roles of breakpoints, state persistence, and human feedback injection.",
-    "modelAnswer": "1) Workflow Structure:\n   - Node 1: `generate_migration_sql` - Analyzes schema diffs and writes DDL scripts.\n   - Breakpoint: `interrupt_before=['execute_migration']`.\n   - Node 2: `execute_migration` - Connects to database and executes the DDL.\n2) Breakpoint & State Persistence:\n   When execution reaches `execute_migration`, LangGraph halts. The checkpointer (e.g. PostgresSaver) persists the complete graph state (including proposed SQL) under the session's `thread_id`. The server process can sleep or handle other requests.\n3) Human Inspection & Approval UI:\n   A database administrator (DBA) reviews the proposed SQL in a web dashboard. The DBA has three options:\n   - Approve: The client calls `graph.invoke(Command(resume='approved'), config)` to resume Node 2.\n   - Edit: The DBA modifies the SQL script via `graph.update_state(config, {'sql_script': modified_sql})` and approves.\n   - Reject: The DBA provides critique (e.g. 'Missing index on user_id'), routing execution back to Node 1 for revision.\n4) Benefit: Guarantees zero unreviewed, destructive schema changes in production while preserving automated drafting.",
+    "question": "Why is Human-in-the-Loop important for high-stakes actions like sending an invoice or deleting customer records?",
+    "modelAnswer": "AI models can make mistakes, misunderstand instructions, or hallucinate.\nIf an AI has unrestricted power to send invoices or delete customer records, a single mistake could cost thousands of dollars or lose critical data.\nHuman-in-the-Loop adds a safety checkpoint: the AI drafts the action, but a human must click 'Approve' or make edits before the dangerous command actually runs.",
     "keyPoints": [
-      "interrupt_before breakpoint halts execution prior to destructive node.",
-      "Checkpointer persists state safely per thread_id during human review.",
-      "Human review interface supports Approve, Edit state, or Reject with feedback.",
-      "Resumes from breakpoint without re-running upstream generation."
+      "AI models can hallucinate or misunderstand complex instructions.",
+      "Dangerous actions (payments, deletions, emails) cannot be easily undone.",
+      "Human review catches errors before damage occurs.",
+      "Allows humans to approve, edit, or reject the proposed action."
     ],
-    "explanation": "Lesson 07 Slide 92-98 outlines Human-in-the-Loop patterns, interrupt breakpoints, and state resumption.",
+    "explanation": "Lesson 07 Slide 92-98 outlines Human-in-the-Loop safety patterns and resume flows.",
     "slideRef": "Lesson 07 Slide 92-98"
   },
   {
@@ -2397,15 +2389,15 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     "subtopic": "4.9 Human-in-the-Loop Design",
     "moduleId": "mod07",
     "type": "fill-in-blank",
-    "question": "In LangGraph, to modify the saved thread state before resuming a paused workflow, you invoke the method `app.update_________(config, values)`.",
+    "question": "In LangGraph, the setting used to pause execution immediately before a specific step runs is interrupt_________.",
     "acceptedAnswers": [
-      "state",
-      "State",
-      "update_state"
+      "before",
+      "Before",
+      "interrupt_before"
     ],
     "placeholder": "Type your answer here...",
-    "explanation": "Lesson 07 Slide 95: 'update_state' injects modifications into a checkpointed thread state before resumption.",
-    "slideRef": "Lesson 07 Slide 95"
+    "explanation": "Lesson 07 Slide 92: interrupt_before=['step_name'] halts execution before the specified node.",
+    "slideRef": "Lesson 07 Slide 92"
   }
 ];
 
